@@ -1,0 +1,8 @@
+#For Mac
+source bad012python/bin/activate
+
+#For Window
+bad012python\Scripts\Activate.ps1
+
+
+deactivate
