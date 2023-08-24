@@ -1,8 +1,14 @@
 #For Mac
-source bad012python/bin/activate
+source python_modules/bin/activate
 
 #For Window
-bad012python\Scripts\Activate.ps1
-
+python_modules\Scripts\Activate.ps1
 
 deactivate
+
+
+
+
+chmod +x pym 
+
+./pym run
