@@ -1,7 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Dependencies,
+  Get,
+  Redirect,
+  Render,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
+@Dependencies(AppService)
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -9,4 +16,6 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+  // @Render('index')
+  // root() {}
 }
