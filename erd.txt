@@ -1,0 +1,53 @@
+# Visualize on https://erd.surge.sh
+#
+# Relationship Types
+#  -    - one to one
+#  -<   - one to many
+#  >-   - many to one
+#  >-<  - many to many
+#  -0   - one to zero or one
+#  0-   - zero or one to one
+#  0-0  - zero or one to zero or one
+#  -0<  - one to zero or many
+#  >0-  - zero or many to one
+#
+////////////////////////////////////
+
+
+users
+----
+id pk
+username varchar(255)
+password varchar(255)
+point integer
+birthday date null
+is_admin boolean
+
+
+receipt
+----
+id pk
+user_id fk >- users.id
+date date
+
+
+receipt_item
+-----
+id pk
+receipt_id integer fk
+name varchar(255)
+price decimal
+
+product
+-------
+id pk 
+name varchar(255)
+price decimal
+
+
+
+# users (955, 381)
+# receipt (663, 213)
+# receipt_item (350, 344)
+# product (375, 135, #000000)
+# view: (93, 50)
