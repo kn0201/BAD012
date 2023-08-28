@@ -35,6 +35,7 @@
     "pg": "^8.11.3",
     "populate": "^5.0.1",
     "populate-env": "^2.0.0",
+    "quick-erd": "^4.9.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "sweetalert2": "^11.7.27"
