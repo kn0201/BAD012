@@ -1,0 +1,7 @@
+{
+  "name": "snowmarket",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
