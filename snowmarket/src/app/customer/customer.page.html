@@ -1,0 +1,80 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-menu-button></ion-menu-button>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-item lines="none">
+      <ion-label>
+        <h3>Hello, <span>Guest</span></h3>
+      </ion-label>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item lines="none">
+    <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="7">
+          <div class="container">
+            <ion-list>
+              <ion-item>
+                <ion-label slot="start">Name</ion-label>
+                <ion-label>Qty</ion-label>
+                <ion-label slot="end">Price</ion-label>
+              </ion-item>
+              <ion-item-sliding *ngFor="let item of items">
+                <ion-item>
+                  <ion-label slot="start"> {{item.name}}</ion-label>
+                  <ion-label>1</ion-label>
+                  <ion-label slot="end">${{item.price}}</ion-label>
+                </ion-item>
+                <ion-item-options>
+                  <ion-item-option color="danger" (click)="removeItem(item)"
+                    ><ion-icon name="trash"></ion-icon
+                  ></ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+            </ion-list>
+          </div>
+        </ion-col>
+        <ion-col size="5">
+          <ion-list>
+            <ion-row class="ion-align-items-center">
+              <ion-col size="4">
+                <img
+                  class="imgButton"
+                  src="https://t3.ftcdn.net/jpg/00/72/18/40/240_F_72184041_8tRO5AHdFzgVhDCZJEsL3vv7nvZUkLKi.jpg"
+                />
+              </ion-col>
+              <ion-col size="4">
+                <img
+                  class="imgButton"
+                  src="https://t3.ftcdn.net/jpg/01/96/19/48/240_F_196194801_Vfy5WI8dIT5690fkQOyePLuBHUJh3RzP.jpg"
+                />
+              </ion-col>
+              <ion-col size="4">
+                <img
+                  class="imgButton"
+                  src="https://t3.ftcdn.net/jpg/01/05/29/62/240_F_105296201_0ps5e3A3oA9oTIauwRNXTrDIVL2VOwNF.jpg"
+                />
+              </ion-col>
+            </ion-row>
+            <ion-row
+              ><div class="cameraArea">
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                /></div
+            ></ion-row>
+            <ion-row> Balance </ion-row>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ion-content>
