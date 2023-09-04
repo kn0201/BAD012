@@ -9,10 +9,13 @@
         <ion-list-header>Snow Market</ion-list-header>
         <ion-note>Admin Page</ion-note>
 
-        <ion-menu-toggle auto-hide="false">
+        <ion-menu-toggle
+          auto-hide="false"
+          *ngFor="let p of adminPages; let i = index"
+        >
           <ion-item
             routerDirection="root"
-            routerLink="/admin/chart-list"
+            [routerLink]="[p.url]"
             lines="none"
             detail="false"
             routerLinkActive="selected"
@@ -20,27 +23,10 @@
             <ion-icon
               aria-hidden="true"
               slot="start"
-              ios="home-outline"
-              md="home-sharp"
+              [ios]="p.icon"
+              [md]="p.icon"
             ></ion-icon>
-            <ion-label>Charts</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle auto-hide="false">
-          <ion-item
-            routerDirection="root"
-            routerLink="/admin/product-list"
-            lines="none"
-            detail="false"
-            routerLinkActive="selected"
-          >
-            <ion-icon
-              aria-hidden="true"
-              slot="start"
-              ios="home-outline"
-              md="home-sharp"
-            ></ion-icon>
-            <ion-label>Products</ion-label>
+            <ion-label>{{ p.title }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
@@ -48,17 +34,3 @@
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-split-pane>
-
-<!-- <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>admin-page</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">admin-page</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content> -->

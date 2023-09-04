@@ -24,6 +24,27 @@ const routes: Routes = [
             (m) => m.AdminProductListPageModule
           ),
       },
+      {
+        path: 'discount-list',
+        loadChildren: () =>
+          import('../admin-discount-list/admin-discount-list.module').then(
+            (m) => m.AdminDiscountListPageModule
+          ),
+      },
+      {
+        path: 'member-list',
+        loadChildren: () =>
+          import('../admin-member-list/admin-member-list.module').then(
+            (m) => m.AdminMemberListPageModule
+          ),
+      },
+      {
+        path: 'trash-list',
+        loadChildren: () =>
+          import('../admin-trash-list/admin-trash-list.module').then(
+            (m) => m.AdminTrashListPageModule
+          ),
+      },
     ],
   },
 ];

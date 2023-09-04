@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title size="large">Discount List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Discount List</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-title size="large">Current Discount</ion-title>
+  <p></p>
+  <ion-grid>
+    <ion-title>數量優惠</ion-title>
+    <ion-row *ngFor="let currentAmountDiscount of currentAmountDiscounts">
+      <ion-col size="4" class=""
+        >折扣名稱 : {{currentAmountDiscount.title}}</ion-col
+      >
+      <ion-col size="2" class=""
+        >商品ID : {{ currentAmountDiscount.product_id }}</ion-col
+      >
+      <ion-col size="2" class=""
+        >折扣數量 : {{ currentAmountDiscount.amount }}</ion-col
+      >
+      <ion-col size="2" class=""
+        >折扣 : {{ currentAmountDiscount.discount }}</ion-col
+      >
+      <ion-col size="2" class=""
+        >完結日期 : {{currentAmountDiscount.date}}</ion-col
+      >
+    </ion-row>
+    <p></p>
+    <ion-title>價錢優惠</ion-title>
+    <ion-row *ngFor="let currentPriceDiscount of currentPriceDiscounts">
+      <ion-col size="6" class=""
+        >折扣名稱 : {{currentPriceDiscount.title}}</ion-col
+      >
+      <ion-col size="2" class=""
+        >價錢 : {{ currentPriceDiscount.total }}</ion-col
+      >
+
+      <ion-col size="2" class=""
+        >折扣 : {{ currentPriceDiscount.discount }}</ion-col
+      >
+      <ion-col size="2" class=""
+        >完結日期 : {{currentPriceDiscount.date}}</ion-col
+      >
+    </ion-row>
+  </ion-grid>
+</ion-content>

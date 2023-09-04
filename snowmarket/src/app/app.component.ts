@@ -12,6 +12,6 @@ export class AppComponent {
     { title: 'Member', url: '/folder/member', icon: 'person' },
     { title: 'Trash', url: '/folder/trash', icon: 'trash' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+
   constructor() {}
 }
