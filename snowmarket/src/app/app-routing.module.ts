@@ -7,11 +7,11 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
-  {
-    path: 'folder/:id',
-    loadChildren: () =>
-      import('./folder/folder.module').then((m) => m.FolderPageModule),
-  },
+  // {
+  //   path: 'folder/:id',
+  //   loadChildren: () =>
+  //     import('./folder/folder.module').then((m) => m.FolderPageModule),
+  // },
   {
     path: 'admin',
     loadChildren: () =>
@@ -26,7 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'customer',
-    loadChildren: () => import('./customer/customer.module').then( m => m.CustomerPageModule)
+    loadChildren: () =>
+      import('./customer/customer.module').then((m) => m.CustomerPageModule),
   },
 ];
 
