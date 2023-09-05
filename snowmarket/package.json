@@ -72,5 +72,5 @@
   "description": "An Ionic project",
   "config": {
     "ionic_sass": "./sass.config.js"
-}
+  }
 }
