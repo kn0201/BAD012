@@ -45,6 +45,13 @@ const routes: Routes = [
             (m) => m.AdminTrashListPageModule
           ),
       },
+      {
+        path: 'receipt-list',
+        loadChildren: () =>
+          import('../admin-receipt-list/admin-receipt-list.module').then(
+            (m) => m.AdminReceiptListPageModule
+          ),
+      },
     ],
   },
 ];

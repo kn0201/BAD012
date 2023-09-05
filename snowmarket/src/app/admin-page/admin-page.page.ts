@@ -11,6 +11,7 @@ export class AdminPagePage implements OnInit {
     { title: 'Product', url: '/admin/product-list', icon: 'pricetag' },
     { title: 'Discount', url: '/admin/discount-list', icon: 'logo-usd' },
     { title: 'Member', url: '/admin/member-list', icon: 'person' },
+    { title: 'Receipt', url: '/admin/receipt-list', icon: 'receipt' },
     { title: 'Trash', url: '/admin/trash-list', icon: 'trash' },
   ];
   constructor() {}
