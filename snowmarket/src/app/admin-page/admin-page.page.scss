@@ -118,3 +118,13 @@ ion-menu ion-content {
   ion-item.selected {
     --color: var(--ion-color-primary);
   }
+
+  .logo {
+    width: 75%;
+    margin-left: 0.5rem;
+  }
+  
+  .image-container {
+    display: flex;
+    justify-content: center;
+  }
