@@ -18,9 +18,10 @@
     <div class="product-list-container">
       <ion-grid *ngFor="let product of productList">
         <ion-row>
-          <ion-col size="2" class="">商品ID : {{ product.id }}</ion-col>
+          <ion-col size="2" class="">ID : {{ product.id }}</ion-col>
           <ion-col size="8" class="">商品名稱 : {{ product.name }}</ion-col>
-          <ion-col size="2" class="">價錢 : {{ product.price }}</ion-col>
+          <ion-col size="1" class="">庫存 : {{product.stock}}</ion-col>
+          <ion-col size="1" class="">價錢 : {{ product.price }}</ion-col>
         </ion-row>
       </ion-grid>
     </div>
