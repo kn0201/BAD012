@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+// import { Subject, Observable } from 'rxjs';
+import { WebcamInitError, WebcamUtil } from 'ngx-webcam';
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.page.html',
@@ -13,9 +16,22 @@ export class CustomerPage implements OnInit {
 
   AIInput = { name: '', price: +'' };
 
+  public multipleWebcamsAvailable = false;
+  public errors: WebcamInitError[] = [];
+
   constructor() {}
 
-  ngOnInit() {}
+  public ngOnInit(): void {
+    WebcamUtil.getAvailableVideoInputs().then(
+      (mediaDevices: MediaDeviceInfo[]) => {
+        this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
+      }
+    );
+  }
+
+  public handleInitError(error: WebcamInitError): void {
+    this.errors.push(error);
+  }
 
   addItem() {
     this.items.push(this.AIInput);

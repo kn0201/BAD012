@@ -30,7 +30,8 @@ is_delete boolean
 receipt
 -------
 id integer PK
-user_id integer FK >- users.id
+user_id integer NULL FK >- users.id
+pos_id integer NULL FK >0- pos.id
 date date
 total decimal
 discount_total decimal
@@ -47,20 +48,23 @@ price decimal
 product
 -------
 id integer PK
+brand_id integer FK -< brand.id
+categories_id integer FK -< categories.id
 name varchar(255)
 price decimal
-categories_id integer FK -< categories.id
 is_delete boolean
-stock
+stock integer
 
 
-amount_discount
+quantity_discount
 ---------------
 id integer PK
 name varchar(255)
-product_id integer FK - product.id
-amount decimal
-discount integer
+product_id integer NULL FK - product.id
+brand_id integer NULL FK - brand.id
+categories_id integer NULL FK - categories.id
+quantity integer
+discount_amount decimal
 start_date date
 end_date date
 is_delete boolean
@@ -71,7 +75,7 @@ price_discount
 id integer PK
 name varchar(255)
 total_price decimal
-discount integer
+discount_rate decimal
 start_date date
 end_date date
 is_delete boolean
@@ -83,18 +87,32 @@ id integer PK
 name varchar(255)
 
 
+brand
+-----
+id integer PK
+name varchar(255)
+
+
+pos
+---
+id integer PK
+code varchar(255)
+
+
 # zoom: 1.000
-# view: (-13, 139)
+# view: (118, 82)
 # text-bg: #6495ed
 # text-color: #000000
 # diagram-bg: #f5f5f5
 # diagram-text: #f5f5f5
 # table-bg: #ffffff
 # table-text: #000000
-# users (463, 603)
-# receipt (93, 533)
-# receipt_item (480, 373)
-# product (464, 124, #000000)
-# amount_discount (932, 87)
-# price_discount (930, 389)
-# categories (501, -6)
+# users (648, 732)
+# receipt (271, 640)
+# receipt_item (710, 524)
+# product (374, -56, #000000)
+# price_discount (1030, 693)
+# categories (290, 351)
+# brand (203, 194)
+# pos (-49, 697)
+# quantity_discount (964, 130)

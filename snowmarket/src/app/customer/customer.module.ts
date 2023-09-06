@@ -8,13 +8,17 @@ import { CustomerPageRoutingModule } from './customer-routing.module';
 
 import { CustomerPage } from './customer.page';
 
+import { WebcamModule } from 'ngx-webcam';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CustomerPageRoutingModule
+    CustomerPageRoutingModule,
+    WebcamModule,
   ],
-  declarations: [CustomerPage]
+  declarations: [CustomerPage],
+  providers: [],
 })
 export class CustomerPageModule {}
