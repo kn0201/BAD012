@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { AdminProductListPageRoutingModule } from './admin-product-list-routing.module';
 
 import { AdminProductListPage } from './admin-product-list.page';
+import { TableModule } from 'ngx-easy-table';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AdminProductListPageRoutingModule
+    AdminProductListPageRoutingModule,
+    TableModule,
   ],
-  declarations: [AdminProductListPage]
+  declarations: [AdminProductListPage],
 })
 export class AdminProductListPageModule {}

@@ -14,11 +14,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- <ion-item padding class="image-container">
-    <img class="logo opacity-25" src="../../assets/image/logo23.png" />
-  </ion-item> -->
-
-  <div id="container">
+  <!-- <div id="container">
     <div class="product-list-container">
       <ion-grid *ngFor="let product of productList">
         <ion-row>
@@ -29,5 +25,30 @@
         </ion-row>
       </ion-grid>
     </div>
+  </div> -->
+
+  <div class="columns">
+    <div class="column col-12">
+      <ngx-table
+        [configuration]="configuration"
+        [data]="data"
+        #table
+        [columns]="columns"
+      >
+      </ngx-table>
+    </div>
   </div>
+  <ng-template #productHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch">Search Product</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedProduct"
+        (input)="filter('name', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
 </ion-content>
