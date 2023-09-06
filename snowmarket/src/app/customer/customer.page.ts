@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 // import { Subject, Observable } from 'rxjs';
 import { WebcamInitError, WebcamUtil } from 'ngx-webcam';
@@ -19,7 +19,19 @@ export class CustomerPage implements OnInit {
   public multipleWebcamsAvailable = false;
   public errors: WebcamInitError[] = [];
 
-  constructor() {}
+  private width!: number;
+  private height!: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: Event) {
+    const win = !!event ? (event.target as Window) : window;
+    this.width = win.innerWidth;
+    this.height = win.innerHeight;
+  }
+
+  constructor() {
+    this.onResize();
+  }
 
   public ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(

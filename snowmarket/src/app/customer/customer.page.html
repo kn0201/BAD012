@@ -64,16 +64,18 @@
               </ion-col>
             </ion-row>
             <ion-row
-              ><div class="cameraArea">
+              ><div class="wrapper" (window:resize)="onResize($event)">
+                <!-- <div class="cameraArea"> -->
                 <webcam
-                  [height]="500"
-                  [width]="500"
+                  [height]="520"
+                  [width]="700"
                   (initError)="handleInitError($event)"
                 ></webcam>
                 <h4 *ngIf="errors.length > 0">Messages:</h4>
                 <ul *ngFor="let error of errors">
                   <li>{{error | json}}</li>
                 </ul>
+                <!-- </div> -->
               </div></ion-row
             >
             <ion-row> Balance </ion-row>

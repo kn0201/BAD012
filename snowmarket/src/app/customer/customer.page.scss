@@ -1,5 +1,5 @@
 ion-list {
-    background-color: #e6faf7;
+    background-color: #fffdea;
     height: 88vh;
     border-radius: 10px;
     margin: 5px;
@@ -11,17 +11,21 @@ ion-list {
     object-fit: cover;
 }
 
-.cameraArea {
-    width:100%;
-    height:50vh;
-    background-color: #2e5953;
+.wrapper {
+  display: flex;
+  background: #ff9763;
+  height: 40vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 ion-header {
 
     ion-toolbar, ion-item {
-      --background: #2e5953;
-      background: #2e5953;
+      --background: #ff9763;
+      background: #ff9763;
       color: white;
       padding: 0 10px;
     }
@@ -37,12 +41,12 @@ ion-header {
   }
   
   ion-content {
-    --background: linear-gradient(90deg, rgba(46,89,83,1) 0%, rgba(46,89,83,1) 35%, rgba(46,89,83,1) 100%);
+    --background: linear-gradient(90deg, rgba(255, 151, 99,1) 0%, rgba(255, 151, 99,1) 35%, rgba(255, 151, 99,1) 100%);
 
     .container {
   
       ion-item {
-        --background: #e6faf7;
+        --background: #fffdea;
         padding:0px, 10px;
         color: #000000;
         font-weight: 600;
