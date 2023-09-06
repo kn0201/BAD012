@@ -65,12 +65,17 @@
             </ion-row>
             <ion-row
               ><div class="cameraArea">
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                /></div
-            ></ion-row>
+                <webcam
+                  [height]="500"
+                  [width]="500"
+                  (initError)="handleInitError($event)"
+                ></webcam>
+                <h4 *ngIf="errors.length > 0">Messages:</h4>
+                <ul *ngFor="let error of errors">
+                  <li>{{error | json}}</li>
+                </ul>
+              </div></ion-row
+            >
             <ion-row> Balance </ion-row>
           </ion-list>
         </ion-col>
