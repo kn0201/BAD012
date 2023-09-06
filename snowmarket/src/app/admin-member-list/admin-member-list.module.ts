@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AdminMemberListPageRoutingModule } from './admin-member-list-routing.module';
-
+import { TableModule } from 'ngx-easy-table';
 import { AdminMemberListPage } from './admin-member-list.page';
 
 @NgModule({
@@ -13,8 +13,9 @@ import { AdminMemberListPage } from './admin-member-list.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    AdminMemberListPageRoutingModule
+    AdminMemberListPageRoutingModule,
+    TableModule,
   ],
-  declarations: [AdminMemberListPage]
+  declarations: [AdminMemberListPage],
 })
 export class AdminMemberListPageModule {}

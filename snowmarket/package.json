@@ -14,6 +14,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.0.0",
+    "@angular/cdk": "^16.2.2",
     "@angular/common": "^16.0.0",
     "@angular/compiler": "^16.0.0",
     "@angular/core": "^16.0.0",
@@ -33,6 +34,7 @@
     "@ionic/pwa-elements": "^3.2.2",
     "bootstrap": "^5.3.1",
     "ionicons": "^7.0.0",
+    "ngx-easy-table": "^15.5.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
@@ -72,5 +74,5 @@
   "description": "An Ionic project",
   "config": {
     "ionic_sass": "./sass.config.js"
-}
+  }
 }

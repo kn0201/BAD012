@@ -52,6 +52,20 @@ const routes: Routes = [
             (m) => m.AdminReceiptListPageModule
           ),
       },
+      {
+        path: 'brand-list',
+        loadChildren: () =>
+          import('../admin-brand-list/admin-brand-list.module').then(
+            (m) => m.AdminBrandListPageModule
+          ),
+      },
+      {
+        path: 'categories-list',
+        loadChildren: () =>
+          import('../admin-categories-list/admin-categories-list.module').then(
+            (m) => m.AdminCategoriesListPageModule
+          ),
+      },
     ],
   },
 ];
