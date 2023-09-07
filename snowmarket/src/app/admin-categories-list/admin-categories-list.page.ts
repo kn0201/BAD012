@@ -13,6 +13,7 @@ import { categoriesList } from 'src/assets/categories';
 import { brand, category } from 'src/assets/interface';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
+import { DOMAIN } from 'utils/domain';
 
 @Component({
   selector: 'app-admin-categories-list',
@@ -74,13 +75,13 @@ export class AdminCategoriesListPage implements OnInit {
     this.brandList.checkboxes = true;
     this.brandList.fixedColumnWidth = true;
     this.brandList.orderEnabled = true;
-    this.brandList.rows = 6;
+    this.brandList.rows = 4;
     this.categoriesList = { ...DefaultConfig };
     this.categoriesList.checkboxes = true;
     this.categoriesList.fixedColumnWidth = true;
     this.categoriesList.orderEnabled = true;
     this.categoriesList.threeWaySort = true;
-    this.categoriesList.rows = 6;
+    this.categoriesList.rows = 4;
     this.brandData = brandList;
     this.brandDataCopy = brandList;
     this.categoryData = categoriesList;
@@ -124,7 +125,7 @@ export class AdminCategoriesListPage implements OnInit {
     this.selectValue = event.target.value;
   }
 
-  @Output() addRow(selectValue: string): void {
+  @Output() async addRow(selectValue: string): Promise<void> {
     if (selectValue === 'brand') {
       console.log('brand name : ' + this.name);
       this.brandData = [
@@ -134,6 +135,22 @@ export class AdminCategoriesListPage implements OnInit {
           brand_name: this.name,
         },
       ];
+      let msgName = this.name;
+      let submitObject = { msgName };
+      let res = await fetch(`${DOMAIN}/receipt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitObject),
+      });
+      let json = await res.json();
+      if (json.error) {
+        console.log('Failed to load Recipes', json.error, 'error');
+        return;
+      }
+      let result = json.result;
+      console.log(' From Nestjs : ' + result);
     }
     if (selectValue === 'category') {
       console.log('category name : ' + this.name);
@@ -144,6 +161,14 @@ export class AdminCategoriesListPage implements OnInit {
           categories_name: this.name,
         },
       ];
+      let res = await fetch(`${DOMAIN}/receipt`);
+      let json = await res.json();
+      if (json.error) {
+        console.log('Failed to load Recipes', json.error, 'error');
+        return;
+      }
+      let result = json.result;
+      console.log(' From Nestjs : ' + result);
     }
     this.name = '';
     this.modal.dismiss();

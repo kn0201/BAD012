@@ -66,6 +66,7 @@
             label="Select"
             placeholder="Brand / Category"
             (ionChange)="handleChange($event)"
+            required
           >
             <ion-select-option value="brand">Brand</ion-select-option>
             <ion-select-option value="category">Category</ion-select-option>
@@ -77,6 +78,7 @@
             type="text"
             placeholder="Name"
             [(ngModel)]="name"
+            required
           ></ion-input>
         </ion-item>
       </ion-content>
