@@ -8,13 +8,15 @@ import { AdminCategoriesListPageRoutingModule } from './admin-categories-list-ro
 
 import { AdminCategoriesListPage } from './admin-categories-list.page';
 
+import { TableModule } from 'ngx-easy-table';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AdminCategoriesListPageRoutingModule
+    AdminCategoriesListPageRoutingModule,
+    TableModule,
   ],
-  declarations: [AdminCategoriesListPage]
+  declarations: [AdminCategoriesListPage],
 })
 export class AdminCategoriesListPageModule {}

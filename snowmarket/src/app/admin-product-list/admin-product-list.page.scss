@@ -27,6 +27,7 @@ ion-content.background {
 
 .columns {
   margin: 0.5rem;
+  padding-bottom: 3rem;
 }
 
 .form-input {
@@ -48,4 +49,7 @@ ion-content.background {
   position: relative;
   transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s;
   width: 100%;
+}
+.addBtn {
+  position: right bottom;
 }

@@ -14,19 +14,6 @@
     </ion-toolbar>
   </ion-header>
 
-  <!-- <div id="container">
-    <div class="product-list-container">
-      <ion-grid *ngFor="let product of productList">
-        <ion-row>
-          <ion-col size="2" class="">ID : {{ product.id }}</ion-col>
-          <ion-col size="8" class="">商品名稱 : {{ product.name }}</ion-col>
-          <ion-col size="1" class="">庫存 : {{product.stock}}</ion-col>
-          <ion-col size="1" class="">價錢 : {{ product.price }}</ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-  </div> -->
-
   <div class="columns">
     <div class="column col-12">
       <ngx-table
@@ -38,6 +25,11 @@
       </ngx-table>
     </div>
   </div>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <ng-template #productHeaderActionTemplate>
     <div class="search-template">
       <label for="filterHeaderSearch">Search Product</label>
@@ -46,6 +38,32 @@
         id="filterHeaderSearch"
         [value]="selectedProduct"
         (input)="filter('name', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
+  <ng-template #brandHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch"> Search Brand</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedBrand"
+        (input)="filter('brand_id', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
+  <ng-template #categoryHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch"> Search Category</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedCategory"
+        (input)="filter('category_id', $event)"
         type="search"
         placeholder="Search"
       />

@@ -19,6 +19,10 @@ export class AdminProductListPage implements OnInit {
   constructor() {}
   @ViewChild('productHeaderActionTemplate', { static: true })
   productHeaderActionTemplate!: TemplateRef<any>;
+  @ViewChild('categoryHeaderActionTemplate', { static: true })
+  categoryHeaderActionTemplate!: TemplateRef<any>;
+  @ViewChild('brandHeaderActionTemplate', { static: true })
+  brandHeaderActionTemplate!: TemplateRef<any>;
   @ViewChild('table')
   table!: APIDefinition;
 
@@ -27,13 +31,26 @@ export class AdminProductListPage implements OnInit {
   dataCopy: products[] = [];
   configuration!: Config;
   selectedProduct = '';
+  selectedBrand = '';
+  selectedCategory = '';
 
   ngOnInit() {
     this.configuration = { ...DefaultConfig };
     this.configuration.checkboxes = true;
     this.configuration.fixedColumnWidth = true;
+    this.configuration.rows = 10;
     this.columns = [
       { key: 'id', title: 'Product ID' },
+      {
+        key: 'brand_id',
+        title: 'Brand ID',
+        headerActionTemplate: this.brandHeaderActionTemplate,
+      },
+      {
+        key: 'category_id',
+        title: 'Category ID',
+        headerActionTemplate: this.categoryHeaderActionTemplate,
+      },
       {
         key: 'name',
         title: 'Product Name',
@@ -49,7 +66,7 @@ export class AdminProductListPage implements OnInit {
     this.dataCopy = productList;
   }
 
-  filter(field: string, event: Event | string): void {
+  filter(field: string | number, event: Event | string): void {
     const value =
       typeof event === 'string'
         ? event
@@ -57,10 +74,20 @@ export class AdminProductListPage implements OnInit {
     if (field === 'name') {
       this.selectedProduct = value;
     }
-    this.data = [...this.dataCopy].filter(({ name }) => {
-      return name
-        .toLocaleLowerCase()
-        .includes(this.selectedProduct.toLocaleLowerCase());
+    if (field === 'brand_id') {
+      this.selectedBrand = value;
+    }
+    if (field === 'category_id') {
+      this.selectedCategory = value;
+    }
+    this.data = [...this.dataCopy].filter(({ name, brand_id, category_id }) => {
+      return (
+        name
+          .toLocaleLowerCase()
+          .includes(this.selectedProduct.toLocaleLowerCase()) &&
+        brand_id.toString().includes(this.selectedBrand) &&
+        category_id.toString().includes(this.selectedCategory)
+      );
     });
   }
 }

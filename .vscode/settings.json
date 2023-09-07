@@ -3,5 +3,6 @@
         "editor.defaultFormatter": "ms-python.autopep8",
         "editor.formatOnSave": true
     },
+    "search.useGlobalIgnoreFiles": false,
     // "python.formatting.provider": "none"
 }

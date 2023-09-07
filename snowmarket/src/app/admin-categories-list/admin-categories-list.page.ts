@@ -1,15 +1,158 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  TemplateRef,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table';
+import { brandList } from 'src/assets/brand';
+import { categoriesList } from 'src/assets/categories';
+import { brand, category } from 'src/assets/interface';
+import { IonModal } from '@ionic/angular';
+import { OverlayEventDetail } from '@ionic/core/components';
 
 @Component({
   selector: 'app-admin-categories-list',
   templateUrl: './admin-categories-list.page.html',
   styleUrls: ['./admin-categories-list.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminCategoriesListPage implements OnInit {
+  constructor() {}
+  @ViewChild('categoryHeaderActionTemplate', { static: true })
+  categoryHeaderActionTemplate!: TemplateRef<any>;
 
-  constructor() { }
+  @ViewChild('brandHeaderActionTemplate', { static: true })
+  brandHeaderActionTemplate!: TemplateRef<any>;
+
+  @ViewChild('table')
+  table!: APIDefinition;
+
+  @ViewChild(IonModal) modal!: IonModal;
+
+  public brandColumns!: Columns[];
+  public categoriesColumns!: Columns[];
+
+  brandList!: Config;
+  categoriesList!: Config;
+
+  brandData: brand[] = [];
+  brandDataCopy: brand[] = [];
+
+  categoryData: category[] = [];
+  categoryDataCopy: category[] = [];
+
+  selectedBrand = '';
+  selectedCategory = '';
+
+  message = '';
+  name!: string;
+
+  selectValue = '';
 
   ngOnInit() {
+    this.brandColumns = [
+      { key: 'id', title: 'Brand ID' },
+      {
+        key: 'brand_name',
+        title: 'Name',
+        headerActionTemplate: this.brandHeaderActionTemplate,
+      },
+    ];
+    this.categoriesColumns = [
+      { key: 'id', title: 'Category ID' },
+      {
+        key: 'categories_name',
+        title: 'Name',
+        headerActionTemplate: this.categoryHeaderActionTemplate,
+      },
+    ];
+    this.brandList = { ...DefaultConfig };
+    this.brandList.checkboxes = true;
+    this.brandList.fixedColumnWidth = true;
+    this.brandList.orderEnabled = true;
+    this.brandList.rows = 6;
+    this.categoriesList = { ...DefaultConfig };
+    this.categoriesList.checkboxes = true;
+    this.categoriesList.fixedColumnWidth = true;
+    this.categoriesList.orderEnabled = true;
+    this.categoriesList.threeWaySort = true;
+    this.categoriesList.rows = 6;
+    this.brandData = brandList;
+    this.brandDataCopy = brandList;
+    this.categoryData = categoriesList;
+    this.categoryDataCopy = categoriesList;
   }
 
+  filter(field: string, event: Event | string): void {
+    const value =
+      typeof event === 'string'
+        ? event
+        : (event.target as HTMLInputElement).value;
+    if (field === 'brand_name') {
+      this.selectedBrand = value;
+      this.brandData = [...this.brandDataCopy].filter(({ brand_name }) => {
+        return brand_name
+          .toLocaleLowerCase()
+          .includes(this.selectedBrand.toLocaleLowerCase());
+      });
+    }
+    if (field === 'categories_name') {
+      this.selectedCategory = value;
+      this.categoryData = [...this.categoryDataCopy].filter(
+        ({ categories_name }) => {
+          return categories_name
+            .toLocaleLowerCase()
+            .includes(this.selectedCategory.toLocaleLowerCase());
+        }
+      );
+    }
+  }
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.name, 'confirm');
+  }
+
+  handleChange(event: any) {
+    this.selectValue = event.target.value;
+  }
+
+  @Output() addRow(selectValue: string): void {
+    if (selectValue === 'brand') {
+      console.log('brand name : ' + this.name);
+      this.brandData = [
+        ...this.brandData,
+        {
+          id: 31,
+          brand_name: this.name,
+        },
+      ];
+    }
+    if (selectValue === 'category') {
+      console.log('category name : ' + this.name);
+      this.categoryData = [
+        ...this.categoryData,
+        {
+          id: 21,
+          categories_name: this.name,
+        },
+      ];
+    }
+    this.name = '';
+    this.modal.dismiss();
+  }
+
+  // onWillDismiss(event: Event) {
+  //   const ev = event as CustomEvent<OverlayEventDetail<string>>;
+  //   if (ev.detail.role === 'confirm') {
+  //     this.message = `Hello, ${ev.detail.data}!`;
+  //   }
+  // }
 }

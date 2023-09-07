@@ -7,7 +7,18 @@ export interface users {
 }
 export interface products {
   id: number;
-  name: string;
+  brand_id: number;
+  category_id: number;
+  price: number;
   stock: number;
-  price: string;
+  name: string;
+}
+
+export interface brand {
+  id: number;
+  brand_name: string;
+}
+export interface category {
+  id: number;
+  categories_name: string;
 }
