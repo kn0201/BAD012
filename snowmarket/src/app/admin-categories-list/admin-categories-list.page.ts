@@ -54,6 +54,8 @@ export class AdminCategoriesListPage implements OnInit {
 
   selectValue = '';
 
+  canDismiss = false;
+
   ngOnInit() {
     this.brandColumns = [
       { key: 'id', title: 'Brand ID' },
@@ -114,7 +116,7 @@ export class AdminCategoriesListPage implements OnInit {
   }
 
   cancel() {
-    this.modal.dismiss(null, 'cancel');
+    this.modal.dismiss();
   }
 
   confirm() {
@@ -126,50 +128,23 @@ export class AdminCategoriesListPage implements OnInit {
   }
 
   @Output() async addRow(selectValue: string): Promise<void> {
-    if (selectValue === 'brand') {
-      console.log('brand name : ' + this.name);
-      this.brandData = [
-        ...this.brandData,
-        {
-          id: 31,
-          brand_name: this.name,
-        },
-      ];
-      let msgName = this.name;
-      let submitObject = { msgName };
-      let res = await fetch(`${DOMAIN}/receipt`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitObject),
-      });
-      let json = await res.json();
-      if (json.error) {
-        console.log('Failed to load Recipes', json.error, 'error');
-        return;
-      }
-      let result = json.result;
-      console.log(' From Nestjs : ' + result);
+    let msgName = this.name;
+    let submitObject = { msgName, selectValue };
+    let res = await fetch(`${DOMAIN}/admin/b&c-list/add`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(submitObject),
+    });
+    let json = await res.json();
+    if (json.error) {
+      console.log('Failed to load Recipes', json.error, 'error');
+      return;
     }
-    if (selectValue === 'category') {
-      console.log('category name : ' + this.name);
-      this.categoryData = [
-        ...this.categoryData,
-        {
-          id: 21,
-          categories_name: this.name,
-        },
-      ];
-      let res = await fetch(`${DOMAIN}/receipt`);
-      let json = await res.json();
-      if (json.error) {
-        console.log('Failed to load Recipes', json.error, 'error');
-        return;
-      }
-      let result = json.result;
-      console.log(' From Nestjs : ' + result);
-    }
+    let result = json.result;
+    console.log(' From Nestjs : ' + result);
+
     this.name = '';
     this.modal.dismiss();
   }

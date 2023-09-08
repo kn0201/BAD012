@@ -11,7 +11,7 @@ export class AdminPagePage implements OnInit {
     // { title: 'Brand', url: '/admin/brand-list', icon: 'ribbon' },
     {
       title: 'Brand & Categories',
-      url: '/admin/categories-list',
+      url: '/admin/b&c-list',
       icon: 'folder-open',
     },
     { title: 'Product', url: '/admin/product-list', icon: 'pricetag' },
