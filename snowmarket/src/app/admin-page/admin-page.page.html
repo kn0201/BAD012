@@ -42,6 +42,22 @@
         </ion-list>
       </ion-content>
     </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content" class="background">
+      <ion-header [translucent]="true">
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title class="text-center adminPanel">Admin Panel</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-img
+        src="../../assets/image/Biglogo.png"
+        class="adminLogo"
+        id="container"
+      ></ion-img>
+      <div class="text-center adminWord">Purrfect Market</div>
+      <div class="text-center adminWord">Admin Panel</div>
+    </ion-router-outlet>
   </ion-split-pane>
 </ion-app>
