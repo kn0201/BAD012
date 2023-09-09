@@ -69,6 +69,8 @@
           <ion-select
             label="Select"
             placeholder="Product / Price"
+            [value]="selectDiscount"
+            defaultValue="Product"
             (ionChange)="handleChange($event)"
             required
           >
@@ -78,7 +80,10 @@
             <ion-select-option value="price_discount">Price</ion-select-option>
           </ion-select>
         </ion-item>
-
+        <ion-item>
+          <div *ngIf="selectedProductDiscount">Product Discount Selected</div>
+          <div *ngIf="!selectedProductDiscount">Price Discount Selected</div>
+        </ion-item>
         <ion-item>
           <ion-label position="stacked">Discount Title*</ion-label>
           <ion-input

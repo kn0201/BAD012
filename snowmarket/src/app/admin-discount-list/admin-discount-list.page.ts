@@ -64,6 +64,7 @@ export class AdminDiscountListPage implements OnInit {
   selectedProduct = '';
   selectedBrand = '';
   selectedCategory = '';
+  selectedProductDiscount: boolean = true;
 
   public priceDiscountColumns: Columns[] = [
     { key: 'id', title: ' Price Discount ID' },
@@ -86,7 +87,7 @@ export class AdminDiscountListPage implements OnInit {
   quantity!: number;
   discount_amount!: number;
 
-  selectDiscount = '';
+  selectDiscount = 'product_discount';
   selectStartDate = '';
   selectEndDate = '';
 
@@ -148,10 +149,18 @@ export class AdminDiscountListPage implements OnInit {
   }
 
   handleChange(event: any) {
-    this.selectDiscount = event.target.value;
-    if (this.selectDiscount === 'product_discount') {
-      // document.querySelector('productQuantity').hidden = false;
+    console.log(event.target.value);
+    if (event.target.value === 'product_discount') {
+      this.selectedProductDiscount = true;
+      this.selectDiscount = 'product_discount';
+    } else if (event.target.value === 'price_discount') {
+      this.selectedProductDiscount = false;
+      this.selectDiscount = 'price_discount';
     }
+    // this.selectDiscount = event.target.value;
+    // if (this.selectDiscount === 'product_discount') {
+    //   // document.querySelector('productQuantity').hidden = false;
+    // }
   }
   startDay(event: any) {
     this.selectStartDate = event.target.value;
