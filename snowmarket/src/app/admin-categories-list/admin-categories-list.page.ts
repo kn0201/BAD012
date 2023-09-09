@@ -6,14 +6,15 @@ import {
   ViewChild,
   Output,
   EventEmitter,
+  Input,
 } from '@angular/core';
 import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table';
-import { brandList } from 'src/assets/brand';
-import { categoriesList } from 'src/assets/categories';
+// import { brandList } from 'src/assets/brand';
 import { brand, category } from 'src/assets/interface';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { DOMAIN } from 'utils/domain';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-categories-list',
@@ -23,6 +24,7 @@ import { DOMAIN } from 'utils/domain';
 })
 export class AdminCategoriesListPage implements OnInit {
   constructor() {}
+
   @ViewChild('categoryHeaderActionTemplate', { static: true })
   categoryHeaderActionTemplate!: TemplateRef<any>;
 
@@ -34,8 +36,22 @@ export class AdminCategoriesListPage implements OnInit {
 
   @ViewChild(IonModal) modal!: IonModal;
 
-  public brandColumns!: Columns[];
-  public categoriesColumns!: Columns[];
+  public brandColumns: Columns[] = [
+    { key: 'id', title: 'Brand ID' },
+    {
+      key: 'brand_name',
+      title: 'Name',
+      headerActionTemplate: this.brandHeaderActionTemplate,
+    },
+  ];
+  public categoriesColumns: Columns[] = [
+    { key: 'id', title: 'Category ID' },
+    {
+      key: 'categories_name',
+      title: 'Name',
+      headerActionTemplate: this.categoryHeaderActionTemplate,
+    },
+  ];
 
   brandList!: Config;
   categoriesList!: Config;
@@ -54,25 +70,11 @@ export class AdminCategoriesListPage implements OnInit {
 
   selectValue = '';
 
-  canDismiss = false;
+  canDismiss = true;
 
   ngOnInit() {
-    this.brandColumns = [
-      { key: 'id', title: 'Brand ID' },
-      {
-        key: 'brand_name',
-        title: 'Name',
-        headerActionTemplate: this.brandHeaderActionTemplate,
-      },
-    ];
-    this.categoriesColumns = [
-      { key: 'id', title: 'Category ID' },
-      {
-        key: 'categories_name',
-        title: 'Name',
-        headerActionTemplate: this.categoryHeaderActionTemplate,
-      },
-    ];
+    this.loadList();
+
     this.brandList = { ...DefaultConfig };
     this.brandList.checkboxes = true;
     this.brandList.fixedColumnWidth = true;
@@ -84,10 +86,6 @@ export class AdminCategoriesListPage implements OnInit {
     this.categoriesList.orderEnabled = true;
     this.categoriesList.threeWaySort = true;
     this.categoriesList.rows = 4;
-    this.brandData = brandList;
-    this.brandDataCopy = brandList;
-    this.categoryData = categoriesList;
-    this.categoryDataCopy = categoriesList;
   }
 
   filter(field: string, event: Event | string): void {
@@ -147,5 +145,22 @@ export class AdminCategoriesListPage implements OnInit {
 
     this.name = '';
     this.modal.dismiss();
+  }
+
+  async loadList(): Promise<any> {
+    let res = await fetch(`${DOMAIN}/admin/b&c-list`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    let json = await res.json();
+    if (json.error) {
+      Swal.fire('Failed ', json.error, 'error');
+      return;
+    }
+    this.brandData = json.brandList;
+    this.brandDataCopy = json.brandList;
+    this.categoryData = json.categoriesList;
+    this.categoryDataCopy = json.categoriesList;
   }
 }

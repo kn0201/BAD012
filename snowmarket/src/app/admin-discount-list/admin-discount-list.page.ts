@@ -35,7 +35,29 @@ export class AdminDiscountListPage implements OnInit {
 
   @ViewChild(IonModal) modal!: IonModal;
 
-  public productDiscountColumns!: Columns[];
+  public productDiscountColumns: Columns[] = [
+    { key: 'id', title: 'Brand ID' },
+    { key: 'title', title: 'Title' },
+    {
+      key: 'product_id',
+      title: 'Product ID',
+      headerActionTemplate: this.productHeaderActionTemplate,
+    },
+    {
+      key: 'brand_id',
+      title: 'Brand ID',
+      headerActionTemplate: this.brandHeaderActionTemplate,
+    },
+    {
+      key: 'categories_id',
+      title: 'Category ID',
+      headerActionTemplate: this.categoryHeaderActionTemplate,
+    },
+    { key: 'amount', title: 'Quantity' },
+    { key: 'discount_amount', title: 'Discount Amount' },
+    { key: 'start_date', title: 'Start date' },
+    { key: 'end_date', title: 'End date' },
+  ];
   productDiscountList!: Config;
   productDiscountData: productDiscount[] = [];
   productDiscountDataCopy: productDiscount[] = [];
@@ -43,51 +65,32 @@ export class AdminDiscountListPage implements OnInit {
   selectedBrand = '';
   selectedCategory = '';
 
-  public priceDiscountColumns!: Columns[];
+  public priceDiscountColumns: Columns[] = [
+    { key: 'id', title: ' Price Discount ID' },
+    {
+      key: 'title',
+      title: 'Title',
+    },
+    { key: 'total_price', title: 'Total' },
+    { key: 'discount_rate', title: 'Discount Rate' },
+    { key: 'start_date', title: 'Start date' },
+    { key: 'end_date', title: 'End date' },
+  ];
   priceDiscountList!: Config;
   priceDiscountData: priceDiscount[] = [];
   priceDiscountDataCopy: priceDiscount[] = [];
 
   message = '';
-  name!: string;
 
-  selectValue = '';
+  title!: string;
+  quantity!: number;
+  discount_amount!: number;
+
+  selectDiscount = '';
+  selectStartDate = '';
+  selectEndDate = '';
 
   ngOnInit() {
-    this.productDiscountColumns = [
-      { key: 'id', title: 'Brand ID' },
-      { key: 'title', title: 'Title' },
-      {
-        key: 'product_id',
-        title: 'Product ID',
-        headerActionTemplate: this.productHeaderActionTemplate,
-      },
-      {
-        key: 'brand_id',
-        title: 'Brand ID',
-        headerActionTemplate: this.brandHeaderActionTemplate,
-      },
-      {
-        key: 'categories_id',
-        title: 'Category ID',
-        headerActionTemplate: this.categoryHeaderActionTemplate,
-      },
-      { key: 'amount', title: 'Quantity' },
-      { key: 'discount_amount', title: 'Discount Amount' },
-      { key: 'start_date', title: 'Start date' },
-      { key: 'end_date', title: 'End date' },
-    ];
-    this.priceDiscountColumns = [
-      { key: 'id', title: ' Price Discount ID' },
-      {
-        key: 'title',
-        title: 'Title',
-      },
-      { key: 'total_price', title: 'Total' },
-      { key: 'discount_rate', title: 'Discount Rate' },
-      { key: 'start_date', title: 'Start date' },
-      { key: 'end_date', title: 'End date' },
-    ];
     this.productDiscountList = { ...DefaultConfig };
     this.productDiscountList.fixedColumnWidth = true;
     this.productDiscountList.orderEnabled = true;
@@ -135,70 +138,30 @@ export class AdminDiscountListPage implements OnInit {
   }
 
   confirm() {
-    this.modal.dismiss(this.name, 'confirm');
+    console.log(this.selectDiscount);
+    console.log(this.title);
+    console.log(this.quantity);
+    console.log(this.discount_amount);
+    console.log(this.selectStartDate);
+    console.log(this.selectEndDate);
+    this.modal.dismiss();
   }
 
   handleChange(event: any) {
-    this.selectValue = event.target.value;
+    this.selectDiscount = event.target.value;
+    if (this.selectDiscount === 'product_discount') {
+      // document.querySelector('productQuantity').hidden = false;
+    }
+  }
+  startDay(event: any) {
+    this.selectStartDate = event.target.value;
+  }
+  endDay(event: any) {
+    this.selectEndDate = event.target.value;
   }
 
   @Output() async addRow(selectValue: string): Promise<void> {
-    if (selectValue === 'brand') {
-      console.log('brand name : ' + this.name);
-      this.productDiscountData = [
-        ...this.productDiscountData,
-        {
-          id: '4',
-          title: '各類水果 30蚊 4個',
-          product_id: '5',
-          brand_id: '',
-          categories_id: '3',
-          amount: '4',
-          discount_amount: '-22',
-          start_date: '0911',
-          end_date: '0919',
-        },
-      ];
-      let msgName = this.name;
-      let submitObject = { msgName };
-      let res = await fetch(`${DOMAIN}/receipt`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitObject),
-      });
-      let json = await res.json();
-      if (json.error) {
-        console.log('Failed to load Recipes', json.error, 'error');
-        return;
-      }
-      let result = json.result;
-      console.log(' From Nestjs : ' + result);
-    }
-    if (selectValue === 'category') {
-      console.log('category name : ' + this.name);
-      this.priceDiscountData = [
-        ...this.priceDiscountData,
-        {
-          id: '3',
-          title: '滿1000 7折',
-          total_price: '1000',
-          discount_rate: '*0.7',
-          start_date: '0911',
-          end_date: '0919',
-        },
-      ];
-      let res = await fetch(`${DOMAIN}/receipt`);
-      let json = await res.json();
-      if (json.error) {
-        console.log('Failed to load Recipes', json.error, 'error');
-        return;
-      }
-      let result = json.result;
-      console.log(' From Nestjs : ' + result);
-    }
-    this.name = '';
+    this.title = '';
     this.modal.dismiss();
   }
 }

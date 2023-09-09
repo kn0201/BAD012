@@ -4,5 +4,8 @@
         "editor.formatOnSave": true
     },
     "search.useGlobalIgnoreFiles": false,
+    "cSpell.words": [
+        "sweetalert"
+    ],
     // "python.formatting.provider": "none"
 }

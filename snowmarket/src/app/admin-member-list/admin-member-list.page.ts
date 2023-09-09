@@ -5,9 +5,11 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { memberList } from '../../assets/member';
+
 import { APIDefinition, Config, Columns, DefaultConfig } from 'ngx-easy-table';
 import { users } from 'src/assets/interface';
+import { DOMAIN } from 'utils/domain';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-member-list',
@@ -22,32 +24,30 @@ export class AdminMemberListPage implements OnInit {
   @ViewChild('table')
   table!: APIDefinition;
 
-  public columns: Columns[] = [];
+  public columns: Columns[] = [
+    { key: 'id', title: 'Member ID' },
+    {
+      key: 'username',
+      title: 'Username',
+      headerActionTemplate: this.usernameHeaderActionTemplate,
+    },
+    {
+      key: 'email',
+      title: 'Email',
+    },
+    { key: 'birthday', title: 'Birthday' },
+    { key: 'points', title: 'points' },
+  ];
   data: users[] = [];
   dataCopy: users[] = [];
   configuration!: Config;
   selectedUser = '';
 
   ngOnInit(): void {
+    this.loadList();
     this.configuration = { ...DefaultConfig };
     this.configuration.checkboxes = true;
     this.configuration.fixedColumnWidth = true;
-    this.columns = [
-      { key: 'id', title: 'Member ID' },
-      {
-        key: 'username',
-        title: 'Username',
-        headerActionTemplate: this.usernameHeaderActionTemplate,
-      },
-      {
-        key: 'email',
-        title: 'Email',
-      },
-      { key: 'birthday', title: 'Birthday' },
-      { key: 'points', title: 'points' },
-    ];
-    this.data = memberList;
-    this.dataCopy = memberList;
   }
   filter(field: string, event: Event | string): void {
     const value =
@@ -62,5 +62,21 @@ export class AdminMemberListPage implements OnInit {
         .toLocaleLowerCase()
         .includes(this.selectedUser.toLocaleLowerCase());
     });
+  }
+  async loadList(): Promise<any> {
+    let res = await fetch(`${DOMAIN}/admin/member-list`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    let json = await res.json();
+    if (json.error) {
+      Swal.fire('Failed ', json.error, 'error');
+      return;
+    }
+    console.log(json.memberList);
+
+    this.data = json.memberList;
+    this.dataCopy = json.memberList;
   }
 }
