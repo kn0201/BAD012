@@ -7,7 +7,8 @@ import {
 } from '@angular/core';
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { products } from 'src/assets/interface';
-import { productList } from 'src/assets/product';
+import Swal from 'sweetalert2';
+import { DOMAIN } from 'utils/domain';
 
 @Component({
   selector: 'app-admin-product-list',
@@ -26,44 +27,45 @@ export class AdminProductListPage implements OnInit {
   @ViewChild('table')
   table!: APIDefinition;
 
-  public columns: Columns[] = [];
+  public columns: Columns[] = [
+    { key: 'id', title: 'Product ID' },
+    {
+      key: 'brand_id',
+      title: 'Brand ID',
+      headerActionTemplate: this.brandHeaderActionTemplate,
+    },
+    {
+      key: 'category_id',
+      title: 'Category ID',
+      headerActionTemplate: this.categoryHeaderActionTemplate,
+    },
+    {
+      key: 'name',
+      title: 'Product Name',
+      headerActionTemplate: this.productHeaderActionTemplate,
+    },
+    {
+      key: 'price',
+      title: 'Price',
+    },
+    { key: 'stock', title: 'Stock' },
+  ];
+
   data: products[] = [];
   dataCopy: products[] = [];
+
   configuration!: Config;
+
   selectedProduct = '';
   selectedBrand = '';
   selectedCategory = '';
 
   ngOnInit() {
+    this.loadList();
     this.configuration = { ...DefaultConfig };
     this.configuration.checkboxes = true;
     this.configuration.fixedColumnWidth = true;
     this.configuration.rows = 10;
-    this.columns = [
-      { key: 'id', title: 'Product ID' },
-      {
-        key: 'brand_id',
-        title: 'Brand ID',
-        headerActionTemplate: this.brandHeaderActionTemplate,
-      },
-      {
-        key: 'category_id',
-        title: 'Category ID',
-        headerActionTemplate: this.categoryHeaderActionTemplate,
-      },
-      {
-        key: 'name',
-        title: 'Product Name',
-        headerActionTemplate: this.productHeaderActionTemplate,
-      },
-      {
-        key: 'price',
-        title: 'Price',
-      },
-      { key: 'stock', title: 'Stock' },
-    ];
-    this.data = productList;
-    this.dataCopy = productList;
   }
 
   filter(field: string | number, event: Event | string): void {
@@ -89,5 +91,22 @@ export class AdminProductListPage implements OnInit {
         category_id.toString().includes(this.selectedCategory)
       );
     });
+  }
+
+  async loadList(): Promise<any> {
+    let res = await fetch(`${DOMAIN}/admin/product-list`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    let json = await res.json();
+    if (json.error) {
+      Swal.fire('Failed ', json.error, 'error');
+      return;
+    }
+    console.log(json.productList);
+
+    this.data = json.productList;
+    this.dataCopy = json.productList;
   }
 }

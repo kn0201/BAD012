@@ -34,9 +34,10 @@
     "@ionic/pwa-elements": "^3.2.2",
     "bootstrap": "^5.3.1",
     "ionicons": "^7.0.0",
-    "ngx-webcam": "^0.4.1",
     "ngx-easy-table": "^15.5.0",
+    "ngx-webcam": "^0.4.1",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.7.27",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },

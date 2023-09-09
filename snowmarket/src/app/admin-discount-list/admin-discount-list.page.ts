@@ -10,6 +10,7 @@ import { IonModal } from '@ionic/angular';
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { productDiscountList, priceDiscountList } from 'src/assets/discount';
 import { priceDiscount, productDiscount } from 'src/assets/interface';
+import Swal from 'sweetalert2';
 import { DOMAIN } from 'utils/domain';
 
 @Component({
@@ -81,17 +82,21 @@ export class AdminDiscountListPage implements OnInit {
   priceDiscountData: priceDiscount[] = [];
   priceDiscountDataCopy: priceDiscount[] = [];
 
-  message = '';
-
   title!: string;
+  product_id!: number;
+  brand_id!: number;
+  categories_id!: number;
   quantity!: number;
   discount_amount!: number;
+  discount_rate!: number;
+  total_price!: number;
 
   selectDiscount = 'product_discount';
   selectStartDate = '';
   selectEndDate = '';
 
   ngOnInit() {
+    this.loadList();
     this.productDiscountList = { ...DefaultConfig };
     this.productDiscountList.fixedColumnWidth = true;
     this.productDiscountList.orderEnabled = true;
@@ -101,10 +106,6 @@ export class AdminDiscountListPage implements OnInit {
     this.priceDiscountList.orderEnabled = true;
     this.priceDiscountList.threeWaySort = true;
     this.priceDiscountList.rows = 4;
-    this.productDiscountData = productDiscountList;
-    this.productDiscountDataCopy = productDiscountList;
-    this.priceDiscountData = priceDiscountList;
-    this.priceDiscountDataCopy = priceDiscountList;
   }
 
   filter(field: string, event: Event | string): void {
@@ -141,10 +142,17 @@ export class AdminDiscountListPage implements OnInit {
   confirm() {
     console.log(this.selectDiscount);
     console.log(this.title);
+    console.log(this.product_id);
+    console.log(this.brand_id);
+    console.log(this.categories_id);
     console.log(this.quantity);
     console.log(this.discount_amount);
+    console.log(this.total_price);
+    console.log(this.discount_rate);
     console.log(this.selectStartDate);
     console.log(this.selectEndDate);
+    // console.log(this);
+
     this.modal.dismiss();
   }
 
@@ -172,5 +180,26 @@ export class AdminDiscountListPage implements OnInit {
   @Output() async addRow(selectValue: string): Promise<void> {
     this.title = '';
     this.modal.dismiss();
+  }
+
+  async loadList(): Promise<any> {
+    let res = await fetch(`${DOMAIN}/admin/discount-list`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    let json = await res.json();
+    if (json.error) {
+      Swal.fire('Failed ', json.error, 'error');
+      return;
+    }
+
+    let productDiscountList = json.productDiscountList;
+    let priceDiscountList = json.priceDiscountList;
+
+    this.productDiscountData = productDiscountList;
+    this.productDiscountDataCopy = productDiscountList;
+    this.priceDiscountData = priceDiscountList;
+    this.priceDiscountDataCopy = priceDiscountList;
   }
 }

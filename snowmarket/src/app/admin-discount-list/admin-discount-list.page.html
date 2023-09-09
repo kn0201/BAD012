@@ -81,10 +81,6 @@
           </ion-select>
         </ion-item>
         <ion-item>
-          <div *ngIf="selectedProductDiscount">Product Discount Selected</div>
-          <div *ngIf="!selectedProductDiscount">Price Discount Selected</div>
-        </ion-item>
-        <ion-item>
           <ion-label position="stacked">Discount Title*</ion-label>
           <ion-input
             type="text"
@@ -94,28 +90,84 @@
             required
           ></ion-input>
         </ion-item>
-        <ion-item id="productQuantity" hidden="true">
-          <ion-label position="stacked">Quantity</ion-label>
-          <ion-input
-            type="text"
-            placeholder="Quantity"
-            [(ngModel)]="quantity"
-            [clearInput]="true"
-            required
-          ></ion-input>
-        </ion-item>
+        <div *ngIf="selectedProductDiscount">
+          <ion-item>
+            <ion-label position="stacked">Product ID*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Product ID"
+              [(ngModel)]="product_id"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Brand ID*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Brand ID"
+              [(ngModel)]="brand_id"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Category ID*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Category ID"
+              [(ngModel)]="categories_id"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item id="productQuantity">
+            <ion-label position="stacked">Quantity*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Quantity"
+              [(ngModel)]="quantity"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Discount Amount*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Discount Amount"
+              [(ngModel)]="discount_amount"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <div *ngIf="!selectedProductDiscount">
+          <ion-item>
+            <ion-label position="stacked">Total*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Total"
+              [(ngModel)]="total_price"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Discount Rate*</ion-label>
+            <ion-input
+              type="text"
+              placeholder="Discount Rate"
+              [(ngModel)]="discount_rate"
+              [clearInput]="true"
+              required
+            ></ion-input>
+          </ion-item>
+        </div>
+
         <ion-item>
-          <ion-label position="stacked">Discount Amount</ion-label>
-          <ion-input
-            type="text"
-            placeholder="Discount Amount"
-            [(ngModel)]="discount_amount"
-            [clearInput]="true"
-            required
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Start Date</ion-label>
+          <ion-label>Start Date*</ion-label>
           <ion-datetime-button datetime="startDay"></ion-datetime-button>
           <ion-modal [keepContentsMounted]="true">
             <ng-template>
@@ -129,7 +181,7 @@
           </ion-modal>
         </ion-item>
         <ion-item>
-          <ion-label>End Date</ion-label>
+          <ion-label>End Date*</ion-label>
           <ion-datetime-button datetime="endDay"></ion-datetime-button>
           <ion-modal [keepContentsMounted]="true">
             <ng-template>
