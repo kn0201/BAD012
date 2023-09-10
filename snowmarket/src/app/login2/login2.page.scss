@@ -1,14 +1,18 @@
+  ion-content.background{
+    --background: none;
+    background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url(../../assets/image/百鬼あやめ11月メン限イラスト.png) 100%;
+    background-color: white;
+    background-position: center center;
+    background-size: 100%;
+    background-repeat: no-repeat;;
+}
+
 h1 {
     font-size: 5rem;
     display: flex;
     justify-content: center;
     color: #FF4B2B;
   }
-  
-body {
-    --min-height: 100vh;
-    --background-color: linear-gradient(45deg, #8bace4, white) !important; 
-  } 
   
   .logo{
     width:30%

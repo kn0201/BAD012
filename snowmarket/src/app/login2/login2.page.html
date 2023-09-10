@@ -1,8 +1,8 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" padding class="background">
   <div id="container">
     <ion-img
       class="logo position-absolute top-0 start-50 translate-middle-x"
-      src="../../assets/image/logo23.png"
+      src="../../assets/image/Biglogo.png"
     ></ion-img>
     <ion-buttons class="login">
       <button>會員登入</button>
@@ -12,13 +12,7 @@
   <div class="form">
     <div class="container" id="container">
       <div class="form-container sign-up-container">
-        <form
-          id="loginform"
-          title="loginForm"
-          method="post"
-          action="/login"
-          hidden="true"
-        >
+        <form id="loginform" title="loginForm" method="post" action="/login">
           <h1>Create Account</h1>
           <span>or use your email for registration</span>
           <input type="text" placeholder="Name" />
@@ -54,5 +48,4 @@
       </div>
     </div>
   </div>
-  <script src="./login2.js"></script>
 </ion-content>
