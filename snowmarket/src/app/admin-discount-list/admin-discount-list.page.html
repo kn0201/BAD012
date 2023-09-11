@@ -14,46 +14,174 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <ion-title size="large">Current Discount</ion-title>
-    <p></p>
-    <ion-grid>
-      <ion-title>數量優惠</ion-title>
-      <ion-row *ngFor="let currentAmountDiscount of currentAmountDiscounts">
-        <ion-col size="1"> ID : {{currentAmountDiscount.id}} </ion-col>
-        <ion-col size="3" class=""
-          >折扣名稱 : {{currentAmountDiscount.title}}</ion-col
-        >
-        <ion-col size="2" class=""
-          >商品ID : {{ currentAmountDiscount.product_id }}</ion-col
-        >
-        <ion-col size="2" class=""
-          >折扣數量 : {{ currentAmountDiscount.amount }}</ion-col
-        >
-        <ion-col size="2" class=""
-          >折扣 : {{ currentAmountDiscount.discount }}</ion-col
-        >
-        <ion-col size="2" class=""
-          >完結日期 : {{currentAmountDiscount.date}}</ion-col
-        >
-      </ion-row>
-      <p></p>
-      <ion-title>價錢優惠</ion-title>
-      <ion-row *ngFor="let currentPriceDiscount of currentPriceDiscounts">
-        <ion-col size="6" class=""
-          >折扣名稱 : {{currentPriceDiscount.title}}</ion-col
-        >
-        <ion-col size="2" class=""
-          >價錢 : {{ currentPriceDiscount.total }}</ion-col
-        >
+  <h2>Amount Discount List</h2>
 
-        <ion-col size="2" class=""
-          >折扣 : {{ currentPriceDiscount.discount }}</ion-col
-        >
-        <ion-col size="2" class=""
-          >完結日期 : {{currentPriceDiscount.date}}</ion-col
-        >
-      </ion-row>
-    </ion-grid>
+  <div class="columns">
+    <div class="column col-12">
+      <ngx-table
+        [id]="'productDiscountList'"
+        [configuration]="productDiscountList"
+        [data]="productDiscountData"
+        [columns]="productDiscountColumns"
+      >
+      </ngx-table>
+    </div>
   </div>
+
+  <hr />
+  <h2>Price Discount List</h2>
+  <div class="columns priceDiscountColumn">
+    <div class="column col-12">
+      <ngx-table
+        [id]="'priceDiscountList'"
+        [configuration]="priceDiscountList"
+        [data]="priceDiscountData"
+        [columns]="priceDiscountColumns"
+      >
+      </ngx-table>
+    </div>
+  </div>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button id="open-modal">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-modal trigger="open-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title class="text-center"
+            >Adding Product / Price Discount</ion-title
+          >
+          <ion-buttons slot="end">
+            <ion-button method="submit" (click)="confirm()" [strong]="true"
+              >Confirm</ion-button
+            >
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-select
+            label="Select"
+            placeholder="Product / Price"
+            [value]="selectDiscount"
+            defaultValue="Product"
+            (ionChange)="handleChange($event)"
+            required
+          >
+            <ion-select-option value="product_discount"
+              >Product</ion-select-option
+            >
+            <ion-select-option value="price_discount">Price</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <div *ngIf="selectedProductDiscount">Product Discount Selected</div>
+          <div *ngIf="!selectedProductDiscount">Price Discount Selected</div>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Discount Title*</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Title"
+            [(ngModel)]="title"
+            [clearInput]="true"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item id="productQuantity" hidden="true">
+          <ion-label position="stacked">Quantity</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Quantity"
+            [(ngModel)]="quantity"
+            [clearInput]="true"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Discount Amount</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Discount Amount"
+            [(ngModel)]="discount_amount"
+            [clearInput]="true"
+            required
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Start Date</ion-label>
+          <ion-datetime-button datetime="startDay"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="startDay"
+                presentation="date"
+                [showDefaultButtons]="true"
+                (ionChange)="startDay($event)"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+        <ion-item>
+          <ion-label>End Date</ion-label>
+          <ion-datetime-button datetime="endDay"></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="endDay"
+                presentation="date"
+                [showDefaultButtons]="true"
+                (ionChange)="endDay($event)"
+              ></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  <ng-template #productHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch"> Search Product</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedProduct"
+        (input)="filter('product_id', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
+  <ng-template #brandHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch"> Search Brand</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedBrand"
+        (input)="filter('brand_id', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
+  <ng-template #categoryHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch"> Search Category</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedCategory"
+        (input)="filter('categories_id', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
 </ion-content>

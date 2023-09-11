@@ -1,59 +1,147 @@
-ion-list {
-    background-color: #e6faf7;
-    height: 88vh;
-    border-radius: 10px;
-    margin: 5px;
-  }
-
-.imgButton {
-    width:10vw;
-    height:10vw;
-    object-fit: cover;
-}
-
-.cameraArea {
-    width:100%;
-    height:50vh;
-    background-color: #2e5953;
-}
-
 ion-header {
+  ion-toolbar,
+  ion-item {
+    --background: linear-gradient(
+      90deg,
+      rgba(243, 93, 46, 1) 0%,
+      rgba(255, 160, 101, 1) 35%,
+      rgba(255, 160, 101, 1) 100%
+    );
+    background: currentColor linear;
+    color: white;
+    padding: 0 10px;
+  }
 
-    ion-toolbar, ion-item {
-      --background: #2e5953;
-      background: #2e5953;
-      color: white;
-      padding: 0 10px;
+  ion-item {
+    h3 {
+      font-weight: 700;
+      font-size: 18px;
+      padding-left: 15px;
     }
-  
+  }
+
+  ion-button.login {
+    padding-right: 2vw;
+  }
+}
+
+::ng-deep ion-content.bg {
+  --background: linear-gradient(
+    90deg,
+    rgba(243, 93, 46, 1) 0%,
+    rgba(255, 160, 101, 1) 35%,
+    rgba(255, 160, 101, 1) 100%
+  );
+}
+
+.modal-background {
+  --background: none;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url(/assets/image/backgroundLogo.png);
+  background-color: white;
+  background-position: center bottom;
+  background-size: 80%;
+  background-repeat: no-repeat;
+}
+
+ion-fab {
+  position: fixed;
+  bottom: 5vh;
+  right: 36.5vw;
+}
+
+ion-content {
+  ion-item {
+    --background: none;
+    background: linear-gradient(rgba(255, 255, 255, 0.5));
+    background-color: white;
+  }
+
+  ion-list {
+    background-color: #fff2e7;
+    height: 83vh;
+    overflow-y: auto;
+    border-radius: 10px;
+  }
+
+  .right {
+    height: 83vh;
+  }
+
+  .wrapper {
+    --backdrop-opacity: var(--backdrop-opacity);
+    height: 42vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  ion-card {
+    border-radius: 14px;
+    padding: 5px;
+  }
+
+  ion-col {
+    ion-img {
+      position: relative;
+      bottom: -23vh;
+      left: -4vw;
+      width: 200px;
+      z-index: 1;
+      display: inline-block;
+    }
+  }
+
+  .container {
     ion-item {
-      h3 {
-        font-weight: 700;
-        font-size: 14px;
+      --background: #fff2e7;
+      padding: 0px, 10px;
+      color: #006d77;
+      font-weight: 600;
+
+      ion-label {
+        padding: 6px 0;
       }
-
     }
-  
   }
-  
-  ion-content {
-    --background: linear-gradient(90deg, rgba(46,89,83,1) 0%, rgba(46,89,83,1) 35%, rgba(46,89,83,1) 100%);
+}
 
-    .container {
-  
-      ion-item {
-        --background: #e6faf7;
-        padding:0px, 10px;
-        color: #000000;
-        font-weight: 600;
-  
-        ion-label {
-          padding: 6px 0;
-        }
-  
-      }
+.delete-button {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20%;
+  background-color: red;
+  color: white;
+  border: none;
+  outline: none;
+}
 
-  
+table {
+  table-layout: fixed;
+  position: absolute;
+  top: 0;
+
+  thead {
+    th {
+      background-color: #ffa065;
+      color: #ffffff;
     }
-  
   }
+
+  tbody {
+    td,
+    th {
+      background-color: #fff2e7;
+      color: #006d77;
+    }
+  }
+}

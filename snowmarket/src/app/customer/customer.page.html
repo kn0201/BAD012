@@ -1,83 +1,158 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button>
-        <ion-menu-button></ion-menu-button>
-      </ion-button>
-    </ion-buttons>
-
     <ion-item lines="none">
       <ion-label>
         <h3>Hello, <span>Guest</span></h3>
       </ion-label>
     </ion-item>
+
+    <ion-button slot="end" color="primary" class="login"> Login </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="bg">
   <ion-item lines="none">
     <ion-grid>
       <ion-row class="ion-align-items-center">
         <ion-col size="7">
           <div class="container">
-            <ion-list>
-              <ion-item>
-                <ion-label slot="start">Name</ion-label>
-                <ion-label>Qty</ion-label>
-                <ion-label slot="end">Price</ion-label>
-              </ion-item>
-              <ion-item-sliding *ngFor="let item of items">
-                <ion-item>
-                  <ion-label slot="start"> {{item.name}}</ion-label>
-                  <ion-label>1</ion-label>
-                  <ion-label slot="end">${{item.price}}</ion-label>
-                </ion-item>
-                <ion-item-options>
-                  <ion-item-option color="danger" (click)="removeItem(item)"
-                    ><ion-icon name="trash"></ion-icon
-                  ></ion-item-option>
-                </ion-item-options>
-              </ion-item-sliding>
-            </ion-list>
+            <ion-card>
+              <ion-list>
+                <div class="table-container">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col" width="5%">#</th>
+                        <th scope="col" width="15%">ID</th>
+                        <th scope="col" width="45%">Name</th>
+                        <th scope="col" width="10%">Qty</th>
+                        <th scope="col" width="10%">Price</th>
+                        <th scope="col" width="5%"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of items; let i = index">
+                        <th scope="row">{{ i + 1}}</th>
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>1</td>
+                        <td>${{item.price}}</td>
+                        <td>
+                          <button
+                            class="btn btn-danger delete-button"
+                            (click)="removeItem(i)"
+                          >
+                            <ion-icon name="trash"></ion-icon>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ion-list>
+            </ion-card>
           </div>
         </ion-col>
-        <ion-col size="5">
-          <ion-list>
-            <ion-row class="ion-align-items-center">
-              <ion-col size="4">
-                <img
-                  class="imgButton"
-                  src="https://t3.ftcdn.net/jpg/00/72/18/40/240_F_72184041_8tRO5AHdFzgVhDCZJEsL3vv7nvZUkLKi.jpg"
-                />
-              </ion-col>
-              <ion-col size="4">
-                <img
-                  class="imgButton"
-                  src="https://t3.ftcdn.net/jpg/01/96/19/48/240_F_196194801_Vfy5WI8dIT5690fkQOyePLuBHUJh3RzP.jpg"
-                />
-              </ion-col>
-              <ion-col size="4">
-                <img
-                  class="imgButton"
-                  src="https://t3.ftcdn.net/jpg/01/05/29/62/240_F_105296201_0ps5e3A3oA9oTIauwRNXTrDIVL2VOwNF.jpg"
-                />
-              </ion-col>
-            </ion-row>
-            <ion-row
-              ><div class="cameraArea">
-                <webcam
-                  [height]="500"
-                  [width]="500"
-                  (initError)="handleInitError($event)"
-                ></webcam>
+
+        <ion-col size="5" class="right">
+          <ion-row>
+            <ion-card class="camera">
+              <div class="wrapper" (window:resize)="onResize($event)">
+                <webcam (initError)="handleInitError($event)"></webcam>
                 <h4 *ngIf="errors.length > 0">Messages:</h4>
                 <ul *ngFor="let error of errors">
                   <li>{{error | json}}</li>
                 </ul>
-              </div></ion-row
-            >
-            <ion-row> Balance </ion-row>
-          </ion-list>
+              </div>
+            </ion-card>
+          </ion-row>
+          <ion-row>
+            <ion-col size="3">
+              <ion-img src="assets/image/logo23.png"></ion-img>
+              <ion-fab vertical="bottom" horizontal="end">
+                <ion-fab-button
+                  ><ion-icon name="people-outline"></ion-icon></ion-fab-button
+                ><ion-fab-list side="top">
+                  <ion-fab-button>
+                    <ion-icon name="bag-handle-outline"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button>
+                    <ion-icon name="create-outline"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button>
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab-list>
+              </ion-fab> </ion-col
+            ><ion-col size="9"
+              ><ion-item>
+                <ion-input placeholder="ID..." [(ngModel)]="findID"></ion-input>
+                <ion-button slot="end" color="secondary" (click)="addItem()"
+                  >Add</ion-button
+                > </ion-item
+              ><ion-item
+                >Number of Items<span slot="end"
+                  >{{items.length}}</span
+                ></ion-item
+              >
+              <ion-item
+                >Total Price<span slot="end"
+                  >${{calculateTotalPrice()}}</span
+                ></ion-item
+              >
+              <ion-item
+                >Discount Amount<span slot="end"
+                  >-${{discountAmount}}</span
+                ></ion-item
+              >
+              <ion-item
+                >Balance<span slot="end"
+                  >${{calculateBalance()}}</span
+                ></ion-item
+              >
+              <ion-item>
+                <ion-button slot="end" color="secondary" id="open-modal"
+                  >Checkout</ion-button
+                ><ion-modal trigger="open-modal" [canDismiss]="canDismiss">
+                  <ng-template>
+                    <ion-header>
+                      <ion-toolbar>
+                        <ion-buttons slot="start">
+                          <ion-button (click)="cancel()">Cancel</ion-button>
+                        </ion-buttons>
+                        <ion-title class="text-center">Cart Summary</ion-title>
+                        <ion-buttons slot="end">
+                          <ion-button (click)="addItem()">Confirm</ion-button>
+                        </ion-buttons>
+                      </ion-toolbar>
+                    </ion-header>
+                    <ion-content class="modal-background">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col" width="10%">#</th>
+                            <th scope="col" width="15%">ID</th>
+                            <th scope="col" width="45%">Name</th>
+                            <th scope="col" width="10%">Qty</th>
+                            <th scope="col" width="10%">Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of items; let i = index">
+                            <th scope="row">{{ i + 1}}</th>
+                            <td>{{item.id}}</td>
+                            <td>{{item.name}}</td>
+                            <td>1</td>
+                            <td>${{item.price}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </ion-content>
+                  </ng-template>
+                </ion-modal>
+              </ion-item></ion-col
+            ></ion-row
+          >
         </ion-col>
       </ion-row>
     </ion-grid>

@@ -3,16 +3,15 @@ import torch
 from torchvision import transforms
 from ultralytics import YOLO
 from ultralytics.data.converter import convert_coco
-from roboflow import Roboflow
 # 載入模型和權重gfvv
 model = YOLO('yolov8n.pt')
 # results = model.train(data='coco128.yaml', epochs=100, imgsz=640)
 
 convert_coco(labels_dir='path/to/coco/annotations/')
 
-rf = Roboflow(api_key="WhCA0N0WxZZuOxBbinZl")
-project = rf.workspace().project("vita")
-model = project.version(1).model
+# rf = Roboflow(api_key="WhCA0N0WxZZuOxBbinZl")
+# project = rf.workspace().project("vita")
+# model = project.version(1).model
 
 # infer on a local image
 # print(model.predict("your_image.jpg", confidence=40, overlap=30).json())
@@ -39,8 +38,8 @@ while True:
     input_tensor = transform(frame).unsqueeze(0)
 
     # 使用模型進行預測
-    # with torch.no_grad():
-    #     output = model(input_tensor)
+    with torch.no_grad():
+        output = model(input_tensor)
 
     # 解析預測結果
     # ...

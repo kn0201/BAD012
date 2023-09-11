@@ -1,8 +1,31 @@
-ion-content.background{
-    --background: none;
-    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(../../assets/image/backgroundLogo.png);
-    background-color: white;
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
+ion-content.background {
+  --background: none;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url(../../assets/image/backgroundLogo.png);
+  background-color: white;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.position {
+  cursor: pointer;
+  font-weight: lighter;
+}
+
+.position:hover {
+  background-color: #e6e6e6;
+}
+
+.search-template {
+  min-width: max-content;
+  padding: 0.25rem 0.4rem;
+}
+
+.columns {
+  margin: 0.5rem;
+  padding-bottom: 3rem;
 }

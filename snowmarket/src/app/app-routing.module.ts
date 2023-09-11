@@ -4,14 +4,9 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login2',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
-  // {
-  //   path: 'folder/:id',
-  //   loadChildren: () =>
-  //     import('./folder/folder.module').then((m) => m.FolderPageModule),
-  // },
   {
     path: 'admin',
     loadChildren: () =>
@@ -25,14 +20,14 @@ const routes: Routes = [
       import('./login/login.module').then((m) => m.LoginPageModule),
   },
   {
-    path: 'customer',
+    path: 'customer/:id',
     loadChildren: () =>
       import('./customer/customer.module').then((m) => m.CustomerPageModule),
   },
   {
-    path: 'login2',
+    path: 'login',
     loadChildren: () =>
-      import('./login2/login2.module').then((m) => m.Login2PageModule),
+      import('./login/login.module').then((m) => m.LoginPageModule),
   },
 ];
 

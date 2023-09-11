@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "[python]": {
     "editor.defaultFormatter": "ms-python.autopep8",
     "editor.formatOnSave": true
@@ -6,3 +7,15 @@
   "liveServer.settings.port": 5501
   // "python.formatting.provider": "none"
 }
+=======
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",
+        "editor.formatOnSave": true
+    },
+    "search.useGlobalIgnoreFiles": false,
+    "cSpell.words": [
+        "sweetalert"
+    ],
+    // "python.formatting.provider": "none"
+}
+>>>>>>> refs/remotes/origin/main

@@ -14,7 +14,29 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <h1>Receipt List</h1>
+  <div class="columns">
+    <div class="column col-12">
+      <ngx-table
+        [configuration]="receiptList"
+        [data]="receiptListData"
+        [columns]="receiptListColumns"
+        [detailsTemplate]="detailsTemplate"
+      >
+      </ngx-table>
+    </div>
   </div>
+  <ng-template #detailsTemplate let-row>
+    <div>
+      <h2 class="color-green">Receipt Number : {{ row.id }}</h2>
+      <div *ngFor="let product of row.products; let i = index">
+        <ion-list>
+          <ion-item>
+            <div>Item {{i + 1}} :</div>
+            <div class="fw-bold">{{product.name}}</div>
+          </ion-item>
+          <ion-item>Price : {{product.price}}</ion-item>
+        </ion-list>
+      </div>
+    </div>
+  </ng-template>
 </ion-content>

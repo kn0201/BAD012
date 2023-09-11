@@ -8,7 +8,7 @@ export let env = {
   DB_NAME: '',
   DB_USERNAME: '',
   DB_PASSWORD: '',
-  DB_HOST: '',
+  // DB_HOST: '',
   PORT: 8200,
 };
 

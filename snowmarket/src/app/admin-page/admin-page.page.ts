@@ -8,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class AdminPagePage implements OnInit {
   public adminPages = [
     { title: 'Chart', url: '/admin/chart-list', icon: 'stats-chart' },
-    { title: 'Brand', url: '/admin/brand-list', icon: 'ribbon' },
-    { title: 'Categories', url: '/admin/categories-list', icon: 'folder-open' },
+    // { title: 'Brand', url: '/admin/brand-list', icon: 'ribbon' },
+    {
+      title: 'Brand & Categories',
+      url: '/admin/b&c-list',
+      icon: 'folder-open',
+    },
     { title: 'Product', url: '/admin/product-list', icon: 'pricetag' },
     { title: 'Discount', url: '/admin/discount-list', icon: 'logo-usd' },
     { title: 'Member', url: '/admin/member-list', icon: 'people' },

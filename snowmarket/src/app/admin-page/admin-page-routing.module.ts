@@ -60,7 +60,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'categories-list',
+        path: 'b&c-list',
         loadChildren: () =>
           import('../admin-categories-list/admin-categories-list.module').then(
             (m) => m.AdminCategoriesListPageModule
