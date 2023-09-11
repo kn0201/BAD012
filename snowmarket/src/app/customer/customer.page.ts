@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 
-// import { Subject, Observable } from 'rxjs';
 import { WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { productList } from 'src/assets/product';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-customer',
@@ -11,17 +11,21 @@ import { productList } from 'src/assets/product';
   styleUrls: ['./customer.page.scss'],
 })
 export class CustomerPage implements OnInit {
-  items: { id: number; name: string; price: number }[] = [];
+  items: { id: number; name: string; quantity: number; price: number }[] = [];
+  summarizedItems: {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+  }[] = [];
 
   findID: number = +'';
-  newID: number = +'';
-  newName: string = '';
-  newPrice: number = +'';
 
   discountAmount: number = +'';
   idToFilter: number = +'';
 
   canDismiss = true;
+  showDeleteButton = false;
 
   public multipleWebcamsAvailable = false;
   public errors: WebcamInitError[] = [];
@@ -65,21 +69,56 @@ export class CustomerPage implements OnInit {
       const newItem = {
         id: matchingProduct.id,
         name: matchingProduct.name,
+        quantity: 1,
         price: matchingProduct.price,
       };
 
       this.items.push(newItem);
+      this.findID = +'';
+    } else {
+      throw new Error('No item matching');
+    }
+  }
 
-      this.newID = +'';
-      this.newName = '';
-      this.newPrice = +'';
+  addBag() {
+    const idBag = 0;
+
+    const matchingProduct = productList.find((product) => product.id === idBag);
+
+    if (matchingProduct) {
+      const newItem = {
+        id: matchingProduct.id,
+        name: matchingProduct.name,
+        quantity: 1,
+        price: matchingProduct.price,
+      };
+      this.items.push(newItem);
     } else {
       throw new Error('No item matching');
     }
   }
 
   removeItem(index: number) {
-    this.items.splice(index, 1);
+    Swal.fire({
+      title: 'Confirm to delete below item?',
+      text: `Name: ${this.items[index].name} | Quantity: ${this.items[index].quantity} | Price: $${this.items[index].price}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirm',
+      heightAuto: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'The item has been deleted.',
+          icon: 'success',
+          heightAuto: false,
+        });
+        this.items.splice(index, 1);
+      }
+    });
   }
 
   calculateTotalPrice(): number {
@@ -93,7 +132,69 @@ export class CustomerPage implements OnInit {
     return +(totalPrice - this.discountAmount).toFixed(2);
   }
 
+  summarizeItem() {
+    type ResultItem = {
+      id: number;
+      name: string;
+      totalQuantity: number;
+      totalPrice: number;
+    };
+    type ResultMap = Record<number, ResultItem>;
+    let result: ResultItem[] = Object.values(
+      this.items.reduce((r: ResultMap, { id, name, quantity, price }) => {
+        r[id] ??= { id, name, totalQuantity: 0, totalPrice: 0 };
+        r[id].totalQuantity += quantity;
+        r[id].totalPrice += price;
+        return r;
+      }, {})
+    );
+    let mappedResult = result.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        quantity: item.totalQuantity,
+        price: item.totalPrice,
+      };
+    });
+    this.summarizedItems = mappedResult;
+  }
+
   cancel() {
     this.modal.dismiss();
+  }
+
+  toggleDeleteButton() {
+    this.showDeleteButton = !this.showDeleteButton;
+  }
+
+  payment() {
+    let timerInterval: any;
+    Swal.fire({
+      title: 'Payment Processing...',
+      timer: 1500,
+      timerProgressBar: true,
+      heightAuto: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      },
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        Swal.fire({
+          title: 'Payment Success!',
+          text: 'You have paid the items.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          heightAuto: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.items = [];
+            this.cancel();
+          }
+        });
+      }
+    });
   }
 }
