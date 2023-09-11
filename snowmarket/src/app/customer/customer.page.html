@@ -27,7 +27,11 @@
                         <th scope="col" width="45%">Name</th>
                         <th scope="col" width="10%">Qty</th>
                         <th scope="col" width="10%">Price</th>
-                        <th scope="col" width="5%"></th>
+                        <th
+                          scope="col"
+                          width="10%"
+                          *ngIf="showDeleteButton"
+                        ></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -37,7 +41,7 @@
                         <td>{{item.name}}</td>
                         <td>1</td>
                         <td>${{item.price}}</td>
-                        <td>
+                        <td *ngIf="showDeleteButton">
                           <button
                             class="btn btn-danger delete-button"
                             (click)="removeItem(i)"
@@ -70,30 +74,40 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="3">
-              <ion-img src="assets/image/logo23.png"></ion-img>
-              <ion-fab vertical="bottom" horizontal="end">
-                <ion-fab-button
-                  ><ion-icon name="people-outline"></ion-icon></ion-fab-button
-                ><ion-fab-list side="top">
-                  <ion-fab-button (click)="addBag()">
-                    <ion-icon name="bag-handle-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button (click)="toggleDeleteButton()">
-                    <ion-icon name="create-outline"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-button>
-                    <ion-icon name="information-circle-outline"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab-list>
-              </ion-fab> </ion-col
-            ><ion-col size="9"
-              ><ion-item>
-                <ion-input placeholder="ID..." [(ngModel)]="findID"></ion-input>
+            <ion-col size="3"
+              ><ion-row
+                ><div class="image-container">
+                  <ion-img src="assets/image/logo23.png"></ion-img>
+                  <ion-fab vertical="bottom" horizontal="end">
+                    <ion-fab-button
+                      ><ion-icon
+                        name="people-outline"
+                      ></ion-icon></ion-fab-button
+                    ><ion-fab-list side="top">
+                      <ion-fab-button (click)="addBag()">
+                        <ion-icon name="bag-handle-outline"></ion-icon>
+                      </ion-fab-button>
+                      <ion-fab-button (click)="toggleDeleteButton()">
+                        <ion-icon name="create-outline"></ion-icon>
+                      </ion-fab-button>
+                      <ion-fab-button>
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                      </ion-fab-button>
+                    </ion-fab-list>
+                  </ion-fab></div
+              ></ion-row>
+            </ion-col>
+            <ion-col size="9">
+              <ion-item>
+                <ion-input
+                  placeholder="Enter Product ID to add item into cart..."
+                  [(ngModel)]="findID"
+                ></ion-input>
                 <ion-button slot="end" color="secondary" (click)="addItem()"
-                  >Add</ion-button
-                > </ion-item
-              ><ion-item
+                  >Add
+                </ion-button>
+              </ion-item>
+              <ion-item
                 >Number of Items<span slot="end"
                   >{{items.length}}</span
                 ></ion-item

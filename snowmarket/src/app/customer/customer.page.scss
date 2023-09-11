@@ -49,11 +49,15 @@ ion-header {
 
 ion-fab {
   position: absolute;
-  bottom: 3vh;
-  right: 4.9vw;
-  // position: fixed;
-  // bottom: 3.5vh;
-  // right: 36.5vw;
+  bottom: -18vh;
+  left: 0.5vw;
+}
+
+.image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
 }
 
 ion-content {
@@ -93,19 +97,16 @@ ion-content {
   ion-col {
     ion-img {
       position: relative;
-      bottom: -22vh;
-      left: -4vw;
-      width: 200px;
+      bottom: -19vh;
+      left: -6vw;
+      width: 250px;
       z-index: 1;
-      display: inline-block;
     }
   }
 
   .container {
     ion-item {
       --background: #fff2e7;
-      padding: 0px, 10px;
-      color: #006d77;
       font-weight: 600;
 
       ion-label {
@@ -117,7 +118,7 @@ ion-content {
 
 .delete-button {
   position: absolute;
-  right: 10px;
+  right: 2vw;
   display: flex;
   align-items: center;
   padding: 3px 10px;
