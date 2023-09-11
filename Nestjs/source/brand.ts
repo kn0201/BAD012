@@ -1,122 +1,122 @@
 export const brandList = [
   {
     id: 1,
-    brand_name: 'Lotte',
+    name: 'Lotte',
   },
   {
     id: 2,
-    brand_name: 'Calbee',
+    name: 'Calbee',
   },
   {
     id: 3,
-    brand_name: 'Vita',
+    name: 'Vita',
   },
   {
     id: 4,
-    brand_name: 'Nissin',
+    name: 'Nissin',
   },
   {
     id: 5,
-    brand_name: 'Nestle',
+    name: 'Nestle',
   },
   {
     id: 6,
-    brand_name: "Kellogg's",
+    name: "Kellogg's",
   },
   {
     id: 7,
-    brand_name: 'Coca-Cola',
+    name: 'Coca-Cola',
   },
   {
     id: 8,
-    brand_name: 'PepsiCo',
+    name: 'PepsiCo',
   },
   {
     id: 9,
-    brand_name: 'Unilever',
+    name: 'Unilever',
   },
   {
     id: 10,
-    brand_name: 'Kraft Heinz',
+    name: 'Kraft Heinz',
   },
   {
     id: 11,
-    brand_name: 'General Mills',
+    name: 'General Mills',
   },
   {
     id: 12,
-    brand_name: "Hershey's",
+    name: "Hershey's",
   },
   {
     id: 13,
-    brand_name: 'Ferrero',
+    name: 'Ferrero',
   },
   {
     id: 14,
-    brand_name: 'Mars',
+    name: 'Mars',
   },
   {
     id: 15,
-    brand_name: 'P&G',
+    name: 'P&G',
   },
   {
     id: 16,
-    brand_name: 'Heineken',
+    name: 'Heineken',
   },
   {
     id: 17,
-    brand_name: 'Danone',
+    name: 'Danone',
   },
   {
     id: 18,
-    brand_name: 'Mondelez International',
+    name: 'Mondelez International',
   },
   {
     id: 19,
-    brand_name: 'Nestlé Purina',
+    name: 'Nestlé Purina',
   },
   {
     id: 20,
-    brand_name: 'McCormick & Company',
+    name: 'McCormick & Company',
   },
   {
     id: 21,
-    brand_name: 'Campbell Soup',
+    name: 'Campbell Soup',
   },
   {
     id: 22,
-    brand_name: 'Hormel Foods',
+    name: 'Hormel Foods',
   },
   {
     id: 23,
-    brand_name: 'Conagra Brands',
+    name: 'Conagra Brands',
   },
   {
     id: 24,
-    brand_name: 'Hain Celestial Group',
+    name: 'Hain Celestial Group',
   },
   {
     id: 25,
-    brand_name: 'Suntory',
+    name: 'Suntory',
   },
   {
     id: 26,
-    brand_name: 'Frito-Lay',
+    name: 'Frito-Lay',
   },
   {
     id: 27,
-    brand_name: 'JBS',
+    name: 'JBS',
   },
   {
     id: 28,
-    brand_name: 'Tyson Foods',
+    name: 'Tyson Foods',
   },
   {
     id: 29,
-    brand_name: 'Mondelēz International',
+    name: 'Mondelēz International',
   },
   {
     id: 30,
-    brand_name: 'Maggi',
+    name: 'Maggi',
   },
 ];

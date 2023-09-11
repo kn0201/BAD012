@@ -16,11 +16,11 @@ export interface products {
 
 export interface brand {
   id: number;
-  brand_name: string;
+  name: string;
 }
 export interface category {
   id: number;
-  categories_name: string;
+  name: string;
 }
 
 export interface priceDiscount {

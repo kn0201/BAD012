@@ -1,5 +1,13 @@
 export const productList = [
   {
+    id: 0,
+    brand_id: 0,
+    category_id: 0,
+    price: 0.5,
+    stock: 999,
+    name: 'Bag',
+  },
+  {
     id: 1,
     brand_id: 7,
     category_id: 15,
