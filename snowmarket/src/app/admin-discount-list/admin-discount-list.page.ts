@@ -6,15 +6,15 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { IonModal, LoadingController } from '@ionic/angular';
+import { IonModal, LoadingController, ModalController } from '@ionic/angular';
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 
 import {
-  priceDiscount,
-  productDiscount,
-  products,
-  brand,
-  category,
+  PriceDiscount,
+  ProductDiscount,
+  Products,
+  Brand,
+  Category,
 } from 'src/assets/type';
 
 import { DOMAIN } from 'utils/domain';
@@ -27,7 +27,7 @@ import sweetalert2error from 'utils/sweetalert2error';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminDiscountListPage implements OnInit {
-  constructor(private loadingCtrl: LoadingController) {}
+  constructor() {}
 
   @ViewChild('productHeaderActionTemplate', { static: true })
   productHeaderActionTemplate!: TemplateRef<any>;
@@ -41,12 +41,15 @@ export class AdminDiscountListPage implements OnInit {
   @ViewChild('table')
   table!: APIDefinition;
 
-  @ViewChild(IonModal) modal!: IonModal;
+  @ViewChild('addModal') addModal: any;
+  @ViewChild('productModal') productModal: any;
+  @ViewChild('brandModal') brandModal: any;
+  @ViewChild('categoryModal') categoryModal: any;
 
   public productDiscountColumns: Columns[] = [];
   productDiscountList!: Config;
-  productDiscountData: productDiscount[] = [];
-  productDiscountDataCopy: productDiscount[] = [];
+  productDiscountData: ProductDiscount[] = [];
+  productDiscountDataCopy: ProductDiscount[] = [];
   selectedProduct = '';
   selectedBrand = '';
   selectedCategory = '';
@@ -63,12 +66,17 @@ export class AdminDiscountListPage implements OnInit {
     { key: 'end_date', title: 'End date' },
   ];
   priceDiscountList!: Config;
-  priceDiscountData: priceDiscount[] = [];
-  priceDiscountDataCopy: priceDiscount[] = [];
+  priceDiscountData: PriceDiscount[] = [];
+  priceDiscountDataCopy: PriceDiscount[] = [];
 
-  productListData: products[] = [];
-  brandListData: brand[] = [];
-  categoriesListData: category[] = [];
+  productListData: Products[] = [];
+  filteredProduct: Products[] = [];
+
+  brandListData: Brand[] = [];
+  filteredBrand: Brand[] = [];
+
+  categoriesListData: Category[] = [];
+  filteredCategory: Category[] = [];
 
   title: string | null = '';
   product_id!: number;
@@ -83,14 +91,21 @@ export class AdminDiscountListPage implements OnInit {
   selectedStartDate = '';
   selectedEndDate = '';
   selectedProductID = '';
+  selectedProductName = '';
   selectedBrandID = '';
+  selectedBrandName = '';
   selectedCategoryID = '';
+  selectedCategoryName = '';
+
+  idMsg = 'Click to Select';
+  brandMsg = 'Click to Select';
+  categoryMsg = 'Click to Select';
 
   finishLoading: boolean = false;
 
   ngOnInit() {
     this.loadList();
-    // this.showLoading();
+
     this.productDiscountColumns = [
       { key: 'id', title: 'Brand ID' },
       { key: 'title', title: 'Title' },
@@ -153,7 +168,7 @@ export class AdminDiscountListPage implements OnInit {
   }
 
   cancel() {
-    this.modal.dismiss();
+    this.addModal.dismiss();
   }
 
   confirm() {
@@ -169,7 +184,43 @@ export class AdminDiscountListPage implements OnInit {
     console.log(this.selectedStartDate);
     console.log(this.selectedEndDate);
 
-    this.modal.dismiss();
+    this.title = '';
+    this.selectedProductID = '';
+    this.selectedBrandID = '';
+    this.selectedCategoryID = '';
+    this.idMsg = 'Click to Select';
+    this.brandMsg = 'Click to Select';
+    this.categoryMsg = 'Click to Select';
+    this.quantity = '';
+    this.discount_amount = '';
+    this.total_price = '';
+    this.discount_rate = '';
+
+    this.addModal.dismiss();
+  }
+
+  IDcancel() {
+    this.productModal.dismiss();
+  }
+
+  IDconfirm() {
+    this.productModal.dismiss();
+  }
+
+  BrandCancel() {
+    this.brandModal.dismiss();
+  }
+
+  BrandConfirm() {
+    this.brandModal.dismiss();
+  }
+
+  categoryCancel() {
+    this.categoryModal.dismiss();
+  }
+
+  categoryConfirm() {
+    this.categoryModal.dismiss();
   }
 
   handleChange(event: any) {
@@ -183,14 +234,20 @@ export class AdminDiscountListPage implements OnInit {
 
   selectProductID(event: any) {
     this.selectedProductID = event.target.value;
+    this.selectedProductName = event.target.name;
+    this.idMsg = `${this.selectedProductID} : ${this.selectedProductName}`;
   }
 
   selectBrandID(event: any) {
     this.selectedBrandID = event.target.value;
+    this.selectedBrandName = event.target.name;
+    this.brandMsg = `${this.selectedBrandID} : ${this.selectedBrandName}`;
   }
 
   selectCategoryID(event: any) {
     this.selectedCategoryID = event.target.value;
+    this.selectedCategoryName = event.target.name;
+    this.categoryMsg = `${this.selectedCategoryID} : ${this.selectedCategoryName}`;
   }
 
   startDay(event: any) {
@@ -202,7 +259,7 @@ export class AdminDiscountListPage implements OnInit {
 
   @Output() async addRow(selectValue: string): Promise<void> {
     this.title = '';
-    this.modal.dismiss();
+    this.addModal.dismiss();
   }
 
   async loadList(): Promise<any> {
@@ -222,26 +279,62 @@ export class AdminDiscountListPage implements OnInit {
 
     this.productDiscountData = productDiscountList;
     this.productDiscountDataCopy = productDiscountList;
+
     this.priceDiscountData = priceDiscountList;
     this.priceDiscountDataCopy = priceDiscountList;
+
     this.productListData = json.productList;
+    this.filteredProduct = json.productList;
+
     this.brandListData = json.brandList;
+    this.filteredBrand = json.brandList;
+
     this.categoriesListData = json.categoriesList;
-    console.log(this.productListData);
+    this.filteredCategory = json.categoriesList;
   }
 
-  // async showLoading() {
-  //   let duration = 30000;
-  //   const loading = await this.loadingCtrl.create({
-  //     message: 'Dismissing after 3 seconds...',
-  //     duration: duration,
-  //   });
+  searchProduct(ev: any) {
+    this.filterProduct(ev.target.value);
+  }
 
-  //   loading.present();
-  //   setTimeout(() => {
-  //     loading.dismiss();
-  //   }, 1000);
-  //   if (this.finishLoading) {
-  //   }
-  // }
+  filterProduct(searchQuery: string | undefined) {
+    if (searchQuery === undefined) {
+      this.filteredProduct = [...this.productListData];
+    } else {
+      const normalizedQuery = searchQuery.toLowerCase();
+      this.filteredProduct = this.productListData.filter((product) => {
+        return product.name.toLowerCase().includes(normalizedQuery);
+      });
+    }
+  }
+
+  searchBrand(ev: any) {
+    this.filterBrand(ev.target.value);
+  }
+
+  filterBrand(searchQuery: string | undefined) {
+    if (searchQuery === undefined) {
+      this.filteredBrand = [...this.brandListData];
+    } else {
+      const normalizedQuery = searchQuery.toLowerCase();
+      this.filteredBrand = this.brandListData.filter((brand) => {
+        return brand.name.toLowerCase().includes(normalizedQuery);
+      });
+    }
+  }
+
+  searchCategory(ev: any) {
+    this.filterCategory(ev.target.value);
+  }
+
+  filterCategory(searchQuery: string | undefined) {
+    if (searchQuery === undefined) {
+      this.filteredCategory = [...this.categoriesListData];
+    } else {
+      const normalizedQuery = searchQuery.toLowerCase();
+      this.filteredCategory = this.categoriesListData.filter((category) => {
+        return category.name.toLowerCase().includes(normalizedQuery);
+      });
+    }
+  }
 }

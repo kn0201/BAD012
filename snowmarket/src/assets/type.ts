@@ -1,11 +1,11 @@
-export interface users {
+export interface Users {
   id: string;
   username: string;
   email: string;
   birthday: string;
   points: number;
 }
-export interface products {
+export interface Products {
   id: number;
   brand_id: number;
   category_id: number;
@@ -14,16 +14,16 @@ export interface products {
   name: string;
 }
 
-export interface brand {
+export interface Brand {
   id: number;
   name: string;
 }
-export interface category {
+export interface Category {
   id: number;
   name: string;
 }
 
-export interface priceDiscount {
+export interface PriceDiscount {
   id: string;
   title: string;
   total_price: string;
@@ -32,7 +32,7 @@ export interface priceDiscount {
   end_date: string;
 }
 
-export interface productDiscount {
+export interface ProductDiscount {
   id: string;
   title: string;
   product_id: string;
@@ -44,7 +44,7 @@ export interface productDiscount {
   end_date: string;
 }
 
-export interface receipt {
+export interface Receipt {
   id: number;
   products: Array<object>;
   total_price: number;

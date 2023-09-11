@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table';
 // import { brandList } from 'src/assets/brand';
-import { brand, category } from 'src/assets/type';
+import { Brand, Category } from 'src/assets/type';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { DOMAIN } from 'utils/domain';
@@ -43,11 +43,11 @@ export class AdminCategoriesListPage implements OnInit {
   brandList!: Config;
   categoriesList!: Config;
 
-  brandData: brand[] = [];
-  brandDataCopy: brand[] = [];
+  brandData: Brand[] = [];
+  brandDataCopy: Brand[] = [];
 
-  categoryData: category[] = [];
-  categoryDataCopy: category[] = [];
+  categoryData: Category[] = [];
+  categoryDataCopy: Category[] = [];
 
   selectedBrand = '';
   selectedCategory = '';

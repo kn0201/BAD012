@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { APIDefinition, Config, Columns, DefaultConfig } from 'ngx-easy-table';
-import { users } from 'src/assets/type';
+import { Users } from 'src/assets/type';
 import { DOMAIN } from 'utils/domain';
 import Swal from 'sweetalert2';
 import sweetalert2error from 'utils/sweetalert2error';
@@ -26,8 +26,8 @@ export class AdminMemberListPage implements OnInit {
   table!: APIDefinition;
 
   public columns: Columns[] = [];
-  data: users[] = [];
-  dataCopy: users[] = [];
+  data: Users[] = [];
+  dataCopy: Users[] = [];
   configuration!: Config;
   selectedUser = '';
 

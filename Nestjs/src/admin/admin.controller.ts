@@ -15,31 +15,26 @@ export class AdminController {
 
   @Get('/b&c-list')
   getBCList() {
-    console.log('AdminController : b&c List');
     return this.AdminService.getBCList();
   }
 
   @Get('/member-list')
   getMemberList() {
-    console.log('AdminController : Member List');
     return this.AdminService.getMemberList();
   }
 
   @Get('/receipt-list')
   getReceiptList() {
-    console.log('AdminController : Receipt List');
     return this.AdminService.getReceiptList();
   }
 
   @Get('/product-list')
   getProductList() {
-    console.log('AdminController : Product List');
     return this.AdminService.getProductList();
   }
 
   @Get('/discount-list')
   getDiscountList() {
-    console.log('AdminController : Discount List');
     return this.AdminService.getDiscountList();
   }
 
