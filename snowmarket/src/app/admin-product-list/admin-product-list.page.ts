@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { products } from 'src/assets/interface';
+import { products } from 'src/assets/type';
 import Swal from 'sweetalert2';
 import { DOMAIN } from 'utils/domain';
 import sweetalert2error from 'utils/sweetalert2error';

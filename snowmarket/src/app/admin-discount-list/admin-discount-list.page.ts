@@ -15,7 +15,7 @@ import {
   products,
   brand,
   category,
-} from 'src/assets/interface';
+} from 'src/assets/type';
 
 import { DOMAIN } from 'utils/domain';
 import sweetalert2error from 'utils/sweetalert2error';
@@ -70,18 +70,18 @@ export class AdminDiscountListPage implements OnInit {
   brandListData: brand[] = [];
   categoriesListData: category[] = [];
 
-  title!: string;
+  title: string | null = '';
   product_id!: number;
   brand_id!: number;
   categories_id!: number;
-  quantity!: number;
-  discount_amount!: number;
-  discount_rate!: number;
-  total_price!: number;
+  quantity: any | null = '';
+  discount_amount: any | null = '';
+  discount_rate: any | null = '';
+  total_price: any | null = '';
 
-  selectDiscount = 'product_discount';
-  selectStartDate = '';
-  selectEndDate = '';
+  selectedDiscount = 'product_discount';
+  selectedStartDate = '';
+  selectedEndDate = '';
   selectedProductID = '';
   selectedBrandID = '';
   selectedCategoryID = '';
@@ -153,22 +153,21 @@ export class AdminDiscountListPage implements OnInit {
   }
 
   cancel() {
-    this.modal.dismiss(null, 'cancel');
+    this.modal.dismiss();
   }
 
   confirm() {
-    console.log(this.selectDiscount);
-    console.log(this.title);
-    console.log(this.selectedProductID);
-    console.log(this.selectedBrandID);
-    console.log(this.selectedCategoryID);
-    console.log(this.quantity);
-    console.log(this.discount_amount);
-    console.log(this.total_price);
-    console.log(this.discount_rate);
-    console.log(this.selectStartDate);
-    console.log(this.selectEndDate);
-    // console.log(this);
+    console.log(this.selectedDiscount);
+    console.log('title : ' + this.title);
+    console.log('Product ID : ' + this.selectedProductID);
+    console.log('Brand ID : ' + this.selectedBrandID);
+    console.log('Category ID : ' + this.selectedCategoryID);
+    console.log('Quantity : ' + this.quantity);
+    console.log('Discount Amount : ' + this.discount_amount);
+    console.log('Total Price : ' + this.total_price);
+    console.log('Discount Rate : ' + this.discount_rate);
+    console.log(this.selectedStartDate);
+    console.log(this.selectedEndDate);
 
     this.modal.dismiss();
   }
@@ -176,9 +175,9 @@ export class AdminDiscountListPage implements OnInit {
   handleChange(event: any) {
     console.log(event.target.value);
     if (event.target.value === 'product_discount') {
-      this.selectDiscount = 'product_discount';
+      this.selectedDiscount = 'product_discount';
     } else if (event.target.value === 'price_discount') {
-      this.selectDiscount = 'price_discount';
+      this.selectedDiscount = 'price_discount';
     }
   }
 
@@ -195,10 +194,10 @@ export class AdminDiscountListPage implements OnInit {
   }
 
   startDay(event: any) {
-    this.selectStartDate = event.target.value;
+    this.selectedStartDate = event.target.value;
   }
   endDay(event: any) {
-    this.selectEndDate = event.target.value;
+    this.selectedEndDate = event.target.value;
   }
 
   @Output() async addRow(selectValue: string): Promise<void> {
@@ -217,7 +216,6 @@ export class AdminDiscountListPage implements OnInit {
       sweetalert2error(json.error);
       return;
     }
-    // console.log(json);
 
     let productDiscountList = json.productDiscountList;
     let priceDiscountList = json.priceDiscountList;

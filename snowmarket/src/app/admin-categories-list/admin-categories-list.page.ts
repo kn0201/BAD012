@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table';
 // import { brandList } from 'src/assets/brand';
-import { brand, category } from 'src/assets/interface';
+import { brand, category } from 'src/assets/type';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { DOMAIN } from 'utils/domain';
@@ -53,11 +53,11 @@ export class AdminCategoriesListPage implements OnInit {
   selectedCategory = '';
 
   message = '';
-  name!: string;
+  name: string | null = null;
 
   selectValue = null;
 
-  canDismiss = false;
+  canDismiss = true;
 
   ngOnInit() {
     this.loadList();
@@ -119,7 +119,13 @@ export class AdminCategoriesListPage implements OnInit {
   }
 
   confirm() {
-    if (this.selectValue && this.name != '') {
+    if (!this.selectValue) {
+      sweetalert2error('Missing Brand/Category');
+      return;
+    } else if (!this.name) {
+      sweetalert2error('Missing Name');
+      return;
+    } else if (this.selectValue && this.name != '') {
       this.canDismiss = true;
       this.addRow(this.selectValue);
     }

@@ -5,7 +5,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { receipt } from 'src/assets/interface';
+import { receipt } from 'src/assets/type';
 
 import Swal from 'sweetalert2';
 import { DOMAIN } from 'utils/domain';

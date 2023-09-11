@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { APIDefinition, Config, Columns, DefaultConfig } from 'ngx-easy-table';
-import { users } from 'src/assets/interface';
+import { users } from 'src/assets/type';
 import { DOMAIN } from 'utils/domain';
 import Swal from 'sweetalert2';
 import sweetalert2error from 'utils/sweetalert2error';

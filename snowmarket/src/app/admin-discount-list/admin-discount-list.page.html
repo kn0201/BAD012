@@ -69,7 +69,7 @@
           <ion-select
             label="Select"
             placeholder="Product / Price"
-            [value]="selectDiscount"
+            [value]="selectedDiscount"
             defaultValue="Product"
             (ionChange)="handleChange($event)"
             required
@@ -87,11 +87,12 @@
             placeholder="Title"
             [(ngModel)]="title"
             [clearInput]="true"
+            defaultValue=""
             required
           ></ion-input>
         </ion-item>
 
-        <div *ngIf="selectDiscount == 'product_discount'">
+        <div *ngIf="selectedDiscount == 'product_discount'">
           <ion-item>
             <ion-select
               label="Select"
@@ -147,6 +148,7 @@
               placeholder="Quantity"
               [(ngModel)]="quantity"
               [clearInput]="true"
+              defaultValue=""
               required
             ></ion-input>
           </ion-item>
@@ -157,12 +159,13 @@
               placeholder="Discount Amount"
               [(ngModel)]="discount_amount"
               [clearInput]="true"
+              defaultValue=""
               required
             ></ion-input>
           </ion-item>
         </div>
 
-        <div *ngIf="selectDiscount == 'price_discount'">
+        <div *ngIf="selectedDiscount == 'price_discount'">
           <ion-item>
             <ion-label position="stacked">Total*</ion-label>
             <ion-input
@@ -170,6 +173,7 @@
               placeholder="Total"
               [(ngModel)]="total_price"
               [clearInput]="true"
+              defaultValue=""
               required
             ></ion-input>
           </ion-item>
@@ -180,6 +184,7 @@
               placeholder="Discount Rate"
               [(ngModel)]="discount_rate"
               [clearInput]="true"
+              defaultValue=""
               required
             ></ion-input>
           </ion-item>

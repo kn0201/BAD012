@@ -50,3 +50,8 @@ export interface receipt {
   total_price: number;
   date: string;
 }
+
+export interface Item {
+  text: string;
+  value: string;
+}
