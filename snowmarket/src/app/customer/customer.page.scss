@@ -48,9 +48,12 @@ ion-header {
 }
 
 ion-fab {
-  position: fixed;
-  bottom: 5vh;
-  right: 36.5vw;
+  position: absolute;
+  bottom: 3vh;
+  right: 4.9vw;
+  // position: fixed;
+  // bottom: 3.5vh;
+  // right: 36.5vw;
 }
 
 ion-content {
@@ -90,7 +93,7 @@ ion-content {
   ion-col {
     ion-img {
       position: relative;
-      bottom: -23vh;
+      bottom: -22vh;
       left: -4vw;
       width: 200px;
       z-index: 1;
@@ -141,7 +144,20 @@ table {
     td,
     th {
       background-color: #fff2e7;
-      color: #006d77;
     }
   }
+  tfoot {
+    td,
+    th {
+      background-color: #fff8f0;
+    }
+  }
+}
+
+html.swal2-shown {
+  height: 100% !important;
+}
+
+ion-modal {
+  --border-radius: 10px !important;
 }
