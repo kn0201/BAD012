@@ -19,7 +19,7 @@ export class CustomerPage implements OnInit {
     price: number;
   }[] = [];
 
-  findID: number = +'';
+  findID: number | string = '';
 
   discountAmount: number = +'';
   idToFilter: number = +'';
@@ -65,7 +65,7 @@ export class CustomerPage implements OnInit {
       (product) => product.id === idToFilter
     );
 
-    if (matchingProduct) {
+    if (matchingProduct && this.findID !== '') {
       const newItem = {
         id: matchingProduct.id,
         name: matchingProduct.name,
@@ -74,9 +74,15 @@ export class CustomerPage implements OnInit {
       };
 
       this.items.push(newItem);
-      this.findID = +'';
+      this.findID = '';
     } else {
-      throw new Error('No item matching');
+      Swal.fire({
+        title: 'Error!',
+        text: 'Invalid ID',
+        icon: 'warning',
+        confirmButtonColor: '#ffa065',
+        heightAuto: false,
+      });
     }
   }
 
@@ -104,7 +110,7 @@ export class CustomerPage implements OnInit {
       text: `Name: ${this.items[index].name} | Quantity: ${this.items[index].quantity} | Price: $${this.items[index].price}`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#ffa065',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Confirm',
       heightAuto: false,
@@ -114,6 +120,7 @@ export class CustomerPage implements OnInit {
           title: 'Deleted!',
           text: 'The item has been deleted.',
           icon: 'success',
+          confirmButtonColor: '#ffa065',
           heightAuto: false,
         });
         this.items.splice(index, 1);
@@ -186,6 +193,7 @@ export class CustomerPage implements OnInit {
           title: 'Payment Success!',
           text: 'You have paid the items.',
           icon: 'success',
+          confirmButtonColor: '#ffa065',
           confirmButtonText: 'OK',
           heightAuto: false,
         }).then((result) => {
