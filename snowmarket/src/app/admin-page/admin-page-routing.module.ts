@@ -53,13 +53,6 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'brand-list',
-        loadChildren: () =>
-          import('../admin-brand-list/admin-brand-list.module').then(
-            (m) => m.AdminBrandListPageModule
-          ),
-      },
-      {
         path: 'b&c-list',
         loadChildren: () =>
           import('../admin-categories-list/admin-categories-list.module').then(

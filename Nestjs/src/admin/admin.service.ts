@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { brandList } from 'source/brand';
 import { categoriesList } from 'source/categories';
+import { priceDiscountList, productDiscountList } from 'source/discount';
 import { memberList } from 'source/member';
+import { productList } from 'source/product';
 import { receiptList } from 'source/receipt';
 
 @Injectable()
@@ -34,5 +36,21 @@ export class AdminService {
   getReceiptList() {
     console.log('AdminService : Get Receipt List');
     return { receiptList };
+  }
+
+  getProductList() {
+    console.log('AdminService : Get Product List');
+    return { productList };
+  }
+
+  getDiscountList() {
+    console.log('AdminService : Get Discount List');
+    return {
+      productDiscountList,
+      priceDiscountList,
+      productList,
+      brandList,
+      categoriesList,
+    };
   }
 }

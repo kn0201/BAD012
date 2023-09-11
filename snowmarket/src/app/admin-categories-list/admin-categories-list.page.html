@@ -39,7 +39,7 @@
       </ngx-table>
     </div>
   </div>
-  <div>{{message}}</div>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button id="open-modal">
       <ion-icon name="add"></ion-icon>
@@ -54,9 +54,7 @@
           </ion-buttons>
           <ion-title class="text-center">Adding Brand / Category</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="addRow(selectValue)" [strong]="true"
-              >Confirm</ion-button
-            >
+            <ion-buttons (click)="confirm()" [strong]="true">Confirm</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>

@@ -15,6 +15,7 @@ import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { DOMAIN } from 'utils/domain';
 import Swal from 'sweetalert2';
+import sweetalert2error from 'utils/sweetalert2error';
 
 @Component({
   selector: 'app-admin-categories-list',
@@ -36,22 +37,8 @@ export class AdminCategoriesListPage implements OnInit {
 
   @ViewChild(IonModal) modal!: IonModal;
 
-  public brandColumns: Columns[] = [
-    { key: 'id', title: 'Brand ID' },
-    {
-      key: 'brand_name',
-      title: 'Name',
-      headerActionTemplate: this.brandHeaderActionTemplate,
-    },
-  ];
-  public categoriesColumns: Columns[] = [
-    { key: 'id', title: 'Category ID' },
-    {
-      key: 'categories_name',
-      title: 'Name',
-      headerActionTemplate: this.categoryHeaderActionTemplate,
-    },
-  ];
+  public brandColumns: Columns[] = [];
+  public categoriesColumns: Columns[] = [];
 
   brandList!: Config;
   categoriesList!: Config;
@@ -68,13 +55,29 @@ export class AdminCategoriesListPage implements OnInit {
   message = '';
   name!: string;
 
-  selectValue = '';
+  selectValue = null;
 
-  canDismiss = true;
+  canDismiss = false;
 
   ngOnInit() {
     this.loadList();
 
+    this.brandColumns = [
+      { key: 'id', title: 'Brand ID' },
+      {
+        key: 'name',
+        title: 'Name',
+        headerActionTemplate: this.brandHeaderActionTemplate,
+      },
+    ];
+    this.categoriesColumns = [
+      { key: 'id', title: 'Category ID' },
+      {
+        key: 'name',
+        title: 'Name',
+        headerActionTemplate: this.categoryHeaderActionTemplate,
+      },
+    ];
     this.brandList = { ...DefaultConfig };
     this.brandList.checkboxes = true;
     this.brandList.fixedColumnWidth = true;
@@ -95,21 +98,19 @@ export class AdminCategoriesListPage implements OnInit {
         : (event.target as HTMLInputElement).value;
     if (field === 'brand_name') {
       this.selectedBrand = value;
-      this.brandData = [...this.brandDataCopy].filter(({ brand_name }) => {
-        return brand_name
+      this.brandData = [...this.brandDataCopy].filter(({ name }) => {
+        return name
           .toLocaleLowerCase()
           .includes(this.selectedBrand.toLocaleLowerCase());
       });
     }
     if (field === 'categories_name') {
       this.selectedCategory = value;
-      this.categoryData = [...this.categoryDataCopy].filter(
-        ({ categories_name }) => {
-          return categories_name
-            .toLocaleLowerCase()
-            .includes(this.selectedCategory.toLocaleLowerCase());
-        }
-      );
+      this.categoryData = [...this.categoryDataCopy].filter(({ name }) => {
+        return name
+          .toLocaleLowerCase()
+          .includes(this.selectedCategory.toLocaleLowerCase());
+      });
     }
   }
 
@@ -118,7 +119,10 @@ export class AdminCategoriesListPage implements OnInit {
   }
 
   confirm() {
-    this.modal.dismiss(this.name, 'confirm');
+    if (this.selectValue && this.name != '') {
+      this.canDismiss = true;
+      this.addRow(this.selectValue);
+    }
   }
 
   handleChange(event: any) {
@@ -155,7 +159,7 @@ export class AdminCategoriesListPage implements OnInit {
     });
     let json = await res.json();
     if (json.error) {
-      Swal.fire('Failed ', json.error, 'error');
+      sweetalert2error(json.error);
       return;
     }
     this.brandData = json.brandList;

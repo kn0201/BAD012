@@ -7,7 +7,9 @@ import {
 } from '@angular/core';
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
 import { products } from 'src/assets/interface';
-import { productList } from 'src/assets/product';
+import Swal from 'sweetalert2';
+import { DOMAIN } from 'utils/domain';
+import sweetalert2error from 'utils/sweetalert2error';
 
 @Component({
   selector: 'app-admin-product-list',
@@ -27,18 +29,19 @@ export class AdminProductListPage implements OnInit {
   table!: APIDefinition;
 
   public columns: Columns[] = [];
+
   data: products[] = [];
   dataCopy: products[] = [];
+
   configuration!: Config;
+
   selectedProduct = '';
   selectedBrand = '';
   selectedCategory = '';
 
   ngOnInit() {
-    this.configuration = { ...DefaultConfig };
-    this.configuration.checkboxes = true;
-    this.configuration.fixedColumnWidth = true;
-    this.configuration.rows = 10;
+    this.loadList();
+
     this.columns = [
       { key: 'id', title: 'Product ID' },
       {
@@ -62,8 +65,10 @@ export class AdminProductListPage implements OnInit {
       },
       { key: 'stock', title: 'Stock' },
     ];
-    this.data = productList;
-    this.dataCopy = productList;
+    this.configuration = { ...DefaultConfig };
+    this.configuration.checkboxes = true;
+    this.configuration.fixedColumnWidth = true;
+    this.configuration.rows = 10;
   }
 
   filter(field: string | number, event: Event | string): void {
@@ -89,5 +94,22 @@ export class AdminProductListPage implements OnInit {
         category_id.toString().includes(this.selectedCategory)
       );
     });
+  }
+
+  async loadList(): Promise<any> {
+    let res = await fetch(`${DOMAIN}/admin/product-list`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    let json = await res.json();
+    if (json.error) {
+      sweetalert2error(json.error);
+      return;
+    }
+    console.log(json.productList);
+
+    this.data = json.productList;
+    this.dataCopy = json.productList;
   }
 }

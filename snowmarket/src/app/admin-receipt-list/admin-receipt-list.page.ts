@@ -9,6 +9,7 @@ import { receipt } from 'src/assets/interface';
 
 import Swal from 'sweetalert2';
 import { DOMAIN } from 'utils/domain';
+import sweetalert2error from 'utils/sweetalert2error';
 @Component({
   selector: 'app-admin-receipt-list',
   templateUrl: './admin-receipt-list.page.html',
@@ -41,7 +42,7 @@ export class AdminReceiptListPage implements OnInit {
     });
     let json = await res.json();
     if (json.error) {
-      Swal.fire('Failed ', json.error, 'error');
+      sweetalert2error(json.error);
       return;
     }
     console.log(json.receiptList);

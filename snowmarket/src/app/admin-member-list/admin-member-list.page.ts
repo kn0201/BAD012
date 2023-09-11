@@ -10,6 +10,7 @@ import { APIDefinition, Config, Columns, DefaultConfig } from 'ngx-easy-table';
 import { users } from 'src/assets/interface';
 import { DOMAIN } from 'utils/domain';
 import Swal from 'sweetalert2';
+import sweetalert2error from 'utils/sweetalert2error';
 
 @Component({
   selector: 'app-admin-member-list',
@@ -24,20 +25,7 @@ export class AdminMemberListPage implements OnInit {
   @ViewChild('table')
   table!: APIDefinition;
 
-  public columns: Columns[] = [
-    { key: 'id', title: 'Member ID' },
-    {
-      key: 'username',
-      title: 'Username',
-      headerActionTemplate: this.usernameHeaderActionTemplate,
-    },
-    {
-      key: 'email',
-      title: 'Email',
-    },
-    { key: 'birthday', title: 'Birthday' },
-    { key: 'points', title: 'points' },
-  ];
+  public columns: Columns[] = [];
   data: users[] = [];
   dataCopy: users[] = [];
   configuration!: Config;
@@ -45,6 +33,21 @@ export class AdminMemberListPage implements OnInit {
 
   ngOnInit(): void {
     this.loadList();
+
+    this.columns = [
+      { key: 'id', title: 'Member ID' },
+      {
+        key: 'username',
+        title: 'Username',
+        headerActionTemplate: this.usernameHeaderActionTemplate,
+      },
+      {
+        key: 'email',
+        title: 'Email',
+      },
+      { key: 'birthday', title: 'Birthday' },
+      { key: 'points', title: 'points' },
+    ];
     this.configuration = { ...DefaultConfig };
     this.configuration.checkboxes = true;
     this.configuration.fixedColumnWidth = true;
@@ -71,7 +74,7 @@ export class AdminMemberListPage implements OnInit {
     });
     let json = await res.json();
     if (json.error) {
-      Swal.fire('Failed ', json.error, 'error');
+      sweetalert2error(json.error);
       return;
     }
     console.log(json.memberList);
