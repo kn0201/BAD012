@@ -12,8 +12,6 @@ import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table'
 
 import { Brand, Category } from 'src/assets/type'
 import { IonModal } from '@ionic/angular'
-import { OverlayEventDetail } from '@ionic/core/components'
-import { DOMAIN } from 'utils/domain'
 
 import { sweetalert2error } from 'utils/sweetalert2'
 import { AdminService } from '../admin.service'

@@ -96,11 +96,16 @@ export class AdminDiscountListPage implements OnInit {
   selectedCategoryID = ''
   selectedCategoryName = ''
 
+  searchBrandParam = ''
+  searchCategoryParam = ''
+
   idMsg = 'Click to Select'
   brandMsg = 'Click to Select'
   categoryMsg = 'Click to Select'
 
   finishLoading: boolean = false
+
+  canDismiss = false
 
   ngOnInit() {
     this.loadList()
@@ -167,7 +172,12 @@ export class AdminDiscountListPage implements OnInit {
   }
 
   cancel() {
+    this.canDismiss = true
     this.addModal.dismiss()
+  }
+
+  normalize() {
+    this.canDismiss = false
   }
 
   confirm() {
@@ -231,22 +241,58 @@ export class AdminDiscountListPage implements OnInit {
     }
   }
 
+  clear() {
+    this.title = ''
+    this.selectedProductID = ''
+    this.selectedBrandID = ''
+    this.selectedCategoryID = ''
+    this.idMsg = 'Click to Select'
+    this.brandMsg = 'Click to Select'
+    this.categoryMsg = 'Click to Select'
+    this.quantity = ''
+    this.discount_amount = ''
+    this.total_price = ''
+    this.discount_rate = ''
+  }
+
   selectProductID(event: any) {
+    if (!event.target.checked) {
+      this.selectedProductID = ''
+      this.idMsg = 'Click to Select'
+      return
+    }
     this.selectedProductID = event.target.value
     this.selectedProductName = event.target.name
     this.idMsg = `${this.selectedProductID} : ${this.selectedProductName}`
   }
 
   selectBrandID(event: any) {
+    if (!event.target.checked) {
+      this.selectedBrandID = ''
+      this.searchBrandParam = ''
+      this.brandMsg = 'Click to Select'
+      this.filterBy('brand_id', this.selectedBrandID)
+      return
+    }
     this.selectedBrandID = event.target.value
     this.selectedBrandName = event.target.name
     this.brandMsg = `${this.selectedBrandID} : ${this.selectedBrandName}`
+    this.filterBy('brand_id', this.selectedBrandID)
   }
 
   selectCategoryID(event: any) {
+    if (!event.target.checked) {
+      this.selectedCategoryID = ''
+      this.searchCategoryParam = ''
+      this.categoryMsg = 'Click to Select'
+      this.filterBy('categories_id', this.selectedCategoryID)
+      return
+    }
+
     this.selectedCategoryID = event.target.value
     this.selectedCategoryName = event.target.name
     this.categoryMsg = `${this.selectedCategoryID} : ${this.selectedCategoryName}`
+    this.filterBy('categories_id', this.selectedCategoryID)
   }
 
   startDay(event: any) {
@@ -335,5 +381,23 @@ export class AdminDiscountListPage implements OnInit {
         return category.name.toLowerCase().includes(normalizedQuery)
       })
     }
+  }
+
+  filterBy(field: string, param: string): void {
+    if (field === 'brand_id') {
+      this.searchBrandParam = param
+    }
+    if (field === 'categories_id') {
+      this.searchCategoryParam = param
+    }
+
+    this.filteredProduct = [...this.productListData].filter(
+      ({ brand_id, category_id }) => {
+        return (
+          brand_id?.toString().includes(this.searchBrandParam) &&
+          category_id?.toString().includes(this.searchCategoryParam)
+        )
+      }
+    )
   }
 }
