@@ -39,7 +39,7 @@ export class AdminController {
   }
 
   @Post('/b&c-list/add')
-  addMsg(@Req() request: Request) {
+  addBrandCategory(@Req() request: Request) {
     let req = request.body;
     return this.AdminService.addBrandCategory(req);
   }
