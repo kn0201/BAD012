@@ -57,7 +57,7 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
+            <ion-button (click)="dismiss(addModal)">Cancel</ion-button>
           </ion-buttons>
           <ion-title class="text-center"
             >Adding Product / Price Discount</ion-title
@@ -102,18 +102,25 @@
           <ion-item [button]="true" [detail]="false" id="select-categoryID">
             <ion-label>Category ID</ion-label>
             <div slot="end" id="selectedCategoryID">{{ this.categoryMsg }}</div>
-            <ion-modal trigger="select-categoryID" #categoryModal>
+            <ion-modal
+              trigger="select-categoryID"
+              #categoryModal
+              [canDismiss]="canDismiss"
+              (didDismiss)="normalize()"
+            >
               <ng-template>
                 <ion-header>
                   <ion-toolbar>
                     <ion-buttons slot="start">
-                      <ion-button (click)="categoryCancel()">Cancel</ion-button>
+                      <ion-button (click)="dismiss(categoryModal)"
+                        >Cancel</ion-button
+                      >
                     </ion-buttons>
                     <ion-title class="text-center">Category ID</ion-title>
                     <ion-buttons slot="end">
                       <ion-button
                         method="submit"
-                        (click)="categoryConfirm()"
+                        (click)="dismiss(categoryModal)"
                         [strong]="true"
                         >Confirm</ion-button
                       >
@@ -146,18 +153,25 @@
           <ion-item [button]="true" [detail]="false" id="select-brandID">
             <ion-label>Brand ID</ion-label>
             <div slot="end" id="selectedBrandID">{{ this.brandMsg }}</div>
-            <ion-modal trigger="select-brandID" #brandModal>
+            <ion-modal
+              trigger="select-brandID"
+              #brandModal
+              [canDismiss]="canDismiss"
+              (didDismiss)="normalize()"
+            >
               <ng-template>
                 <ion-header>
                   <ion-toolbar>
                     <ion-buttons slot="start">
-                      <ion-button (click)="BrandCancel()">Cancel</ion-button>
+                      <ion-button (click)="dismiss(brandModal)"
+                        >Cancel</ion-button
+                      >
                     </ion-buttons>
-                    <ion-title class="text-center">Product ID</ion-title>
+                    <ion-title class="text-center">Brand ID</ion-title>
                     <ion-buttons slot="end">
                       <ion-button
                         method="submit"
-                        (click)="BrandConfirm()"
+                        (click)="dismiss(brandModal)"
                         [strong]="true"
                         >Confirm</ion-button
                       >
@@ -191,18 +205,25 @@
             <ion-item [button]="true" [detail]="false" id="select-productID">
               <ion-label>Product ID</ion-label>
               <div slot="end" id="selectedProductID">{{ this.idMsg }}</div>
-              <ion-modal trigger="select-productID" #productModal>
+              <ion-modal
+                trigger="select-productID"
+                #productModal
+                [canDismiss]="canDismiss"
+                (didDismiss)="normalize()"
+              >
                 <ng-template>
                   <ion-header>
                     <ion-toolbar>
                       <ion-buttons slot="start">
-                        <ion-button (click)="IDcancel()">Cancel</ion-button>
+                        <ion-button (click)="dismiss(productModal)"
+                          >Cancel</ion-button
+                        >
                       </ion-buttons>
                       <ion-title class="text-center">Product ID</ion-title>
                       <ion-buttons slot="end">
                         <ion-button
                           method="submit"
-                          (click)="IDconfirm()"
+                          (click)="dismiss(productModal)"
                           [strong]="true"
                           >Confirm</ion-button
                         >
