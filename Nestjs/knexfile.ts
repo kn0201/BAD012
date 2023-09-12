@@ -1,5 +1,5 @@
-import type { Knex } from 'knex'
-import { env } from './src/env'
+import type { Knex } from 'knex';
+import { env } from './src/env';
 
 const config: { [key: string]: Knex.Config } = {
   development: {
@@ -12,7 +12,7 @@ const config: { [key: string]: Knex.Config } = {
       port: env.DB_PORT,
       multipleStatements: true,
     },
-  }
-}
+  },
+};
 
 module.exports = config;

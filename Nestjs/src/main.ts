@@ -4,13 +4,13 @@ import { print } from 'listening-on';
 import { env } from 'utils/env';
 // import { join } from 'path';
 // import { NestExpressApplication } from '@nestjs/platform-express';
-import * as cors from 'cors';
+// import * as cors from 'cors';
 
 async function bootstrap() {
   let port = env.PORT;
   const app = await NestFactory.create(AppModule);
-
-  app.use(cors());
+  app.enableCors();
+  // app.use(cors());
   await app.listen(port);
 
   print(port);
