@@ -1,6 +1,5 @@
 export const receiptList = [
   {
-    id: 123456,
     products: [
       {
         name: 'Tuna',
@@ -27,7 +26,6 @@ export const receiptList = [
     date: '2023-01-15',
   },
   {
-    id: 789012,
     products: [
       {
         name: 'Granola',
@@ -54,7 +52,6 @@ export const receiptList = [
     date: '2023-02-19',
   },
   {
-    id: 345678,
     products: [
       {
         name: 'Apple',
@@ -81,7 +78,6 @@ export const receiptList = [
     date: '2023-03-05',
   },
   {
-    id: 901234,
     products: [
       {
         name: 'Chocolate Bar',
@@ -108,7 +104,6 @@ export const receiptList = [
     date: '2023-04-10',
   },
   {
-    id: 567890,
     products: [
       {
         name: 'Energy Drink',
@@ -135,7 +130,6 @@ export const receiptList = [
     date: '2023-05-21',
   },
   {
-    id: 234567,
     products: [
       {
         name: 'Granola',
