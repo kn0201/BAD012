@@ -4,43 +4,42 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-} from '@angular/core';
-import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table';
-import { products } from 'src/assets/interface';
-import Swal from 'sweetalert2';
-import { DOMAIN } from 'utils/domain';
-import sweetalert2error from 'utils/sweetalert2error';
+} from '@angular/core'
+import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table'
+import { Products } from 'src/assets/type'
+
+import { DOMAIN } from 'utils/domain'
+import { sweetalert2error } from 'utils/sweetalert2'
 
 @Component({
   selector: 'app-admin-product-list',
   templateUrl: './admin-product-list.page.html',
   styleUrls: ['./admin-product-list.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminProductListPage implements OnInit {
   constructor() {}
   @ViewChild('productHeaderActionTemplate', { static: true })
-  productHeaderActionTemplate!: TemplateRef<any>;
+  productHeaderActionTemplate!: TemplateRef<any>
   @ViewChild('categoryHeaderActionTemplate', { static: true })
-  categoryHeaderActionTemplate!: TemplateRef<any>;
+  categoryHeaderActionTemplate!: TemplateRef<any>
   @ViewChild('brandHeaderActionTemplate', { static: true })
-  brandHeaderActionTemplate!: TemplateRef<any>;
+  brandHeaderActionTemplate!: TemplateRef<any>
   @ViewChild('table')
-  table!: APIDefinition;
+  table!: APIDefinition
 
-  public columns: Columns[] = [];
+  public columns: Columns[] = []
 
-  data: products[] = [];
-  dataCopy: products[] = [];
+  data: Products[] = []
+  dataCopy: Products[] = []
 
-  configuration!: Config;
+  configuration!: Config
 
-  selectedProduct = '';
-  selectedBrand = '';
-  selectedCategory = '';
+  selectedProduct = ''
+  selectedBrand = ''
+  selectedCategory = ''
 
   ngOnInit() {
-    this.loadList();
+    this.loadList()
 
     this.columns = [
       { key: 'id', title: 'Product ID' },
@@ -64,26 +63,26 @@ export class AdminProductListPage implements OnInit {
         title: 'Price',
       },
       { key: 'stock', title: 'Stock' },
-    ];
-    this.configuration = { ...DefaultConfig };
-    this.configuration.checkboxes = true;
-    this.configuration.fixedColumnWidth = true;
-    this.configuration.rows = 10;
+    ]
+    this.configuration = { ...DefaultConfig }
+    this.configuration.checkboxes = true
+    this.configuration.fixedColumnWidth = true
+    this.configuration.rows = 10
   }
 
   filter(field: string | number, event: Event | string): void {
     const value =
       typeof event === 'string'
         ? event
-        : (event.target as HTMLInputElement).value;
+        : (event.target as HTMLInputElement).value
     if (field === 'name') {
-      this.selectedProduct = value;
+      this.selectedProduct = value
     }
     if (field === 'brand_id') {
-      this.selectedBrand = value;
+      this.selectedBrand = value
     }
     if (field === 'category_id') {
-      this.selectedCategory = value;
+      this.selectedCategory = value
     }
     this.data = [...this.dataCopy].filter(({ name, brand_id, category_id }) => {
       return (
@@ -92,8 +91,8 @@ export class AdminProductListPage implements OnInit {
           .includes(this.selectedProduct.toLocaleLowerCase()) &&
         brand_id.toString().includes(this.selectedBrand) &&
         category_id.toString().includes(this.selectedCategory)
-      );
-    });
+      )
+    })
   }
 
   async loadList(): Promise<any> {
@@ -101,15 +100,15 @@ export class AdminProductListPage implements OnInit {
       headers: {
         Accept: 'application/json',
       },
-    });
-    let json = await res.json();
+    })
+    let json = await res.json()
     if (json.error) {
-      sweetalert2error(json.error);
-      return;
+      sweetalert2error(json.error)
+      return
     }
-    console.log(json.productList);
+    console.log(json.productList)
 
-    this.data = json.productList;
-    this.dataCopy = json.productList;
+    this.data = json.productList
+    this.dataCopy = json.productList
   }
 }

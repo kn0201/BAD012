@@ -24,27 +24,22 @@ export class AdminService {
   }
 
   getBCList() {
-    console.log('AdminService : Get BC List');
     return { brandList, categoriesList };
   }
 
   getMemberList() {
-    console.log('AdminService : Get Member List');
     return { memberList };
   }
 
   getReceiptList() {
-    console.log('AdminService : Get Receipt List');
     return { receiptList };
   }
 
   getProductList() {
-    console.log('AdminService : Get Product List');
     return { productList };
   }
 
   getDiscountList() {
-    console.log('AdminService : Get Discount List');
     return {
       productDiscountList,
       priceDiscountList,

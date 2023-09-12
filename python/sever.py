@@ -3,17 +3,31 @@ import torch
 from torchvision import transforms
 from ultralytics import YOLO
 from ultralytics.data.converter import convert_coco
+from roboflow import Roboflow
+
+rf = Roboflow(api_key="pHQ3gzZuQym3KW2Ihfhn")
+project = rf.workspace().project("bad-spztu")
+model = project.version(1).model
+
+# infer on a local image
+print(model.predict("your_image.jpg", confidence=40, overlap=30).json())
+
+# visualize your prediction
+# model.predict("your_image.jpg", confidence=40, overlap=30).save("prediction.jpg")
+
+# infer on an image hosted elsewhere
+# print(model.predict("URL_OF_YOUR_IMAGE", hosted=True, confidence=40, overlap=30).json())
 # 載入模型和權重gfvv
-model = YOLO('yolov8n.yaml')
+# model = YOLO('yolov8n.yaml')
 
-model = YOLO('yolov8n.pt')
-results = model.train(data='coco128.yaml', epochs=100, imgsz=640)
+# model = YOLO('yolov8n.pt')
+# results = model.train(data='coco128.yaml', epochs=100, imgsz=640)
 
-results = model.val()
+# results = model.val()
 
-convert_coco(labels_dir='path/to/coco/annotations/')
+# convert_coco(labels_dir='path/to/coco/annotations/')
 
-success = model.export(format='onnx')
+# success = model.export(format='onnx')
 
 # rf = Roboflow(api_key="WhCA0N0WxZZuOxBbinZl")
 # project = rf.workspace().project("vita")
