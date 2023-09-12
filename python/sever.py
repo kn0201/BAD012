@@ -4,10 +4,16 @@ from torchvision import transforms
 from ultralytics import YOLO
 from ultralytics.data.converter import convert_coco
 # 載入模型和權重gfvv
+model = YOLO('yolov8n.yaml')
+
 model = YOLO('yolov8n.pt')
-# results = model.train(data='coco128.yaml', epochs=100, imgsz=640)
+results = model.train(data='coco128.yaml', epochs=100, imgsz=640)
+
+results = model.val()
 
 convert_coco(labels_dir='path/to/coco/annotations/')
+
+success = model.export(format='onnx')
 
 # rf = Roboflow(api_key="WhCA0N0WxZZuOxBbinZl")
 # project = rf.workspace().project("vita")

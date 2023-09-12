@@ -29,10 +29,24 @@
                 <div class="form-container sign-in-container">
                   <form action="#">
                     <h1>Sign in</h1>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <a href="#">Forgot your password?</a>
-                    <button>Sign In</button>
+                    <ion-item>
+                      <ion-input
+                        type="email"
+                        [(ngModel)]="user.username"
+                        labelPlacement="Email"
+                        placeholder="Email"
+                      />
+                    </ion-item>
+                    <ion-item>
+                      <ion-input
+                        type="password"
+                        [(ngModel)]="user.password"
+                        labelPlacement="Password"
+                        placeholder="password"
+                      />
+                    </ion-item>
+
+                    <ion-button (click)="login()">Login In</ion-button>
                   </form>
                 </div>
                 <div class="overlay-container">
@@ -43,6 +57,7 @@
                         To keep connected with us please login with your
                         personal info
                       </p>
+                      a``
                       <button class="ghost" id="signIn">Sign In</button>
                     </div>
                     <div class="overlay-panel overlay-right">
