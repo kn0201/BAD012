@@ -4,13 +4,16 @@
 		"pos": "000161",
 		"total": 80.9,
 		"discount_total": 20,
-		"item": ["VITA LEMON TEA", "HAAGEN-DAZS STRAWBERRY ICE CREAM"]
+		"item": [
+			{ "name": "VITA LEMON TEA", "price": 18.0 },
+			{ "name": "HAAGEN-DAZS STRAWBERRY ICE CREAM", "price": 82.9 }
+		]
 	},
 	{
 		"user": "davidwilson",
 		"pos": "000162",
 		"total": 58.0,
 		"discount_total": 0,
-		"item": ["KRAFT SINGLE SLICE CHEESE REDUCE FAT"]
+		"item": [{ "name": "KRAFT SINGLE SLICE CHEESE REDUCE FAT", "price": 58.0 }]
 	}
 ]

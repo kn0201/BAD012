@@ -1,92 +1,92 @@
 [
-  {
-    "username": "johnsmith",
-    "email": "johnsmith@example.com",
-    "birthday": "1990-01-10",
-    "points": 500,
-    "password": "Rt3jYp7s",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "sarahjones",
-    "email": "sjones@email.com",
-    "birthday": "1985-03-15",
-    "points": 750,
-    "password": "Ea5kDz9w",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "mikedoe",
-    "email": "mikedoe12@gmail.com",
-    "birthday": "1992-11-22",
-    "points": 250,
-    "password": "Gz4bPv6d",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "emilybrown",
-    "email": "emily.brown@example.com",
-    "birthday": "1994-07-05",
-    "points": 350,
-    "password": "Hs7mLw5j",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "davidwilson",
-    "email": "dwilson@mail.com",
-    "birthday": "1988-04-30",
-    "points": 900,
-    "password": "Qw8sJr5y",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "lisasmith",
-    "email": "lisa.smith@example.com",
-    "birthday": "1991-12-12",
-    "points": 600,
-    "password": "Ud2bDm7x",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "johndoe",
-    "email": "johndoe@hotmail.com",
-    "birthday": "1987-02-18",
-    "points": 400,
-    "password": "Zk3fOr8g",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "amandajackson",
-    "email": "ajackson@email.com",
-    "birthday": "1995-09-08",
-    "points": 150,
-    "password": "Xe9pAm5l",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "robertgreen",
-    "email": "robert.green@example.com",
-    "birthday": "1993-05-25",
-    "points": 800,
-    "password": "Vy7rQt4w",
-    "role": "guest",
-    "is_delete": false
-  },
-  {
-    "username": "michaeltaylor",
-    "email": "mtaylor@gmail.com",
-    "birthday": "1989-10-03",
-    "points": 700,
-    "password": "Kg9pXt2m",
-    "role": "guest",
-    "is_delete": false
-  }
+	{
+		"username": "johnsmith",
+		"email": "johnsmith@example.com",
+		"birthday": "1990-01-10",
+		"points": 500,
+		"password": "Rt3jYp7s",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "sarahjones",
+		"email": "sjones@email.com",
+		"birthday": "1985-03-15",
+		"points": 750,
+		"password": "Ea5kDz9w",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "mikedoe",
+		"email": "mikedoe12@gmail.com",
+		"birthday": "1992-11-22",
+		"points": 250,
+		"password": "Gz4bPv6d",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "emilybrown",
+		"email": "emily.brown@example.com",
+		"birthday": "1994-07-05",
+		"points": 350,
+		"password": "Hs7mLw5j",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "davidwilson",
+		"email": "dwilson@mail.com",
+		"birthday": "1988-04-30",
+		"points": 900,
+		"password": "Qw8sJr5y",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "lisasmith",
+		"email": "lisa.smith@example.com",
+		"birthday": "1991-12-12",
+		"points": 600,
+		"password": "Ud2bDm7x",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "johndoe",
+		"email": "johndoe@hotmail.com",
+		"birthday": "1987-02-18",
+		"points": 400,
+		"password": "Zk3fOr8g",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "amandajackson",
+		"email": "ajackson@email.com",
+		"birthday": "1995-09-08",
+		"points": 150,
+		"password": "Xe9pAm5l",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "robertgreen",
+		"email": "robert.green@example.com",
+		"birthday": "1993-05-25",
+		"points": 800,
+		"password": "Vy7rQt4w",
+		"role": "member",
+		"is_delete": false
+	},
+	{
+		"username": "michaeltaylor",
+		"email": "mtaylor@gmail.com",
+		"birthday": "1989-10-03",
+		"points": 700,
+		"password": "Kg9pXt2m",
+		"role": "member",
+		"is_delete": false
+	}
 ]
