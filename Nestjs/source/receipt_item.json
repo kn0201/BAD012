@@ -1,0 +1,20 @@
+[
+	{
+		"user": "johnsmith",
+		"pos": "000161",
+		"name": "VITA LEMON TEA",
+		"price": 18.0
+	},
+	{
+		"user": "johnsmith",
+		"pos": "000161",
+		"name": "HAAGEN-DAZS STRAWBERRY ICE CREAM",
+		"price": 82.9
+	},
+	{
+		"user": "davidwilson",
+		"pos": "000162",
+		"name": "KRAFT SINGLE SLICE CHEESE REDUCE FAT",
+		"price": 58.0
+	}
+]

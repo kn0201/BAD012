@@ -1,0 +1,234 @@
+[
+	{
+		"name": "Bag",
+		"price": 0.5,
+		"brand": "Purrfect",
+		"category": "Bag",
+		"stock": 999,
+		"is_delete": false
+	},
+	{
+		"name": "IF 100 PERCENT COCONUT WATER",
+		"price": 7.0,
+		"brand": "IF",
+		"category": "Beverages",
+		"stock": 175,
+		"is_delete": false
+	},
+	{
+		"name": "SUN TUNG LOK MINI WHITE LOTUS PASTE MC W YOLK",
+		"price": 268.0,
+		"brand": "Sun Tung Lok",
+		"category": "Mooncakes",
+		"stock": 31,
+		"is_delete": false
+	},
+	{
+		"name": "VITA LEMON TEA",
+		"price": 18.0,
+		"brand": "Vita",
+		"category": "Beverages",
+		"stock": 150,
+		"is_delete": false
+	},
+	{
+		"name": "OPTIMUM NUTRITION GOLD STAND.WHEY DOUBLE RICH CHOC FLV",
+		"price": 595.0,
+		"brand": "Optimum Nutrition",
+		"category": "Supplements",
+		"stock": 72,
+		"is_delete": false
+	},
+	{
+		"name": "HAAGEN-DAZS STRAWBERRY ICE CREAM",
+		"price": 82.9,
+		"brand": "HAAGEN-DAZS",
+		"category": "Ice Cream",
+		"stock": 27,
+		"is_delete": false
+	},
+	{
+		"name": "IBN PNS X IBN CS4 CORDYCEPS MYCELIUM",
+		"price": 288.0,
+		"brand": "IBN",
+		"category": "Supplements",
+		"stock": 113,
+		"is_delete": false
+	},
+	{
+		"name": "TSING TAO BEER 12 CAN",
+		"price": 80.0,
+		"brand": "TSING TAO",
+		"category": "Beer",
+		"stock": 138,
+		"is_delete": false
+	},
+	{
+		"name": "BLUE ICE BEER 12'S CAN",
+		"price": 53.9,
+		"brand": "BLUE ICE",
+		"category": "Beer",
+		"stock": 10,
+		"is_delete": false
+	},
+	{
+		"name": "ASAHI BEER CAN",
+		"price": 80.0,
+		"brand": "ASAHI",
+		"category": "Beer",
+		"stock": 42,
+		"is_delete": false
+	},
+	{
+		"name": "KRONENBOURG1664 BLANC 4'S KING CAN (Random Pick)",
+		"price": 72.0,
+		"brand": "KRONENBOURG1664 BLANC",
+		"category": "Beer",
+		"stock": 179,
+		"is_delete": false
+	},
+	{
+		"name": "HEINEKEN BEER 12S CAN HEINEKEN",
+		"price": 80.0,
+		"brand": "HEINEKEN",
+		"category": "Beer",
+		"stock": 114,
+		"is_delete": false
+	},
+	{
+		"name": "HOEGAARDEN WHITE BEER 4'S KING CAN",
+		"price": 72.9,
+		"brand": "HOEGAARDEN",
+		"category": "Beer",
+		"stock": 73,
+		"is_delete": false
+	},
+	{
+		"name": "PAULS UHT MILK",
+		"price": 49.0,
+		"brand": "PAULS",
+		"category": "Dairy",
+		"stock": 82,
+		"is_delete": false
+	},
+	{
+		"name": "KELLOGG'S CLASSIC CORN FLAKES",
+		"price": 37.9,
+		"brand": "KELLOGG'S",
+		"category": "Cereals",
+		"stock": 139,
+		"is_delete": false
+	},
+	{
+		"name": "KRAFT SINGLE SLICE CHEESE REDUCE FAT",
+		"price": 58.0,
+		"brand": "KRAFT",
+		"category": "Dairy",
+		"stock": 12,
+		"is_delete": false
+	},
+	{
+		"name": "VITA LOW SUGAR CHOCOLATE MILK BEVERAGE",
+		"price": 32.0,
+		"brand": "Vita",
+		"category": "Beverages",
+		"stock": 104,
+		"is_delete": false
+	},
+	{
+		"name": "THE YIN CRAB ROE SIU MAI 12PCS (FROZEN)",
+		"price": 60.0,
+		"brand": "THE YIN",
+		"category": "Frozen Food",
+		"stock": 32,
+		"is_delete": false
+	},
+	{
+		"name": "KNORR Q/S MACARONI CHICKEN BROTH",
+		"price": 25.9,
+		"brand": "KNORR",
+		"category": "Soup",
+		"stock": 44,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT CREAMY PEANUT BUTTER",
+		"price": 20.9,
+		"brand": "SELECT",
+		"category": "Groceries",
+		"stock": 191,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT SPAGHETTI",
+		"price": 15.9,
+		"brand": "SELECT",
+		"category": "Groceries",
+		"stock": 157,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT PURE CANOLA OIL",
+		"price": 62.9,
+		"brand": "SELECT",
+		"category": "Groceries",
+		"stock": 15,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT SANDWICH BISCUITS (LEMON)",
+		"price": 23.9,
+		"brand": "SELECT",
+		"category": "Snack",
+		"stock": 29,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT BRAZILIAN MID JOINT WING",
+		"price": 42.9,
+		"brand": "SELECT",
+		"category": "Frozen Food",
+		"stock": 53,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT NATURAL WHOLE ALMONDS",
+		"price": 25.9,
+		"brand": "SELECT",
+		"category": "Snack",
+		"stock": 136,
+		"is_delete": false
+	},
+	{
+		"name": "SELECT BEEF KABOB WITH BBQ SAUCE",
+		"price": 28.9,
+		"brand": "SELECT",
+		"category": "Frozen Food",
+		"stock": 85,
+		"is_delete": false
+	},
+	{
+		"name": "KIT KAT CHOCOLATE BAR",
+		"price": 6.0,
+		"brand": "Kit Kat",
+		"category": "Snack",
+		"stock": 100,
+		"is_delete": false
+	},
+	{
+		"name": "NISSIN CRISP CHOCO STRAWBERRY FLV",
+		"price": 8.0,
+		"brand": "Nissin",
+		"category": "Snack",
+		"stock": 80,
+		"is_delete": false
+	},
+	{
+		"name": "NISSIN CRISP CHOCO COCO FLV",
+		"price": 8.0,
+		"brand": "Nissin",
+		"category": "Snack",
+		"stock": 60,
+		"is_delete": false
+	}
+]

@@ -1,0 +1,16 @@
+[
+	{
+		"user": "johnsmith",
+		"pos": "000161",
+		"total": 80.9,
+		"discount_total": 20,
+		"item": ["VITA LEMON TEA", "HAAGEN-DAZS STRAWBERRY ICE CREAM"]
+	},
+	{
+		"user": "davidwilson",
+		"pos": "000162",
+		"total": 58.0,
+		"discount_total": 0,
+		"item": ["KRAFT SINGLE SLICE CHEESE REDUCE FAT"]
+	}
+]
