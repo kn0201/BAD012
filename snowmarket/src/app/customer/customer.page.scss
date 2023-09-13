@@ -162,3 +162,14 @@ html.swal2-shown {
 ion-modal {
   --border-radius: 10px !important;
 }
+
+video {
+  background-color: #ffa06555;
+  max-width: 100%;
+  transform: scaleX();
+}
+canvas {
+  background-color: #ff00ff55;
+  width: 100%;
+  transform: scaleX();
+}

@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { config } from 'dotenv';
 import populateEnv from 'populate-env';
 
@@ -5,6 +6,7 @@ config();
 
 export let env = {
   NODE_ENV: 'development',
+  SESSION_SECRET: randomUUID(),
   DB_NAME: '',
   DB_USERNAME: '',
   DB_PASSWORD: '',

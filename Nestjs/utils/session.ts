@@ -1,18 +1,16 @@
-import { randomBytes } from 'crypto';
-import expressSession from 'express-session';
+import session from 'express-session';
+import { env } from './env';
+
+export let sessionMiddleware = session({
+  secret: env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+});
 
 declare module 'express-session' {
   interface SessionData {
-    counter: number;
     user_id: number;
-    username: string;
-    chatrecord: string;
-    msgId: number;
   }
 }
 
-export let sessionMiddleware = expressSession({
-  resave: false,
-  secret: randomBytes(32).toString('hex'),
-  saveUninitialized: false,
-});
+export type RequestSession = session.Session & Partial<session.SessionData>;
