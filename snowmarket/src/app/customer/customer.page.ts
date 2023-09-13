@@ -193,7 +193,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
   removeItem(index: number) {
     Swal.fire({
-      title: 'Confirm to delete below item?',
+      title: 'Confirm to delete below gitem?',
       text: `Name: ${this.items[index].name} | Quantity: ${this.items[index].quantity} | Price: $${this.items[index].price}`,
       icon: 'warning',
       showCancelButton: true,

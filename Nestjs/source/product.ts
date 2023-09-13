@@ -1,6 +1,5 @@
 export const productList = [
   {
-    id: 1,
     brand_id: 7,
     category_id: 15,
     price: 2.99,
@@ -8,7 +7,6 @@ export const productList = [
     name: 'Apple',
   },
   {
-    id: 2,
     brand_id: 12,
     category_id: 5,
     price: 3.49,
@@ -16,7 +14,6 @@ export const productList = [
     name: 'Cream Cheese',
   },
   {
-    id: 3,
     brand_id: 19,
     category_id: 9,
     price: 1.99,
@@ -24,7 +21,6 @@ export const productList = [
     name: 'Coke',
   },
   {
-    id: 4,
     brand_id: 5,
     category_id: 18,
     price: 0.99,
@@ -32,7 +28,6 @@ export const productList = [
     name: 'Cherry',
   },
   {
-    id: 5,
     brand_id: 24,
     category_id: 7,
     price: 2.49,
@@ -40,7 +35,6 @@ export const productList = [
     name: 'Tuna',
   },
   {
-    id: 6,
     brand_id: 8,
     category_id: 2,
     price: 4.99,
@@ -48,7 +42,6 @@ export const productList = [
     name: 'Yogurt',
   },
   {
-    id: 7,
     brand_id: 14,
     category_id: 12,
     price: 3.99,
@@ -56,7 +49,6 @@ export const productList = [
     name: 'Granola',
   },
   {
-    id: 8,
     brand_id: 21,
     category_id: 3,
     price: 1.49,
@@ -64,7 +56,6 @@ export const productList = [
     name: 'Baguette',
   },
   {
-    id: 9,
     brand_id: 3,
     category_id: 10,
     price: 2.99,
@@ -72,7 +63,6 @@ export const productList = [
     name: 'Potato Chips',
   },
   {
-    id: 10,
     brand_id: 26,
     category_id: 6,
     price: 2.49,
@@ -80,7 +70,6 @@ export const productList = [
     name: 'Ketchup',
   },
   {
-    id: 11,
     brand_id: 10,
     category_id: 17,
     price: 5.99,
@@ -88,7 +77,6 @@ export const productList = [
     name: 'Pasta',
   },
   {
-    id: 12,
     brand_id: 16,
     category_id: 13,
     price: 4.29,
@@ -96,7 +84,6 @@ export const productList = [
     name: 'Frozen Pizza',
   },
   {
-    id: 13,
     brand_id: 27,
     category_id: 11,
     price: 2.99,
@@ -104,7 +91,6 @@ export const productList = [
     name: 'Ice Cream',
   },
   {
-    id: 14,
     brand_id: 9,
     category_id: 8,
     price: 1.99,
@@ -112,7 +98,6 @@ export const productList = [
     name: 'Chocolate Bar',
   },
   {
-    id: 15,
     brand_id: 17,
     category_id: 16,
     price: 3.49,
@@ -120,7 +105,6 @@ export const productList = [
     name: 'Bread',
   },
   {
-    id: 16,
     brand_id: 25,
     category_id: 1,
     price: 2.99,
@@ -128,7 +112,6 @@ export const productList = [
     name: 'Lettuce',
   },
   {
-    id: 17,
     brand_id: 1,
     category_id: 14,
     price: 4.99,
@@ -136,7 +119,6 @@ export const productList = [
     name: 'Salsa',
   },
   {
-    id: 18,
     brand_id: 23,
     category_id: 10,
     price: 1.99,
@@ -144,7 +126,6 @@ export const productList = [
     name: 'Orange Juice',
   },
   {
-    id: 19,
     brand_id: 6,
     category_id: 4,
     price: 0.99,
@@ -152,7 +133,6 @@ export const productList = [
     name: 'Banana',
   },
   {
-    id: 20,
     brand_id: 30,
     category_id: 19,
     price: 2.49,
@@ -160,7 +140,6 @@ export const productList = [
     name: 'Milk',
   },
   {
-    id: 21,
     brand_id: 13,
     category_id: 7,
     price: 3.99,
@@ -168,7 +147,6 @@ export const productList = [
     name: 'Salmon',
   },
   {
-    id: 22,
     brand_id: 20,
     category_id: 2,
     price: 1.49,
@@ -176,7 +154,6 @@ export const productList = [
     name: 'Cucumber',
   },
   {
-    id: 23,
     brand_id: 4,
     category_id: 12,
     price: 2.99,
@@ -184,7 +161,6 @@ export const productList = [
     name: 'Peanut Butter',
   },
   {
-    id: 24,
     brand_id: 29,
     category_id: 6,
     price: 2.49,
@@ -192,7 +168,6 @@ export const productList = [
     name: 'Mayonnaise',
   },
   {
-    id: 25,
     brand_id: 11,
     category_id: 17,
     price: 5.99,
@@ -200,7 +175,6 @@ export const productList = [
     name: 'Rice',
   },
   {
-    id: 26,
     brand_id: 15,
     category_id: 13,
     price: 4.29,
@@ -208,7 +182,6 @@ export const productList = [
     name: 'Frozen Vegetables',
   },
   {
-    id: 27,
     brand_id: 28,
     category_id: 11,
     price: 2.99,
@@ -216,7 +189,6 @@ export const productList = [
     name: 'Yogurt Drink',
   },
   {
-    id: 28,
     brand_id: 18,
     category_id: 8,
     price: 1.99,
@@ -224,7 +196,6 @@ export const productList = [
     name: 'Popcorn',
   },
   {
-    id: 29,
     brand_id: 2,
     category_id: 16,
     price: 3.49,
@@ -232,7 +203,6 @@ export const productList = [
     name: 'Croissant',
   },
   {
-    id: 30,
     brand_id: 22,
     category_id: 1,
     price: 2.99,
@@ -240,7 +210,6 @@ export const productList = [
     name: 'Tomato',
   },
   {
-    id: 31,
     brand_id: 12,
     category_id: 5,
     price: 2.99,
@@ -248,7 +217,6 @@ export const productList = [
     name: 'Tuna',
   },
   {
-    id: 32,
     brand_id: 6,
     category_id: 13,
     price: 3.49,
@@ -256,7 +224,6 @@ export const productList = [
     name: 'Cream Cheese',
   },
   {
-    id: 33,
     brand_id: 22,
     category_id: 7,
     price: 3.99,
@@ -264,7 +231,6 @@ export const productList = [
     name: 'Granola',
   },
   {
-    id: 34,
     brand_id: 18,
     category_id: 3,
     price: 2.99,
@@ -272,7 +238,6 @@ export const productList = [
     name: 'Lettuce',
   },
   {
-    id: 35,
     brand_id: 9,
     category_id: 20,
     price: 3.99,
@@ -280,7 +245,6 @@ export const productList = [
     name: 'Granola',
   },
   {
-    id: 36,
     brand_id: 3,
     category_id: 17,
     price: 5.99,
@@ -288,7 +252,6 @@ export const productList = [
     name: 'Steak',
   },
   {
-    id: 37,
     brand_id: 15,
     category_id: 9,
     price: 1.49,
@@ -296,7 +259,6 @@ export const productList = [
     name: 'Baguette',
   },
   {
-    id: 38,
     brand_id: 7,
     category_id: 14,
     price: 2.99,
@@ -304,7 +266,6 @@ export const productList = [
     name: 'Cookies',
   },
   {
-    id: 39,
     brand_id: 25,
     category_id: 10,
     price: 3.99,
@@ -312,7 +273,6 @@ export const productList = [
     name: 'Energy Drink',
   },
   {
-    id: 40,
     brand_id: 2,
     category_id: 6,
     price: 3.49,
@@ -320,7 +280,6 @@ export const productList = [
     name: 'Bread',
   },
   {
-    id: 41,
     brand_id: 14,
     category_id: 18,
     price: 2.99,
@@ -328,7 +287,6 @@ export const productList = [
     name: 'Apple',
   },
   {
-    id: 42,
     brand_id: 1,
     category_id: 8,
     price: 4.29,
@@ -336,7 +294,6 @@ export const productList = [
     name: 'Frozen Pizza',
   },
   {
-    id: 43,
     brand_id: 4,
     category_id: 19,
     price: 2.49,
@@ -344,7 +301,6 @@ export const productList = [
     name: 'Soda',
   },
   {
-    id: 44,
     brand_id: 10,
     category_id: 16,
     price: 4.99,
@@ -352,7 +308,6 @@ export const productList = [
     name: 'Cheese',
   },
   {
-    id: 45,
     brand_id: 17,
     category_id: 2,
     price: 2.49,
@@ -360,7 +315,6 @@ export const productList = [
     name: 'Ketchup',
   },
   {
-    id: 46,
     brand_id: 19,
     category_id: 12,
     price: 1.99,
@@ -368,7 +322,6 @@ export const productList = [
     name: 'Chocolate Bar',
   },
   {
-    id: 47,
     brand_id: 27,
     category_id: 11,
     price: 1.99,
@@ -376,7 +329,6 @@ export const productList = [
     name: 'Candy',
   },
   {
-    id: 48,
     brand_id: 11,
     category_id: 15,
     price: 2.49,
@@ -384,7 +336,6 @@ export const productList = [
     name: 'Yogurt',
   },
   {
-    id: 49,
     brand_id: 8,
     category_id: 4,
     price: 2.99,
@@ -393,7 +344,6 @@ export const productList = [
   },
 
   {
-    id: 50,
     brand_id: 16,
     category_id: 1,
     price: 3.99,
@@ -401,7 +351,6 @@ export const productList = [
     name: 'Coffee',
   },
   {
-    id: 51,
     brand_id: 29,
     category_id: 10,
     price: 3.99,
@@ -409,7 +358,6 @@ export const productList = [
     name: 'Energy Drink',
   },
   {
-    id: 52,
     brand_id: 5,
     category_id: 6,
     price: 4.49,
@@ -417,7 +365,6 @@ export const productList = [
     name: 'Bagels',
   },
   {
-    id: 53,
     brand_id: 21,
     category_id: 16,
     price: 3.99,
@@ -425,7 +372,6 @@ export const productList = [
     name: 'Cheese',
   },
   {
-    id: 54,
     brand_id: 20,
     category_id: 3,
     price: 1.99,
@@ -433,7 +379,6 @@ export const productList = [
     name: 'Lettuce',
   },
   {
-    id: 55,
     brand_id: 26,
     category_id: 17,
     price: 5.49,
@@ -441,7 +386,6 @@ export const productList = [
     name: 'Salmon',
   },
   {
-    id: 56,
     brand_id: 23,
     category_id: 7,
     price: 3.99,
@@ -449,7 +393,6 @@ export const productList = [
     name: 'Granola',
   },
   {
-    id: 57,
     brand_id: 30,
     category_id: 13,
     price: 2.99,
@@ -457,7 +400,6 @@ export const productList = [
     name: 'Cream Cheese',
   },
   {
-    id: 58,
     brand_id: 13,
     category_id: 5,
     price: 4.49,
@@ -465,7 +407,6 @@ export const productList = [
     name: 'Tuna',
   },
   {
-    id: 59,
     brand_id: 24,
     category_id: 20,
     price: 3.99,
@@ -473,7 +414,6 @@ export const productList = [
     name: 'Granola',
   },
   {
-    id: 60,
     brand_id: 28,
     category_id: 9,
     price: 1.99,

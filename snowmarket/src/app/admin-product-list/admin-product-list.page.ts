@@ -10,6 +10,7 @@ import { Products } from 'src/assets/type'
 
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2error } from 'utils/sweetalert2'
+import { AdminService } from '../admin.service'
 
 @Component({
   selector: 'app-admin-product-list',
@@ -17,7 +18,8 @@ import { sweetalert2error } from 'utils/sweetalert2'
   styleUrls: ['./admin-product-list.page.scss'],
 })
 export class AdminProductListPage implements OnInit {
-  constructor() {}
+  constructor(private adminService: AdminService) {}
+
   @ViewChild('productHeaderActionTemplate', { static: true })
   productHeaderActionTemplate!: TemplateRef<any>
   @ViewChild('categoryHeaderActionTemplate', { static: true })
@@ -96,18 +98,7 @@ export class AdminProductListPage implements OnInit {
   }
 
   async loadList(): Promise<any> {
-    let res = await fetch(`${DOMAIN}/admin/product-list`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-    let json = await res.json()
-    if (json.error) {
-      sweetalert2error(json.error)
-      return
-    }
-    console.log(json.productList)
-
+    let json = await this.adminService.getProductList()
     this.data = json.productList
     this.dataCopy = json.productList
   }

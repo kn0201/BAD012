@@ -47,12 +47,6 @@ ion-header {
   background-repeat: no-repeat;
 }
 
-ion-fab {
-  position: absolute;
-  bottom: -18vh;
-  left: 0.5vw;
-}
-
 .image-container {
   position: relative;
   display: flex;
@@ -67,26 +61,58 @@ ion-content {
     background-color: white;
   }
 
-  ion-list {
-    background-color: #fff2e7;
-    height: 83vh;
-    overflow-y: auto;
-    border-radius: 10px;
+  @media (min-height: 1080px) {
+    ion-list {
+      background-color: #fff2e7;
+      height: 90vh;
+      overflow-y: auto;
+      border-radius: 10px;
+    }
+    .right {
+      height: 90vh;
+    }
+    .wrapper {
+      --backdrop-opacity: var(--backdrop-opacity);
+      height: 50vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+    ion-fab {
+      position: absolute;
+      bottom: -15vh;
+      left: 1.4vw;
+    }
   }
 
-  .right {
-    height: 83vh;
-  }
-
-  .wrapper {
-    --backdrop-opacity: var(--backdrop-opacity);
-    height: 42vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 14px;
+  @media (max-height: 1079px) {
+    ion-list {
+      background-color: #fff2e7;
+      height: 83vh;
+      overflow-y: auto;
+      border-radius: 10px;
+    }
+    .right {
+      height: 83vh;
+    }
+    .wrapper {
+      --backdrop-opacity: var(--backdrop-opacity);
+      height: 42vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+    ion-fab {
+      position: absolute;
+      bottom: -18vh;
+      left: 0.5vw;
+    }
   }
 
   ion-card {
@@ -99,7 +125,7 @@ ion-content {
       position: relative;
       bottom: -19vh;
       left: -6vw;
-      width: 250px;
+      width: 17vw;
       z-index: 1;
     }
   }

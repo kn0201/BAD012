@@ -6,7 +6,9 @@
       </ion-label>
     </ion-item>
 
-    <ion-button slot="end" color="primary" class="login"> Login </ion-button>
+    <ion-button slot="end" color="primary" class="login" routerLink="/login">
+      Login
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -26,7 +28,7 @@
                         <th scope="col" width="15%">ID</th>
                         <th scope="col" width="45%">Name</th>
                         <th scope="col" width="10%">Qty</th>
-                        <th scope="col" width="10%">Price</th>
+                        <th scope="col" width="10%">Unit Price</th>
                         <th
                           scope="col"
                           width="10%"
@@ -35,22 +37,32 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let item of items; let i = index">
-                        <th scope="row">{{ i + 1}}</th>
-                        <td>{{item.id}}</td>
-                        <td>{{item.name}}</td>
-                        <td>1</td>
-                        <td>${{item.price}}</td>
-                        <td *ngIf="showDeleteButton">
-                          <button
-                            class="btn btn-danger delete-button"
-                            (click)="removeItem(i)"
-                            *ngIf="showDeleteButton"
-                          >
-                            <ion-icon name="trash"></ion-icon>
-                          </button>
-                        </td>
-                      </tr>
+                      <ng-container *ngFor="let item of items; let i = index">
+                        <tr>
+                          <th scope="row">{{ i + 1}}</th>
+                          <td>{{item.id}}</td>
+                          <td>{{item.name}}</td>
+                          <td>{{item.quantity}}</td>
+                          <td>${{item.price}}</td>
+                          <td *ngIf="showDeleteButton">
+                            <button
+                              class="btn btn-danger delete-button"
+                              (click)="removeItem(i)"
+                              *ngIf="showDeleteButton"
+                            >
+                              <ion-icon name="trash"></ion-icon>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th></th>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>-$10</td>
+                          <td *ngIf="showDeleteButton"></td>
+                        </tr>
+                      </ng-container>
                     </tbody>
                   </table>
                 </div>
@@ -63,6 +75,7 @@
           <ion-row>
             <ion-col size="12">
               <ion-card class="camera">
+<<<<<<< HEAD
                 <video #video autoplay muted playsinline hidden="ture"></video>
                 <canvas #canvas></canvas>
                 <!-- <div class="wrapper" (window:resize)="onResize($event)">
@@ -70,6 +83,15 @@
                     <video id="video" autoplay muted playsinline></video>
                     <div id="fps"></div>
                   </webcam>
+=======
+                <div class="wrapper" (window:resize)="onResize($event)">
+                  <webcam
+                    #webcam
+                    [width]="width"
+                    [height]="height"
+                    (initError)="handleInitError($event)"
+                  ></webcam>
+>>>>>>> d1d95a9610d724660b8e753797f72b120a94ec43
                   <h4 *ngIf="errors.length > 0">Messages:</h4>
                   <ul *ngFor="let error of errors">
                     <li>{{error | json}}</li>

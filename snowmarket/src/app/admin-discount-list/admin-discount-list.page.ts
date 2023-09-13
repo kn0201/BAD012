@@ -19,6 +19,7 @@ import {
 
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2error } from 'utils/sweetalert2'
+import { AdminService } from '../admin.service'
 
 @Component({
   selector: 'app-admin-discount-list',
@@ -26,7 +27,7 @@ import { sweetalert2error } from 'utils/sweetalert2'
   styleUrls: ['./admin-discount-list.page.scss'],
 })
 export class AdminDiscountListPage implements OnInit {
-  constructor() {}
+  constructor(private adminService: AdminService) {}
 
   @ViewChild('productHeaderActionTemplate', { static: true })
   productHeaderActionTemplate!: TemplateRef<any>
@@ -89,21 +90,24 @@ export class AdminDiscountListPage implements OnInit {
   selectedDiscount = 'product_discount'
   selectedStartDate = ''
   selectedEndDate = ''
+
   selectedProductID = ''
   selectedProductName = ''
+
   selectedBrandID = ''
   selectedBrandName = ''
+
   selectedCategoryID = ''
   selectedCategoryName = ''
 
   searchBrandParam = ''
   searchCategoryParam = ''
 
-  idMsg = 'Click to Select'
-  brandMsg = 'Click to Select'
-  categoryMsg = 'Click to Select'
+  originalMsg = 'Click to Select'
 
-  finishLoading: boolean = false
+  idMsg = this.originalMsg
+  brandMsg = this.originalMsg
+  categoryMsg = this.originalMsg
 
   canDismiss = false
 
@@ -171,13 +175,35 @@ export class AdminDiscountListPage implements OnInit {
     )
   }
 
-  cancel() {
-    this.canDismiss = true
-    this.addModal.dismiss()
+  async loadList(): Promise<any> {
+    let json = await this.adminService.getDiscountList()
+
+    let productDiscountList = json.productDiscountList
+    let priceDiscountList = json.priceDiscountList
+
+    this.productDiscountData = productDiscountList
+    this.productDiscountDataCopy = productDiscountList
+
+    this.priceDiscountData = priceDiscountList
+    this.priceDiscountDataCopy = priceDiscountList
+
+    this.productListData = json.productList
+    this.filteredProduct = json.productList
+
+    this.brandListData = json.brandList
+    this.filteredBrand = json.brandList
+
+    this.categoriesListData = json.categoriesList
+    this.filteredCategory = json.categoriesList
   }
 
   normalize() {
     this.canDismiss = false
+  }
+
+  dismiss(modal: any) {
+    this.canDismiss = true
+    modal.dismiss()
   }
 
   confirm() {
@@ -193,43 +219,8 @@ export class AdminDiscountListPage implements OnInit {
     console.log(this.selectedStartDate)
     console.log(this.selectedEndDate)
 
-    this.title = ''
-    this.selectedProductID = ''
-    this.selectedBrandID = ''
-    this.selectedCategoryID = ''
-    this.idMsg = 'Click to Select'
-    this.brandMsg = 'Click to Select'
-    this.categoryMsg = 'Click to Select'
-    this.quantity = ''
-    this.discount_amount = ''
-    this.total_price = ''
-    this.discount_rate = ''
-
+    this.clear()
     this.addModal.dismiss()
-  }
-
-  IDcancel() {
-    this.productModal.dismiss()
-  }
-
-  IDconfirm() {
-    this.productModal.dismiss()
-  }
-
-  BrandCancel() {
-    this.brandModal.dismiss()
-  }
-
-  BrandConfirm() {
-    this.brandModal.dismiss()
-  }
-
-  categoryCancel() {
-    this.categoryModal.dismiss()
-  }
-
-  categoryConfirm() {
-    this.categoryModal.dismiss()
   }
 
   handleChange(event: any) {
@@ -302,42 +293,6 @@ export class AdminDiscountListPage implements OnInit {
     this.selectedEndDate = event.target.value
   }
 
-  @Output() async addRow(selectValue: string): Promise<void> {
-    this.title = ''
-    this.addModal.dismiss()
-  }
-
-  async loadList(): Promise<any> {
-    let res = await fetch(`${DOMAIN}/admin/discount-list`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-    let json = await res.json()
-    if (json.error) {
-      sweetalert2error(json.error)
-      return
-    }
-
-    let productDiscountList = json.productDiscountList
-    let priceDiscountList = json.priceDiscountList
-
-    this.productDiscountData = productDiscountList
-    this.productDiscountDataCopy = productDiscountList
-
-    this.priceDiscountData = priceDiscountList
-    this.priceDiscountDataCopy = priceDiscountList
-
-    this.productListData = json.productList
-    this.filteredProduct = json.productList
-
-    this.brandListData = json.brandList
-    this.filteredBrand = json.brandList
-
-    this.categoriesListData = json.categoriesList
-    this.filteredCategory = json.categoriesList
-  }
-
   searchProduct(ev: any) {
     this.filterProduct(ev.target.value)
   }
@@ -399,5 +354,10 @@ export class AdminDiscountListPage implements OnInit {
         )
       }
     )
+  }
+
+  @Output() async addRow(selectValue: string): Promise<void> {
+    this.clear()
+    this.addModal.dismiss()
   }
 }

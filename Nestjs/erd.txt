@@ -18,11 +18,11 @@
 users
 -----
 id integer PK
-username varchar(255)
+username varchar(255) unique
 email varchar(255)
 password varchar(255)
-point integer
 birthday date NULL
+point integer
 role varchar(255)
 is_delete boolean
 
@@ -31,8 +31,7 @@ receipt
 -------
 id integer PK
 user_id integer NULL FK >- users.id
-pos_id integer NULL FK >0- pos.id
-date date
+pos_id integer FK >0- pos.id
 total decimal
 discount_total decimal
 
@@ -50,7 +49,7 @@ product
 id integer PK
 brand_id integer FK -< brand.id
 categories_id integer FK -< categories.id
-name varchar(255)
+name varchar(255) unique
 price decimal
 is_delete boolean
 stock integer
@@ -75,7 +74,7 @@ price_discount
 id integer PK
 title varchar(255)
 total_price decimal
-discount_rate decimal
+discount_rate varchar(255)
 start_date date
 end_date date
 is_delete boolean
@@ -84,35 +83,35 @@ is_delete boolean
 categories
 ----------
 id integer PK
-name varchar(255)
+name varchar(255) unique
 
 
 brand
 -----
 id integer PK
-name varchar(255)
+name varchar(255) unique
 
 
 pos
 ---
 id integer PK
-code varchar(255)
+code varchar(255) unique
 
 
-# zoom: 1.005
-# view: (-19, 185)
+# zoom: 1.000
+# view: (1, 455)
 # text-bg: #6495ed
 # text-color: #000000
 # diagram-bg: #f5f5f5
 # diagram-text: #f5f5f5
 # table-bg: #ffffff
 # table-text: #000000
-# users (648, 732)
-# receipt (271, 640)
-# receipt_item (710, 524)
-# product (329, -108, #000000)
-# quantity_discount (964, 130)
-# price_discount (1030, 693)
-# categories (303, 299)
-# brand (203, 188)
-# pos (-49, 697)
+# users (120, 253, #0b4b40)
+# receipt (510, 360, #580238)
+# receipt_item (884, 358, #061a38)
+# product (123, 6, #355a57)
+# quantity_discount (803, -41, #17210b)
+# price_discount (1156, -40, #5c4047)
+# categories (506, 212, #5b5248)
+# brand (506, 97, #280d23)
+# pos (217, 577, #40480d)

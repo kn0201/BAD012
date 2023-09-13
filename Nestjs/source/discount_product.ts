@@ -1,6 +1,5 @@
 export const productDiscountList = [
   {
-    id: '1',
     title: 'apple 買2送1',
     product_id: '1',
     brand_id: '',
@@ -11,7 +10,6 @@ export const productDiscountList = [
     end_date: '0919',
   },
   {
-    id: '2',
     title: 'banana 20蚊 3個',
     product_id: '2',
     brand_id: '4',
@@ -22,7 +20,6 @@ export const productDiscountList = [
     end_date: '0919',
   },
   {
-    id: '3',
     title: '新奇是橙 買3送2',
     product_id: '3',
     brand_id: '4',
@@ -33,40 +30,12 @@ export const productDiscountList = [
     end_date: '0919',
   },
   {
-    id: '4',
     title: '各類水果 30蚊 4個',
     product_id: '5',
     brand_id: '',
     categories_id: '3',
     amount: '4',
     discount_amount: '-22',
-    start_date: '0911',
-    end_date: '0919',
-  },
-];
-
-export const priceDiscountList = [
-  {
-    id: '1',
-    title: '滿100 減20',
-    total_price: '100',
-    discount_rate: '-20',
-    start_date: '0911',
-    end_date: '0919',
-  },
-  {
-    id: '2',
-    title: '滿500 8折',
-    total_price: '500',
-    discount_rate: '*0.8',
-    start_date: '0911',
-    end_date: '0919',
-  },
-  {
-    id: '3',
-    title: '滿1000 7折',
-    total_price: '1000',
-    discount_rate: '*0.7',
     start_date: '0911',
     end_date: '0919',
   },

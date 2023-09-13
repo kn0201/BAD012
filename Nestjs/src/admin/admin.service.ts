@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { brandList } from 'source/brand';
 import { categoriesList } from 'source/categories';
-import { priceDiscountList, productDiscountList } from 'source/discount';
+import { priceDiscountList } from 'source/discount_price';
+import { productDiscountList } from 'source/discount_product';
 import { memberList } from 'source/member';
 import { productList } from 'source/product';
 import { receiptList } from 'source/receipt';
