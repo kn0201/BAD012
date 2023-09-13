@@ -29,6 +29,7 @@
   </div>
 
   <hr />
+
   <h2>Price Discount List</h2>
   <div class="columns priceDiscountColumn">
     <div class="column col-12">
@@ -138,7 +139,7 @@
                       <ion-checkbox
                         [value]="category.id"
                         [name]="category.name"
-                        (ionChange)="selectCategoryID($event)"
+                        (ionChange)="selected($event,'selectedCategoryID','searchCategoryParam','categoryMsg','selectedCategoryName','categories_id')"
                         [checked]="category.id.toString() == selectedCategoryID"
                       >
                         {{category.id}} : {{ category.name }}</ion-checkbox
@@ -189,7 +190,7 @@
                       <ion-checkbox
                         [value]="brand.id"
                         [name]="brand.name"
-                        (ionChange)="selectBrandID($event)"
+                        (ionChange)="selected($event,'selectedBrandID','searchBrandParam','brandMsg','selectedBrandName','brand_id')"
                         [checked]="brand.id.toString() == selectedBrandID"
                       >
                         {{brand.id}} : {{ brand.name }}</ion-checkbox

@@ -5,32 +5,36 @@ export interface Users {
   username: string
   email: string
   birthday: string
-  points: number
+  point: number
 }
 export let user = object({
   id: string(),
   username: string(),
   email: string(),
   birthday: string(),
-  points: number(),
+  point: number(),
 })
 
 export interface Products {
   id: number
-  brand_id: number
-  category_id: number
+  brand_id: number | null
+  categories_id: number | null
   price: number
   stock: number
   name: string
+  brand_name: string | null
+  category_name: string | null
 }
 
 export let product = object({
   id: number(),
-  brand_id: number(),
-  category_id: number(),
+  brand_id: nullable(number()),
+  categories_id: nullable(number()),
   price: number(),
   stock: number(),
   name: string(),
+  brand_name: nullable(string()),
+  category_name: nullable(string()),
 })
 export interface Brand {
   id: number
@@ -72,10 +76,10 @@ export let priceDiscount = object({
 export interface ProductDiscount {
   id: string
   title: string
-  product_id: string
+  product_id: string | null
   brand_id: string | null
   categories_id: string | null
-  amount: string
+  quantity: string
   discount_amount: string
   start_date: string
   end_date: string
@@ -84,31 +88,43 @@ export interface ProductDiscount {
 export let productDiscount = object({
   id: string(),
   title: string(),
-  product_id: string(),
-  brand_id: string(),
-  categories_id: string(),
-  amount: string(),
+  product_id: nullable(string()),
+  brand_id: nullable(string()),
+  categories_id: nullable(string()),
+  quantity: string(),
   discount_amount: string(),
   start_date: string(),
   end_date: string(),
 })
 export interface Receipt {
   id: number
-  products: Array<object>
-  total_price: number
+  username: string
+  pos_name: string
+  total: number
+  discount_total: number
   date: string
 }
 
 export let receipt = object({
   id: number(),
-  products: array(object(string)),
-  total_price: number(),
+  username: string(),
+  pos_name: string(),
+  total: number(),
+  discount_total: number(),
   date: string(),
 })
+
 export interface Item {
-  text: string
-  value: string
+  receipt_id: number
+  name: string
+  price: number
 }
+
+export let item = object({
+  receipt_id: number(),
+  name: string(),
+  price: number(),
+})
 
 export let test = object({
   result: string(),

@@ -27,16 +27,24 @@
   </div>
   <ng-template #detailsTemplate let-row>
     <div>
-      <h2 class="color-green">Receipt Number : {{ row.id }}</h2>
-      <div *ngFor="let product of row.products; let i = index">
-        <ion-list>
+      <h2 class="fw-bold">Receipt Number : {{ row.id }} Date : {{row.date}}</h2>
+      <h3 class="fw-bold">Date : {{row.date}}</h3>
+      <h4>POS ID : {{row.pos_name}}</h4>
+      <h4>Customer Name : {{row.username}}</h4>
+      <div *ngFor="let item of receiptItemData; let i = index">
+        <ion-list *ngIf="item.receipt_id == row.id">
           <ion-item>
-            <div>Item {{i + 1}} :</div>
-            <div class="fw-bold">{{product.name}}</div>
+            <div>Item {{i + 1}} :&nbsp;&nbsp;&nbsp;</div>
+            <div class="fw-bold text-end">{{item.name}}</div>
           </ion-item>
-          <ion-item>Price : {{product.price}}</ion-item>
+          <ion-item>Price :&nbsp;&nbsp;&nbsp;${{item.price}}</ion-item>
         </ion-list>
       </div>
+      <h4 class="text-end">
+        Original Price : $ {{row.discount_total + row.total}}
+      </h4>
+      <h5 class="text-end">Discount : ${{row.discount_total}}</h5>
+      <h4 class="fw-bold text-end">Total Price : ${{row.total}}</h4>
     </div>
   </ng-template>
 </ion-content>
