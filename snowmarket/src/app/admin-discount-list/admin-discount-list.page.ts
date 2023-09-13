@@ -19,6 +19,7 @@ import {
 
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2error } from 'utils/sweetalert2'
+import { AdminService } from '../admin.service'
 
 @Component({
   selector: 'app-admin-discount-list',
@@ -26,7 +27,7 @@ import { sweetalert2error } from 'utils/sweetalert2'
   styleUrls: ['./admin-discount-list.page.scss'],
 })
 export class AdminDiscountListPage implements OnInit {
-  constructor() {}
+  constructor(private adminService: AdminService) {}
 
   @ViewChild('productHeaderActionTemplate', { static: true })
   productHeaderActionTemplate!: TemplateRef<any>
@@ -89,18 +90,26 @@ export class AdminDiscountListPage implements OnInit {
   selectedDiscount = 'product_discount'
   selectedStartDate = ''
   selectedEndDate = ''
+
   selectedProductID = ''
   selectedProductName = ''
+
   selectedBrandID = ''
   selectedBrandName = ''
+
   selectedCategoryID = ''
   selectedCategoryName = ''
 
-  idMsg = 'Click to Select'
-  brandMsg = 'Click to Select'
-  categoryMsg = 'Click to Select'
+  searchBrandParam = ''
+  searchCategoryParam = ''
 
-  finishLoading: boolean = false
+  originalMsg = 'Click to Select'
+
+  idMsg = this.originalMsg
+  brandMsg = this.originalMsg
+  categoryMsg = this.originalMsg
+
+  canDismiss = false
 
   ngOnInit() {
     this.loadList()
@@ -166,112 +175,8 @@ export class AdminDiscountListPage implements OnInit {
     )
   }
 
-  cancel() {
-    this.addModal.dismiss()
-  }
-
-  confirm() {
-    console.log(this.selectedDiscount)
-    console.log('title : ' + this.title)
-    console.log('Product ID : ' + this.selectedProductID)
-    console.log('Brand ID : ' + this.selectedBrandID)
-    console.log('Category ID : ' + this.selectedCategoryID)
-    console.log('Quantity : ' + this.quantity)
-    console.log('Discount Amount : ' + this.discount_amount)
-    console.log('Total Price : ' + this.total_price)
-    console.log('Discount Rate : ' + this.discount_rate)
-    console.log(this.selectedStartDate)
-    console.log(this.selectedEndDate)
-
-    this.title = ''
-    this.selectedProductID = ''
-    this.selectedBrandID = ''
-    this.selectedCategoryID = ''
-    this.idMsg = 'Click to Select'
-    this.brandMsg = 'Click to Select'
-    this.categoryMsg = 'Click to Select'
-    this.quantity = ''
-    this.discount_amount = ''
-    this.total_price = ''
-    this.discount_rate = ''
-
-    this.addModal.dismiss()
-  }
-
-  IDcancel() {
-    this.productModal.dismiss()
-  }
-
-  IDconfirm() {
-    this.productModal.dismiss()
-  }
-
-  BrandCancel() {
-    this.brandModal.dismiss()
-  }
-
-  BrandConfirm() {
-    this.brandModal.dismiss()
-  }
-
-  categoryCancel() {
-    this.categoryModal.dismiss()
-  }
-
-  categoryConfirm() {
-    this.categoryModal.dismiss()
-  }
-
-  handleChange(event: any) {
-    console.log(event.target.value)
-    if (event.target.value === 'product_discount') {
-      this.selectedDiscount = 'product_discount'
-    } else if (event.target.value === 'price_discount') {
-      this.selectedDiscount = 'price_discount'
-    }
-  }
-
-  selectProductID(event: any) {
-    this.selectedProductID = event.target.value
-    this.selectedProductName = event.target.name
-    this.idMsg = `${this.selectedProductID} : ${this.selectedProductName}`
-  }
-
-  selectBrandID(event: any) {
-    this.selectedBrandID = event.target.value
-    this.selectedBrandName = event.target.name
-    this.brandMsg = `${this.selectedBrandID} : ${this.selectedBrandName}`
-  }
-
-  selectCategoryID(event: any) {
-    this.selectedCategoryID = event.target.value
-    this.selectedCategoryName = event.target.name
-    this.categoryMsg = `${this.selectedCategoryID} : ${this.selectedCategoryName}`
-  }
-
-  startDay(event: any) {
-    this.selectedStartDate = event.target.value
-  }
-  endDay(event: any) {
-    this.selectedEndDate = event.target.value
-  }
-
-  @Output() async addRow(selectValue: string): Promise<void> {
-    this.title = ''
-    this.addModal.dismiss()
-  }
-
   async loadList(): Promise<any> {
-    let res = await fetch(`${DOMAIN}/admin/discount-list`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-    let json = await res.json()
-    if (json.error) {
-      sweetalert2error(json.error)
-      return
-    }
+    let json = await this.adminService.getDiscountList()
 
     let productDiscountList = json.productDiscountList
     let priceDiscountList = json.priceDiscountList
@@ -290,6 +195,102 @@ export class AdminDiscountListPage implements OnInit {
 
     this.categoriesListData = json.categoriesList
     this.filteredCategory = json.categoriesList
+  }
+
+  normalize() {
+    this.canDismiss = false
+  }
+
+  dismiss(modal: any) {
+    this.canDismiss = true
+    modal.dismiss()
+  }
+
+  confirm() {
+    console.log(this.selectedDiscount)
+    console.log('title : ' + this.title)
+    console.log('Product ID : ' + this.selectedProductID)
+    console.log('Brand ID : ' + this.selectedBrandID)
+    console.log('Category ID : ' + this.selectedCategoryID)
+    console.log('Quantity : ' + this.quantity)
+    console.log('Discount Amount : ' + this.discount_amount)
+    console.log('Total Price : ' + this.total_price)
+    console.log('Discount Rate : ' + this.discount_rate)
+    console.log(this.selectedStartDate)
+    console.log(this.selectedEndDate)
+
+    this.clear()
+    this.addModal.dismiss()
+  }
+
+  handleChange(event: any) {
+    console.log(event.target.value)
+    if (event.target.value === 'product_discount') {
+      this.selectedDiscount = 'product_discount'
+    } else if (event.target.value === 'price_discount') {
+      this.selectedDiscount = 'price_discount'
+    }
+  }
+
+  clear() {
+    this.title = ''
+    this.selectedProductID = ''
+    this.selectedBrandID = ''
+    this.selectedCategoryID = ''
+    this.idMsg = 'Click to Select'
+    this.brandMsg = 'Click to Select'
+    this.categoryMsg = 'Click to Select'
+    this.quantity = ''
+    this.discount_amount = ''
+    this.total_price = ''
+    this.discount_rate = ''
+  }
+
+  selectProductID(event: any) {
+    if (!event.target.checked) {
+      this.selectedProductID = ''
+      this.idMsg = 'Click to Select'
+      return
+    }
+    this.selectedProductID = event.target.value
+    this.selectedProductName = event.target.name
+    this.idMsg = `${this.selectedProductID} : ${this.selectedProductName}`
+  }
+
+  selectBrandID(event: any) {
+    if (!event.target.checked) {
+      this.selectedBrandID = ''
+      this.searchBrandParam = ''
+      this.brandMsg = 'Click to Select'
+      this.filterBy('brand_id', this.selectedBrandID)
+      return
+    }
+    this.selectedBrandID = event.target.value
+    this.selectedBrandName = event.target.name
+    this.brandMsg = `${this.selectedBrandID} : ${this.selectedBrandName}`
+    this.filterBy('brand_id', this.selectedBrandID)
+  }
+
+  selectCategoryID(event: any) {
+    if (!event.target.checked) {
+      this.selectedCategoryID = ''
+      this.searchCategoryParam = ''
+      this.categoryMsg = 'Click to Select'
+      this.filterBy('categories_id', this.selectedCategoryID)
+      return
+    }
+
+    this.selectedCategoryID = event.target.value
+    this.selectedCategoryName = event.target.name
+    this.categoryMsg = `${this.selectedCategoryID} : ${this.selectedCategoryName}`
+    this.filterBy('categories_id', this.selectedCategoryID)
+  }
+
+  startDay(event: any) {
+    this.selectedStartDate = event.target.value
+  }
+  endDay(event: any) {
+    this.selectedEndDate = event.target.value
   }
 
   searchProduct(ev: any) {
@@ -335,5 +336,28 @@ export class AdminDiscountListPage implements OnInit {
         return category.name.toLowerCase().includes(normalizedQuery)
       })
     }
+  }
+
+  filterBy(field: string, param: string): void {
+    if (field === 'brand_id') {
+      this.searchBrandParam = param
+    }
+    if (field === 'categories_id') {
+      this.searchCategoryParam = param
+    }
+
+    this.filteredProduct = [...this.productListData].filter(
+      ({ brand_id, category_id }) => {
+        return (
+          brand_id?.toString().includes(this.searchBrandParam) &&
+          category_id?.toString().includes(this.searchCategoryParam)
+        )
+      }
+    )
+  }
+
+  @Output() async addRow(selectValue: string): Promise<void> {
+    this.clear()
+    this.addModal.dismiss()
   }
 }

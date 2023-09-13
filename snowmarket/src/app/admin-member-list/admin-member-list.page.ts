@@ -11,6 +11,7 @@ import { Users } from 'src/assets/type'
 import { DOMAIN } from 'utils/domain'
 
 import { sweetalert2error } from 'utils/sweetalert2'
+import { AdminService } from '../admin.service'
 
 @Component({
   selector: 'app-admin-member-list',
@@ -18,7 +19,8 @@ import { sweetalert2error } from 'utils/sweetalert2'
   styleUrls: ['./admin-member-list.page.scss'],
 })
 export class AdminMemberListPage implements OnInit {
-  // constructor() {}
+  constructor(private adminService: AdminService) {}
+
   @ViewChild('usernameHeaderActionTemplate', { static: true })
   usernameHeaderActionTemplate!: TemplateRef<any>
   @ViewChild('table')
@@ -66,17 +68,7 @@ export class AdminMemberListPage implements OnInit {
     })
   }
   async loadList(): Promise<any> {
-    let res = await fetch(`${DOMAIN}/admin/member-list`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-    let json = await res.json()
-    if (json.error) {
-      sweetalert2error(json.error)
-      return
-    }
-    console.log(json.memberList)
+    let json = await this.adminService.getMemberList()
 
     this.data = json.memberList
     this.dataCopy = json.memberList
