@@ -109,3 +109,7 @@ export interface Item {
   text: string
   value: string
 }
+
+export let test = object({
+  result: string(),
+})
