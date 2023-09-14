@@ -46,13 +46,13 @@ export class AdminProductListPage implements OnInit {
     this.columns = [
       { key: 'id', title: 'Product ID' },
       {
-        key: 'brand_id',
-        title: 'Brand ID',
+        key: 'brand_name',
+        title: 'Brand Name',
         headerActionTemplate: this.brandHeaderActionTemplate,
       },
       {
-        key: 'category_id',
-        title: 'Category ID',
+        key: 'category_name',
+        title: 'Category Name',
         headerActionTemplate: this.categoryHeaderActionTemplate,
       },
       {
@@ -68,7 +68,7 @@ export class AdminProductListPage implements OnInit {
     ]
     this.configuration = { ...DefaultConfig }
     this.configuration.checkboxes = true
-    this.configuration.fixedColumnWidth = true
+    this.configuration.fixedColumnWidth = false
     this.configuration.rows = 10
   }
 
@@ -80,21 +80,23 @@ export class AdminProductListPage implements OnInit {
     if (field === 'name') {
       this.selectedProduct = value
     }
-    if (field === 'brand_id') {
+    if (field === 'brand_name') {
       this.selectedBrand = value
     }
-    if (field === 'category_id') {
+    if (field === 'category_name') {
       this.selectedCategory = value
     }
-    this.data = [...this.dataCopy].filter(({ name, brand_id, category_id }) => {
-      return (
-        name
-          .toLocaleLowerCase()
-          .includes(this.selectedProduct.toLocaleLowerCase()) &&
-        brand_id.toString().includes(this.selectedBrand) &&
-        category_id.toString().includes(this.selectedCategory)
-      )
-    })
+    this.data = [...this.dataCopy].filter(
+      ({ name, brand_name, category_name }) => {
+        return (
+          name
+            .toLocaleLowerCase()
+            .includes(this.selectedProduct.toLocaleLowerCase()) &&
+          brand_name?.toLocaleLowerCase().includes(this.selectedBrand) &&
+          category_name?.toLocaleLowerCase().includes(this.selectedCategory)
+        )
+      }
+    )
   }
 
   async loadList(): Promise<any> {

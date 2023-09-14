@@ -4,10 +4,12 @@ import { array, object, string } from 'cast.ts'
 import {
   brand,
   category,
+  item,
   priceDiscount,
   product,
   productDiscount,
   receipt,
+  test,
   user,
 } from 'src/assets/type'
 
@@ -22,6 +24,7 @@ let memberList = object({
 
 let receiptList = object({
   receiptList: array(receipt),
+  receiptItemList: array(item),
 })
 
 let productList = object({
@@ -35,6 +38,7 @@ let discountList = object({
   productDiscountList: array(productDiscount),
   priceDiscountList: array(priceDiscount),
 })
+
 let addBrandCategoryResult = object({ result: string() })
 
 @Injectable({
@@ -62,7 +66,12 @@ export class AdminService {
   getDiscountList() {
     return this.api.get('/admin/discount-list', discountList)
   }
+
   addBrandCategory(body: { msgName: string; selectValue: string }) {
     return this.api.post('/admin/b&c-list/add', body, addBrandCategoryResult)
+  }
+
+  getHello() {
+    return this.api.delete('/admin/trash-list', {}, test)
   }
 }

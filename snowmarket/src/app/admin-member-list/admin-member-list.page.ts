@@ -47,7 +47,7 @@ export class AdminMemberListPage implements OnInit {
         title: 'Email',
       },
       { key: 'birthday', title: 'Birthday' },
-      { key: 'points', title: 'points' },
+      { key: 'point', title: 'points' },
     ]
     this.configuration = { ...DefaultConfig }
     this.configuration.checkboxes = true
@@ -69,8 +69,13 @@ export class AdminMemberListPage implements OnInit {
   }
   async loadList(): Promise<any> {
     let json = await this.adminService.getMemberList()
+    console.log(json)
 
     this.data = json.memberList
     this.dataCopy = json.memberList
+
+    for (let item of json.memberList) {
+      item.birthday = new Date(item.birthday).toLocaleDateString()
+    }
   }
 }

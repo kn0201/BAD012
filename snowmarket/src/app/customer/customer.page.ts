@@ -40,27 +40,15 @@ export class CustomerPage implements OnInit, AfterViewInit {
   public multipleWebcamsAvailable = false
   public errors: WebcamInitError[] = []
 
-  // private width!: number
-  // private height!: number
-
   @ViewChild(IonModal) modal!: IonModal
 
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?: Event) {
-    // const win = !!event ? (event.target as Window) : window
-    // this.width = win.innerWidth
-    // this.height = win.innerHeight
-  }
-
   model: any
   context!: CanvasRenderingContext2D
 
-  constructor() {
-    this.onResize()
-  }
+  constructor() {}
 
   public ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(
@@ -111,7 +99,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
   resizeCanvas() {
     this.canvas.nativeElement.width = this.video.nativeElement.videoWidth
-    this.canvas.nativeElement.height = this.video.nativeElement.videoHeight
+    this.canvas.nativeElement.height =
+      this.video.nativeElement.videoHeight / 1.6
   }
 
   async detectFrame() {
