@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { AdminService } from '../admin.service'
 
 @Component({
   selector: 'app-admin-trash-list',
@@ -6,7 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-trash-list.page.scss'],
 })
 export class AdminTrashListPage implements OnInit {
-  constructor() {}
+  constructor(private adminService: AdminService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.test()
+  }
+
+  async test() {
+    let json = await this.adminService.getHello()
+    console.log(json.result)
+  }
 }

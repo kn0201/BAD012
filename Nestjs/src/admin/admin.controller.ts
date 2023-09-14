@@ -1,8 +1,10 @@
 import {
   Controller,
+  Delete,
   Dependencies,
   Get,
   Param,
+  Patch,
   Post,
   Req,
 } from '@nestjs/common';
@@ -42,5 +44,10 @@ export class AdminController {
   addBrandCategory(@Req() request: Request) {
     let req = request.body;
     return this.AdminService.addBrandCategory(req);
+  }
+
+  @Delete('/trash-list')
+  getHello() {
+    return this.AdminService.getHello();
   }
 }

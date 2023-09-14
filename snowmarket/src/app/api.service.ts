@@ -39,4 +39,36 @@ export class ApiService {
     }
     return parser.parse(json)
   }
+
+  async patch<T>(path: string, body: object, parser: Parser<T>) {
+    let res = await fetch(this.apiOrigin + path, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    let json = await res.json()
+    if (json.error) {
+      this.alertService.showError(json.error)
+      throw new Error(json.error)
+    }
+    return parser.parse(json)
+  }
+
+  async delete<T>(path: string, body: object, parser: Parser<T>) {
+    let res = await fetch(this.apiOrigin + path, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    let json = await res.json()
+    if (json.error) {
+      this.alertService.showError(json.error)
+      throw new Error(json.error)
+    }
+    return parser.parse(json)
+  }
 }

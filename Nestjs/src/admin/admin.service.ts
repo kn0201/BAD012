@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { brandList } from 'source/brand';
-import { categoriesList } from 'source/categories';
-import { priceDiscountList } from 'source/discount_price';
-import { productDiscountList } from 'source/discount_product';
-import { memberList } from 'source/member';
+import { InjectKnex, Knex } from 'nestjs-knex';
+
 import { productList } from 'source/product';
-import { receiptList } from 'source/receipt';
 
 @Injectable()
 export class AdminService {
+  constructor(@InjectKnex() private readonly knex: Knex) {}
+
   addBrandCategory(req) {
     let param = req.selectValue;
     if (param === 'brand') {
@@ -24,23 +22,102 @@ export class AdminService {
     }
   }
 
-  getBCList() {
+  async getBCList() {
+    let brandList = await this.knex.select('*').from('brand');
+
+    let categoriesList = await this.knex.select('*').from('categories');
+
     return { brandList, categoriesList };
   }
 
-  getMemberList() {
+  async getMemberList() {
+    let memberList = await this.knex
+      .select('id', 'username', 'email', 'birthday', 'point')
+      .from('users')
+      .where('is_delete', 'false');
+
     return { memberList };
   }
 
-  getReceiptList() {
-    return { receiptList };
+  async getReceiptList() {
+    let receiptList = await this.knex
+      .select(
+        'receipt.id',
+        'users.username as username',
+        'pos.code as pos_name',
+        'receipt.total',
+        'receipt.discount_total',
+        'receipt.created_at as date',
+      )
+      .from('receipt')
+      .leftJoin('users', 'user_id', 'users.id')
+      .leftJoin('pos', 'pos_id', 'pos.id');
+    receiptList = receiptList.map((receipt) => {
+      return {
+        ...receipt,
+        date: receipt.date.toISOString().split('T')[0],
+      };
+    });
+
+    let receiptItemList = await this.knex.select('*').from('receipt_item');
+    console.log(receiptItemList);
+
+    return { receiptList, receiptItemList };
   }
 
-  getProductList() {
+  async getProductList() {
+    let productList = await this.knex
+      .select(
+        'product.id',
+        'product.brand_id',
+        'product.categories_id',
+        'product.name',
+        'product.price',
+        'product.stock',
+        'brand.name as brand_name',
+        'categories.name as category_name',
+      )
+      .from('product')
+      .leftJoin('brand', 'brand_id', 'brand.id')
+      .leftJoin('categories', 'categories_id', 'categories.id');
+
+    console.log(productList);
+
     return { productList };
   }
 
-  getDiscountList() {
+  async getDiscountList() {
+    let priceDiscountList = await this.knex
+      .select('*')
+      .from('price_discount')
+      .where('is_delete', 'false');
+
+    let productDiscountList = await this.knex
+      .select('*')
+      .from('quantity_discount')
+      .where('is_delete', 'false');
+
+    let brandList = await this.knex.select('*').from('brand');
+
+    let categoriesList = await this.knex.select('*').from('categories');
+
+    let productList = await this.knex
+      .select(
+        'product.id',
+        'product.brand_id',
+        'product.categories_id',
+        'product.name',
+        'product.price',
+        'product.stock',
+        'brand.name as brand_name',
+        'categories.name as category_name',
+      )
+      .from('product')
+      .leftJoin('brand', 'brand_id', 'brand.id')
+      .leftJoin('categories', 'categories_id', 'categories.id');
+
+    console.log(productDiscountList);
+
     return {
       productDiscountList,
       priceDiscountList,
@@ -48,5 +125,10 @@ export class AdminService {
       brandList,
       categoriesList,
     };
+  }
+
+  getHello() {
+    let result = 'Hello World';
+    return { result };
   }
 }

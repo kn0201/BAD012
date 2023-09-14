@@ -17,9 +17,8 @@ import {
   Category,
 } from 'src/assets/type'
 
-import { DOMAIN } from 'utils/domain'
-import { sweetalert2error } from 'utils/sweetalert2'
 import { AdminService } from '../admin.service'
+import { sweetalert2error } from 'utils/sweetalert2'
 
 @Component({
   selector: 'app-admin-discount-list',
@@ -167,7 +166,7 @@ export class AdminDiscountListPage implements OnInit {
     this.productDiscountData = [...this.productDiscountDataCopy].filter(
       ({ product_id, brand_id, categories_id }) => {
         return (
-          product_id.toString().includes(this.selectedProduct) &&
+          product_id?.toString().includes(this.selectedProduct) &&
           brand_id?.toString().includes(this.selectedBrand) &&
           categories_id?.toString().includes(this.selectedCategory)
         )
@@ -181,12 +180,21 @@ export class AdminDiscountListPage implements OnInit {
     let productDiscountList = json.productDiscountList
     let priceDiscountList = json.priceDiscountList
 
+    for (let item of productDiscountList) {
+      item.start_date = new Date(item.start_date).toLocaleDateString()
+      item.end_date = new Date(item.start_date).toLocaleDateString()
+    }
+
     this.productDiscountData = productDiscountList
     this.productDiscountDataCopy = productDiscountList
 
     this.priceDiscountData = priceDiscountList
     this.priceDiscountDataCopy = priceDiscountList
 
+    for (let item of priceDiscountList) {
+      item.start_date = new Date(item.start_date).toLocaleDateString()
+      item.end_date = new Date(item.start_date).toLocaleDateString()
+    }
     this.productListData = json.productList
     this.filteredProduct = json.productList
 
@@ -257,33 +265,28 @@ export class AdminDiscountListPage implements OnInit {
     this.idMsg = `${this.selectedProductID} : ${this.selectedProductName}`
   }
 
-  selectBrandID(event: any) {
+  selected(
+    event: any,
+    id: string,
+    param: string,
+    msg: string,
+    name: string,
+    id_param: string
+  ) {
     if (!event.target.checked) {
-      this.selectedBrandID = ''
-      this.searchBrandParam = ''
-      this.brandMsg = 'Click to Select'
-      this.filterBy('brand_id', this.selectedBrandID)
+      ;(this as any)[id] = ''
+      ;(this as any)[param] = ''
+      ;(this as any)[msg] = this.originalMsg
+      this.filterBy(id_param, id)
+      console.log('id : ', this.selectedCategoryID)
+
       return
     }
-    this.selectedBrandID = event.target.value
-    this.selectedBrandName = event.target.name
-    this.brandMsg = `${this.selectedBrandID} : ${this.selectedBrandName}`
-    this.filterBy('brand_id', this.selectedBrandID)
-  }
+    ;(this as any)[id] = event.target.value
+    ;(this as any)[name] = event.target.name
+    ;(this as any)[msg] = `${event.target.value} : ${event.target.name}`
 
-  selectCategoryID(event: any) {
-    if (!event.target.checked) {
-      this.selectedCategoryID = ''
-      this.searchCategoryParam = ''
-      this.categoryMsg = 'Click to Select'
-      this.filterBy('categories_id', this.selectedCategoryID)
-      return
-    }
-
-    this.selectedCategoryID = event.target.value
-    this.selectedCategoryName = event.target.name
-    this.categoryMsg = `${this.selectedCategoryID} : ${this.selectedCategoryName}`
-    this.filterBy('categories_id', this.selectedCategoryID)
+    this.filterBy(id_param, event.target.value)
   }
 
   startDay(event: any) {
@@ -347,17 +350,21 @@ export class AdminDiscountListPage implements OnInit {
     }
 
     this.filteredProduct = [...this.productListData].filter(
-      ({ brand_id, category_id }) => {
+      ({ brand_id, categories_id }) => {
         return (
           brand_id?.toString().includes(this.searchBrandParam) &&
-          category_id?.toString().includes(this.searchCategoryParam)
+          categories_id?.toString().includes(this.searchCategoryParam)
         )
       }
     )
   }
 
-  @Output() async addRow(selectValue: string): Promise<void> {
-    this.clear()
-    this.addModal.dismiss()
+  @Output() async addRow(): Promise<void> {
+    if (this.title == '') {
+      sweetalert2error('miss title')
+      return
+    }
+    // this.clear()
+    // this.addModal.dismiss()
   }
 }

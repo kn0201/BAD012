@@ -1,6 +1,8 @@
 import { readFileSync } from 'fs'
 import { Knex } from 'knex'
 import { hashPassword } from '../utils/hash'
+import { TimezoneDate } from 'timezone-date.ts'
+import { fromHKDateToISODate } from '../src/format'
 
 export async function seed(knex: Knex): Promise<void> {
 	let brands = JSON.parse(readFileSync('source/brand.json').toString())
@@ -120,6 +122,7 @@ export async function seed(knex: Knex): Promise<void> {
 					quantity: discountData.quantity,
 					discount_amount: discountData.discount_amount,
 					start_date: discountData.start_date,
+					// start_date: fromHKDateToISODate(discountData.start_date),
 					end_date: discountData.end_date,
 					is_delete: discountData.is_delete,
 				})
@@ -135,6 +138,7 @@ export async function seed(knex: Knex): Promise<void> {
 				quantity: discountData.quantity,
 				discount_amount: discountData.discount_amount,
 				start_date: discountData.start_date,
+				// start_date: fromHKDateToISODate(discountData.start_date),
 				end_date: discountData.end_date,
 				is_delete: discountData.is_delete,
 			})
@@ -228,12 +232,12 @@ export async function seed(knex: Knex): Promise<void> {
 				.from('receipt')
 				.where('id', row.id)
 		}
-		for (let item_content of receipt.item) {
-			await knex('receipt_item').insert({
-				receipt_id,
-				name: item_content.name,
-				price: item_content.price,
-			})
-		}
+		// for (let item_content of receipt.item) {
+		// 	await knex('receipt_item').insert({
+		// 		receipt_id,
+		// 		name: item_content.name,
+		// 		price: item_content.price,
+		// 	})
+		// }
 	}
 }

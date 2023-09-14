@@ -5,10 +5,7 @@ import {
   ViewChild,
 } from '@angular/core'
 import { Columns, Config, DefaultConfig } from 'ngx-easy-table'
-import { Receipt } from 'src/assets/type'
-
-import { DOMAIN } from 'utils/domain'
-import { sweetalert2error } from 'utils/sweetalert2'
+import { Item, Receipt } from 'src/assets/type'
 import { AdminService } from '../admin.service'
 @Component({
   selector: 'app-admin-receipt-list',
@@ -19,11 +16,13 @@ export class AdminReceiptListPage implements OnInit {
   constructor(private adminService: AdminService) {}
 
   public receiptListColumns: Columns[] = [
-    { key: 'id', title: ' Receipt Number' },
-    { key: 'total_price', title: 'Total' },
+    { key: 'pos_name', title: 'Pos No.' },
+    { key: 'id', title: 'Receipt Number' },
+    { key: 'total', title: 'Total' },
     { key: 'date', title: 'Receipt date' },
   ]
   receiptListData: Receipt[] = []
+  receiptItemData: Item[] = []
   receiptList!: Config
 
   ngOnInit() {
@@ -37,6 +36,7 @@ export class AdminReceiptListPage implements OnInit {
     let json = await this.adminService.getReceiptList()
 
     this.receiptListData = json.receiptList
-    // this.receiptListDataCopy = json.brandList;
+    this.receiptItemData = json.receiptItemList
+    console.log(this.receiptItemData)
   }
 }
