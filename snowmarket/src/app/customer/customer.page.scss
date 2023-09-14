@@ -57,6 +57,7 @@ ion-header {
 ion-content {
   ion-item {
     --background: none;
+    --padding-bottom: 0px;
     background: linear-gradient(rgba(255, 255, 255, 0.5));
     background-color: white;
   }
@@ -83,7 +84,7 @@ ion-content {
     }
     ion-fab {
       position: absolute;
-      bottom: -15vh;
+      bottom: -14vh;
       left: 1.4vw;
     }
   }
@@ -110,7 +111,7 @@ ion-content {
     }
     ion-fab {
       position: absolute;
-      bottom: -18vh;
+      bottom: -16.5vh;
       left: 0.5vw;
     }
   }
@@ -123,7 +124,7 @@ ion-content {
   ion-col {
     ion-img {
       position: relative;
-      bottom: -19vh;
+      bottom: -17.5vh;
       left: -6vw;
       width: 17vw;
       z-index: 1;
@@ -190,12 +191,12 @@ ion-modal {
 }
 
 video {
-  background-color: #ffa06555;
+  background-color: #ffffff;
   max-width: 100%;
   transform: scaleX();
 }
 canvas {
-  background-color: #ff00ff55;
+  background-color: #ffffff;
   width: 100%;
   transform: scaleX();
 }
