@@ -45,12 +45,17 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-modal trigger="open-modal" [canDismiss]="canDismiss">
+  <ion-modal
+    trigger="open-modal"
+    [canDismiss]="canDismiss"
+    (didDismiss)="normalize()"
+    #bcModal
+  >
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
+            <ion-button (click)="dismiss(bcModal)">Cancel</ion-button>
           </ion-buttons>
           <ion-title class="text-center">Adding Brand / Category</ion-title>
           <ion-buttons slot="end">
@@ -67,7 +72,7 @@
             required="true"
           >
             <ion-select-option value="brand">Brand</ion-select-option>
-            <ion-select-option value="category">Category</ion-select-option>
+            <ion-select-option value="categories">Category</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-item>

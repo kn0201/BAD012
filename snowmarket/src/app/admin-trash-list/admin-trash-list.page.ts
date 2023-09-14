@@ -9,12 +9,5 @@ import { AdminService } from '../admin.service'
 export class AdminTrashListPage implements OnInit {
   constructor(private adminService: AdminService) {}
 
-  ngOnInit() {
-    this.test()
-  }
-
-  async test() {
-    let json = await this.adminService.getHello()
-    console.log(json.result)
-  }
+  ngOnInit() {}
 }

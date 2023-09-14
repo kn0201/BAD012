@@ -137,7 +137,7 @@ export class AdminDiscountListPage implements OnInit {
       { key: 'end_date', title: 'End date' },
     ]
     this.productDiscountList = { ...DefaultConfig }
-    this.productDiscountList.fixedColumnWidth = true
+    this.productDiscountList.fixedColumnWidth = false
     this.productDiscountList.orderEnabled = true
     this.productDiscountList.rows = 4
     this.priceDiscountList = { ...DefaultConfig }
