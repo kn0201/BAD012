@@ -10,7 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { number, object, string } from 'cast.ts';
+import { array, number, object, string } from 'cast.ts';
 
 let bcParser = object({
   name: string(),
@@ -23,6 +23,8 @@ let productParser = object({
   name: string(),
   price: number(),
 });
+
+let deleteProductParser = object({});
 @Controller('admin')
 @Dependencies(AdminService)
 export class AdminController {
@@ -62,5 +64,11 @@ export class AdminController {
   async addProduct(@Body() body: Body) {
     let input = productParser.parse(body);
     return this.AdminService.addProduct(input);
+  }
+
+  @Patch('/product-list/delete')
+  async deleteProduct(@Body() body: Body) {
+    let input = deleteProductParser.parse(body);
+    return this.AdminService.deleteProduct(input);
   }
 }

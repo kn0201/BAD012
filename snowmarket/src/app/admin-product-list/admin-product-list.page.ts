@@ -7,7 +7,7 @@ import {
 } from '@angular/core'
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table'
 import { Brand, Category, Products } from 'src/assets/type'
-
+import Swal from 'sweetalert2'
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { AdminService } from '../admin.service'
@@ -263,6 +263,43 @@ export class AdminProductListPage implements OnInit {
         break
     }
   }
+
+  deleteConfirm() {
+    let arrayID = []
+    for (let id of this.selectedChecked) {
+      arrayID.push(id)
+      console.log(arrayID)
+    }
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      heightAuto: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.delete()
+      }
+    })
+  }
+
+  async delete() {
+    await this.adminService.deleteProduct(this.selectedChecked)
+    Swal.fire({
+      title: 'Finish',
+      text: 'Product Deleted',
+      icon: 'success',
+      heightAuto: false,
+      didClose: () => {
+        this.loadList()
+      },
+    })
+  }
+
   async loadList(): Promise<any> {
     let json = await this.adminService.getProductList()
     this.data = json.productList

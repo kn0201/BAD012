@@ -48,6 +48,8 @@ let addBrandCategoryResult = object({
 let addProductResult = object({
   name: string(),
 })
+
+let deleteProductResult = object({})
 @Injectable({
   providedIn: 'root',
 })
@@ -85,5 +87,13 @@ export class AdminService {
     price: number
   }) {
     return this.api.post('/admin/product-list/add', body, addProductResult)
+  }
+
+  deleteProduct(selectedChecked: Set<unknown>) {
+    return this.api.patch(
+      '/admin/product-list/delete',
+      selectedChecked,
+      deleteProductResult
+    )
   }
 }

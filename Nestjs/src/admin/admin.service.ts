@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
-
-import { productList } from 'source/product';
-
 @Injectable()
 export class AdminService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
+
+  async deleteProduct(body) {
+    console.log(body);
+    return {};
+  }
 
   async addBrandCategory(body) {
     let param = body.selectValue;
