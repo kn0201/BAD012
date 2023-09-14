@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2error } from 'utils/sweetalert2'
@@ -16,9 +16,15 @@ export class LoginPage implements OnInit {
     username: '',
   }
 
+  signUpPageVisible: boolean = false
+
   constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  switchPage(switchToSignUp: boolean) {
+    this.signUpPageVisible = switchToSignUp
+  }
 
   getPasswordError() {
     // console.log('get password error...')

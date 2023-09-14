@@ -10,9 +10,10 @@ import {
 import { IonModal } from '@ionic/angular'
 
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam'
-import { productList } from 'src/assets/product'
 import Swal from 'sweetalert2'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { CustomerService } from '../customer.service'
+import { sweetalert2error } from 'utils/sweetalert2'
 
 declare var roboflow: any
 @Component({
@@ -21,13 +22,26 @@ declare var roboflow: any
   styleUrls: ['./customer.page.scss'],
 })
 export class CustomerPage implements OnInit, AfterViewInit {
-  items: { id: number; name: string; quantity: number; price: number }[] = []
-  summarizedItems: {
+  items: {
     id: number
     name: string
+    unit_price: number
     quantity: number
     price: number
   }[] = []
+  discounts: {
+    id: number
+    title: string
+    discount_amount: number
+    discount_quantity: number
+    total_discount: number
+  }[] = []
+  // summarizedItems: {
+  //   id: number
+  //   name: string
+  //   quantity: number
+  //   price: number
+  // }[] = []
 
   findID: number | string = ''
 
@@ -37,30 +51,30 @@ export class CustomerPage implements OnInit, AfterViewInit {
   canDismiss = true
   showDeleteButton = false
 
+  // Add Item Section
+  // searchedItemIDList: number[] = []
+  // itemListMap: Map<
+  //   number /*product id */,
+  //   { name: string; quantity: number; unit_price: number; price: number }
+  // > = new Map()
+  // productDiscountMap: Map<
+  //   number /*product id */,
+  //   { amount: number; quantity: number }
+  // > = new Map()
+  // /* */
+
   public multipleWebcamsAvailable = false
   public errors: WebcamInitError[] = []
-
-  // private width!: number
-  // private height!: number
 
   @ViewChild(IonModal) modal!: IonModal
 
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?: Event) {
-    // const win = !!event ? (event.target as Window) : window
-    // this.width = win.innerWidth
-    // this.height = win.innerHeight
-  }
-
   model: any
   context!: CanvasRenderingContext2D
 
-  constructor() {
-    this.onResize()
-  }
+  constructor(private customerService: CustomerService) {}
 
   public ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(
@@ -87,14 +101,12 @@ export class CustomerPage implements OnInit, AfterViewInit {
         },
       },
     })
-    // console.log('video:', this.video)
-    // console.log('canvas:', this.canvas)
     this.video.nativeElement.srcObject = stream
     this.context = this.canvas.nativeElement.getContext('2d')!
 
-    var publishable_key = 'rf_66gJTamhMjVzjdyU5uRFOeNV2Sk2'
+    var publishable_key = 'rf_lmQyrjb8JIWuxlFLi7CDwWUSPZq1'
     var toLoad = {
-      model: 'bad-spztu',
+      model: 'bad-ovtnr',
       version: 1,
     }
 
@@ -111,7 +123,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
   resizeCanvas() {
     this.canvas.nativeElement.width = this.video.nativeElement.videoWidth
-    this.canvas.nativeElement.height = this.video.nativeElement.videoHeight
+    this.canvas.nativeElement.height =
+      this.video.nativeElement.videoHeight / 1.6
   }
 
   async detectFrame() {
@@ -145,49 +158,121 @@ export class CustomerPage implements OnInit, AfterViewInit {
     this.errors.push(error)
   }
 
-  addItem() {
-    const idToFilter = +this.findID
-
-    const matchingProduct = productList.find(
-      (product) => product.id === idToFilter
-    )
-
-    if (matchingProduct && this.findID !== '') {
-      const newItem = {
-        id: matchingProduct.id,
-        name: matchingProduct.name,
-        quantity: 1,
-        price: matchingProduct.price,
-      }
-
-      this.items.push(newItem)
-      this.findID = ''
-    } else {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Invalid ID',
-        icon: 'warning',
-        confirmButtonColor: '#ffa065',
-        heightAuto: false,
-      })
+  async addItem() {
+    if (this.findID == '') {
+      sweetalert2error('Empty Product ID')
+      return
     }
+
+    const idToFilter = +this.findID
+    try {
+      let json = await this.customerService.postID({ id: idToFilter })
+      if (json) {
+        const newItem = {
+          id: json.item.id,
+          name: json.item.name,
+          unit_price: json.item.unit_price,
+          quantity: 1,
+          price: json.item.unit_price,
+        }
+        let check = this.items.find((item) => item.id == idToFilter)
+        if (!check) {
+          this.items.push(newItem)
+        } else {
+          check.quantity++
+          check.price += newItem.unit_price
+        }
+        this.findID = ''
+        // const { discount_amount, discount_quantity,  } =
+        // if (discount_amount && discount_quantity) {
+        //         this.productDiscountMap.set(idToFilter, {
+        //           amount: discount_amount,
+        //           quantity: discount_quantity,
+        //         })
+        //       }
+        //     }
+        //     const productDiscountInfo = this.productDiscountMap.get(idToFilter)
+        //     if (productDiscountInfo) {
+        //       const productInConsideration = this.itemListMap.get(idToFilter)
+        //       if (productInConsideration) {
+        //         const discountTimes = Math.floor(
+        //           productInConsideration.quantity / productDiscountInfo.quantity
+        //         )
+        //         /* Update the discount = discount times * productDiscountInfo.amount */
+        //       }
+      }
+    } catch (err) {
+      sweetalert2error(err)
+    }
+    //   let dummyArray = new Set([...this.searchedItemIDList, idToFilter])
+    //   if (dummyArray.size === this.searchedItemIDList.length) {
+    //     let objectInConsideration = this.itemListMap.get(idToFilter)
+    //     if (objectInConsideration) {
+    //       this.itemListMap.set(idToFilter, {
+    //         ...objectInConsideration,
+    //         quantity: objectInConsideration.quantity + 1,
+    //         price:
+    //           objectInConsideration.unit_price * objectInConsideration.quantity,
+    //       })
+    //     }
+    //     let json = await this.customerService.postID({ id: idToFilter })
+    //     this.searchedItemIDList.push(idToFilter)
+    //     const { id, name, unit_price, discount_amount, discount_quantity } =
+    //       json.item
+    //     this.itemListMap.set(idToFilter, {
+    //       name,
+    //       unit_price,
+    //       price: unit_price,
+    //       quantity: 1,
+    //     })
+    //     if (discount_amount && discount_quantity) {
+    //       this.productDiscountMap.set(idToFilter, {
+    //         amount: discount_amount,
+    //         quantity: discount_quantity,
+    //       })
+    //     }
+    //   }
+    //   const productDiscountInfo = this.productDiscountMap.get(idToFilter)
+    //   if (productDiscountInfo) {
+    //     const productInConsideration = this.itemListMap.get(idToFilter)
+    //     if (productInConsideration) {
+    //       const discountTimes = Math.floor(
+    //         productInConsideration.quantity / productDiscountInfo.quantity
+    //       )
+    //       /* Update the discount = discount times * productDiscountInfo.amount */
+    //     }
+    //     this.items = Array.from(this.itemListMap).map(([id, productInfo]) => {
+    //       return { ...productInfo, id }
+    //     })
+    //     this.findID = ''
+    //   }
+    // } catch (err) {
+    //   sweetalert2error('Invalid Product ID')
+    // }
   }
 
-  addBag() {
-    const idBag = 0
-
-    const matchingProduct = productList.find((product) => product.id === idBag)
-
-    if (matchingProduct) {
-      const newItem = {
-        id: matchingProduct.id,
-        name: matchingProduct.name,
-        quantity: 1,
-        price: matchingProduct.price,
+  async addBag() {
+    const idToFilter = 1
+    try {
+      let json = await this.customerService.postID({ id: idToFilter })
+      if (json) {
+        const newItem = {
+          id: json.item.id,
+          name: json.item.name,
+          unit_price: json.item.unit_price,
+          quantity: 1,
+          price: json.item.unit_price,
+        }
+        let check = this.items.find((item) => item.id == idToFilter)
+        if (!check) {
+          this.items.push(newItem)
+        } else {
+          check.quantity++
+          check.price += newItem.unit_price
+        }
       }
-      this.items.push(newItem)
-    } else {
-      throw new Error('No item matching')
+    } catch (err) {
+      sweetalert2error(err)
     }
   }
 
@@ -214,6 +299,11 @@ export class CustomerPage implements OnInit, AfterViewInit {
       }
     })
   }
+  calculateTotalQuantity(): number {
+    return +this.items
+      .reduce((total, item) => total + item.quantity, 0)
+      .toFixed(2)
+  }
 
   calculateTotalPrice(): number {
     return +this.items.reduce((total, item) => total + item.price, 0).toFixed(2)
@@ -224,32 +314,47 @@ export class CustomerPage implements OnInit, AfterViewInit {
     return +(totalPrice - this.discountAmount).toFixed(2)
   }
 
-  summarizeItem() {
-    type ResultItem = {
-      id: number
-      name: string
-      totalQuantity: number
-      totalPrice: number
-    }
-    type ResultMap = Record<number, ResultItem>
-    let result: ResultItem[] = Object.values(
-      this.items.reduce((r: ResultMap, { id, name, quantity, price }) => {
-        r[id] ??= { id, name, totalQuantity: 0, totalPrice: 0 }
-        r[id].totalQuantity += quantity
-        r[id].totalPrice += price
-        return r
-      }, {})
-    )
-    let mappedResult = result.map((item) => {
-      return {
-        id: item.id,
-        name: item.name,
-        quantity: item.totalQuantity,
-        price: item.totalPrice,
-      }
-    })
-    this.summarizedItems = mappedResult
-  }
+  // summarizeItem2() {
+  //   type ResultItem = {
+  //     id: number
+  //     name: string
+  //     totalQuantity: number
+  //     totalPrice: number
+  //   }
+  //   type ResultMap = Record<number, ResultItem>
+  //   let result: ResultItem[] = Object.values(
+  //     this.items.reduce((r: ResultMap, { id, name, quantity, price }) => {
+  //       r[id] ??= { id, name, totalQuantity: 0, totalPrice: 0 }
+  //       r[id].totalQuantity += quantity
+  //       r[id].totalPrice += price
+  //       return r
+  //     }, {})
+  //   )
+  //   let mappedResult = result.map((item) => {
+  //     return {
+  //       id: item.id,
+  //       name: item.name,
+  //       quantity: item.totalQuantity,
+  //       price: item.totalPrice,
+  //     }
+  //   })
+  //   this.summarizedItems = mappedResult
+  // }
+
+  // summarizeItem() {
+  //   const itemList: {
+  //     id: number
+  //     name: string
+  //     quantity: number
+  //     price: number
+  //   }[] = []
+
+  //   Array.from(this.itemListMap).map(([id, productInfo]) => {
+  //     itemList.push({ ...productInfo, id })
+  //   })
+  //   console.log({ itemList })
+  //   this.summarizedItems = itemList
+  // }
 
   cancel() {
     this.modal.dismiss()
