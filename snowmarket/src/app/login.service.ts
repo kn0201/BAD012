@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
+import { ApiService } from './api.service'
+import { array, object, string } from 'cast.ts'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
-
-  constructor() { }
+  constructor(private api: ApiService) {}
 }

@@ -9,16 +9,22 @@ import { sweetalert2error } from 'utils/sweetalert2'
 })
 export class LoginPage implements OnInit {
   user = {
-    username: 'admin',
-    password: '123',
+    username: '',
+    password: '',
   }
   errors = {
     username: '',
   }
 
+  signUpPageVisible: boolean = false
+
   constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  switchPage(switchToSignUp: boolean) {
+    this.signUpPageVisible = switchToSignUp
+  }
 
   getPasswordError() {
     // console.log('get password error...')

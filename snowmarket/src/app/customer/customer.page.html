@@ -75,18 +75,6 @@
           <ion-row>
             <ion-col size="12">
               <ion-card class="camera">
-                <video #video autoplay muted playsinline hidden="ture"></video>
-                <canvas #canvas></canvas>
-                <!-- <div class="wrapper" (window:resize)="onResize($event)">
-                  <webcam (initError)="handleInitError($event)">
-                    <video id="video" autoplay muted playsinline></video>
-                    <div id="fps"></div>
-                  </webcam>
-                  <h4 *ngIf="errors.length > 0">Messages:</h4>
-                  <ul *ngFor="let error of errors">
-                    <li>{{error | json}}</li>
-                  </ul>
-                </div> -->
                 <div class="wrapper">
                   <video
                     #video
