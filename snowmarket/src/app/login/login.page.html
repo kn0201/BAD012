@@ -10,7 +10,11 @@
         <ng-template>
           <ion-content class="ion-padding">
             <div class="form">
-              <div class="container" id="container">
+              <div
+                class="container"
+                id="container"
+                [ngClass]="{'right-panel-active':signUpPageVisible}"
+              >
                 <div class="form-container sign-up-container">
                   <form
                     id="loginform"
@@ -59,13 +63,25 @@
                         To keep connected with us please login with your
                         personal info
                       </p>
-                      a``
-                      <button class="ghost" id="signIn">Sign In</button>
+
+                      <button
+                        class="ghost"
+                        id="signIn"
+                        (click)="switchPage(false)"
+                      >
+                        Sign In
+                      </button>
                     </div>
                     <div class="overlay-panel overlay-right">
                       <h1>Hello, Friend!</h1>
                       <p>Enter your personal details and start discount now!</p>
-                      <button class="ghost" id="signUp">Sign Up</button>
+                      <button
+                        class="ghost"
+                        id="signUp"
+                        (click)="switchPage(true)"
+                      >
+                        Sign Up
+                      </button>
                     </div>
                   </div>
                 </div>
