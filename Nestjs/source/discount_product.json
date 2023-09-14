@@ -1,24 +1,24 @@
 [
-	{
-		"title": "KIT KAT CHOCOLATE BAR買2送1",
-		"product": "KIT KAT CHOCOLATE BAR",
-		"brand": null,
-		"categories": null,
-		"quantity": 3,
-		"discount_amount": -6.0,
-		"start_date": "2023-09-11",
-		"end_date": "2023-09-18",
-		"is_delete": false
-	},
-	{
-		"title": "NISSIN SNACK 20蚊3個",
-		"product": null,
-		"brand": "Nissin",
-		"categories": "Snack",
-		"quantity": 3,
-		"discount_amount": -4.0,
-		"start_date": "2023-09-11",
-		"end_date": "2023-09-18",
-		"is_delete": false
-	}
+  {
+    "title": "KIT KAT CHOCOLATE BAR買3送1",
+    "product": "KIT KAT CHOCOLATE BAR",
+    "brand": null,
+    "categories": null,
+    "quantity": 3,
+    "discount_amount": -6.0,
+    "start_date": "2023-09-11",
+    "end_date": "2023-09-18",
+    "is_delete": false
+  },
+  {
+    "title": "NISSIN SNACK 20蚊3個",
+    "product": null,
+    "brand": "Nissin",
+    "categories": "Snack",
+    "quantity": 3,
+    "discount_amount": -4.0,
+    "start_date": "2023-09-11",
+    "end_date": "2023-09-18",
+    "is_delete": false
+  }
 ]
