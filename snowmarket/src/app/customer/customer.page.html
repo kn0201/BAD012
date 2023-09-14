@@ -26,9 +26,13 @@
                       <tr>
                         <th scope="col" width="5%">#</th>
                         <th scope="col" width="45%">Name</th>
-                        <th scope="col" width="15%">Unit Price</th>
-                        <th scope="col" width="10%">Qty</th>
-                        <th scope="col" width="15%">Total Amount</th>
+                        <th scope="col" width="15%" class="text-center">
+                          Unit Price
+                        </th>
+                        <th scope="col" width="10%" class="text-center">Qty</th>
+                        <th scope="col" width="15%" class="text-center">
+                          Total Amount
+                        </th>
                         <th
                           scope="col"
                           width="10%"
@@ -41,9 +45,9 @@
                         <tr>
                           <th scope="row">{{ i + 1}}</th>
                           <td>{{item.name}}</td>
-                          <td>${{item.unit_price}}</td>
-                          <td>{{item.quantity}}</td>
-                          <td>${{item.price}}</td>
+                          <td class="text-center">${{item.unit_price}}</td>
+                          <td class="text-center">{{item.quantity}}</td>
+                          <td class="text-center">${{item.price}}</td>
                           <td *ngIf="showDeleteButton">
                             <button
                               class="btn btn-danger delete-button"
@@ -57,9 +61,9 @@
                         <tr>
                           <th></th>
                           <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>-$10</td>
+                          <td class="text-center"></td>
+                          <td class="text-center"></td>
+                          <td class="text-center">-$10</td>
                           <td *ngIf="showDeleteButton"></td>
                         </tr>
                       </ng-container>
@@ -163,17 +167,23 @@
                         <thead>
                           <tr>
                             <th scope="col" width="45%">Name</th>
-                            <th scope="col" width="10%">Unit Price</th>
-                            <th scope="col" width="10%">Qty</th>
-                            <th scope="col" width="10%">Total Amount</th>
+                            <th scope="col" width="15%" class="text-center">
+                              Unit Price
+                            </th>
+                            <th scope="col" width="10%" class="text-center">
+                              Qty
+                            </th>
+                            <th scope="col" width="20%" class="text-center">
+                              Total Amount
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let item of items; let i = index">
                             <td>{{item.name}}</td>
-                            <td>${{item.unit_price}}</td>
-                            <td>{{item.quantity}}</td>
-                            <td>${{item.price}}</td>
+                            <td class="text-center">${{item.unit_price}}</td>
+                            <td class="text-center">{{item.quantity}}</td>
+                            <td class="text-center">${{item.price}}</td>
                             <!-- <tr *ngFor="let summarizedItem of summarizedItems">
                             <td>{{summarizedItem.name}}</td>
                             <td>${{summarizedItem.unit_price}}</td>
@@ -185,8 +195,10 @@
                           <tr>
                             <th scope="row">Total</th>
                             <td></td>
-                            <td>{{calculateTotalQuantity()}}</td>
-                            <td>${{calculateBalance()}}</td>
+                            <td class="text-center">
+                              {{calculateTotalQuantity()}}
+                            </td>
+                            <td class="text-center">${{calculateBalance()}}</td>
                           </tr>
                         </tfoot>
                       </table>
