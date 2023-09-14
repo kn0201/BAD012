@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2error } from 'utils/sweetalert2'
@@ -9,8 +9,8 @@ import { sweetalert2error } from 'utils/sweetalert2'
 })
 export class LoginPage implements OnInit {
   user = {
-    username: '',
-    password: '',
+    username: 'admin',
+    password: '123',
   }
   errors = {
     username: '',

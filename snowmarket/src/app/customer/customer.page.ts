@@ -92,9 +92,9 @@ export class CustomerPage implements OnInit, AfterViewInit {
     this.video.nativeElement.srcObject = stream
     this.context = this.canvas.nativeElement.getContext('2d')!
 
-    var publishable_key = 'rf_66gJTamhMjVzjdyU5uRFOeNV2Sk2'
+    var publishable_key = 'rf_lmQyrjb8JIWuxlFLi7CDwWUSPZq1'
     var toLoad = {
-      model: 'bad-spztu',
+      model: 'bad-ovtnr',
       version: 1,
     }
 
