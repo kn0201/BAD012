@@ -24,8 +24,6 @@ let product = object({ item })
 export class CustomerService {
   constructor(private api: ApiService) {}
   postID(body: { id: number }) {
-    console.log({ body })
-
     return this.api.post('/customer', body, product)
   }
 }

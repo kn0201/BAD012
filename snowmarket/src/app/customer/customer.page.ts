@@ -29,13 +29,27 @@ export class CustomerPage implements OnInit, AfterViewInit {
     quantity: number
     price: number
   }[] = []
+  originals: {
+    id: number
+    name: string
+    unit_price: number
+    quantity: number
+    price: number
+  }[] = []
   discounts: {
     id: number
-    title: string
-    discount_amount: number
-    discount_quantity: number
-    total_discount: number
+    name: string
+    unit_price: number
+    quantity: number
+    price: number
   }[] = []
+  newDiscount: {
+    id: number
+    name: string
+    unit_price: number
+    quantity: number
+    price: number
+  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0 }
   // summarizedItems: {
   //   id: number
   //   name: string
@@ -168,38 +182,66 @@ export class CustomerPage implements OnInit, AfterViewInit {
     try {
       let json = await this.customerService.postID({ id: idToFilter })
       if (json) {
+        const {
+          discount_id,
+          discount_title,
+          discount_product_id,
+          discount_brand_id,
+          discount_categories_id,
+          discount_quantity,
+          discount_amount,
+          ...itemData
+        } = json.item
         const newItem = {
-          id: json.item.id,
-          name: json.item.name,
-          unit_price: json.item.unit_price,
+          id: itemData.id,
+          name: itemData.name,
+          unit_price: itemData.unit_price,
           quantity: 1,
-          price: json.item.unit_price,
+          price: itemData.unit_price,
         }
         let check = this.items.find((item) => item.id == idToFilter)
         if (!check) {
           this.items.push(newItem)
+          this.originals.push(newItem)
         } else {
           check.quantity++
           check.price += newItem.unit_price
+          if (
+            discount_id &&
+            discount_title &&
+            discount_quantity &&
+            discount_amount
+          ) {
+            let checkDiscount = check.quantity % discount_quantity == 0
+            if (checkDiscount == true) {
+              const newDiscount = {
+                id: discount_id,
+                name: discount_title,
+                unit_price: -discount_amount,
+                quantity: 1,
+                price: -discount_amount,
+              }
+              const newDiscountItem = {
+                id: discount_id,
+                name: discount_title,
+                unit_price: +'',
+                quantity: +'',
+                price: discount_amount,
+              }
+              let checkDiscountList = this.discounts.find(
+                (discount) => discount.id == discount_id
+              )
+              if (!checkDiscountList) {
+                this.items.push(newDiscountItem)
+                this.discounts.push(newDiscount)
+              } else {
+                checkDiscountList.quantity++
+                checkDiscountList.price += newDiscount.unit_price
+              }
+            }
+          }
         }
         this.findID = ''
-        // const { discount_amount, discount_quantity,  } =
-        // if (discount_amount && discount_quantity) {
-        //         this.productDiscountMap.set(idToFilter, {
-        //           amount: discount_amount,
-        //           quantity: discount_quantity,
-        //         })
-        //       }
-        //     }
-        //     const productDiscountInfo = this.productDiscountMap.get(idToFilter)
-        //     if (productDiscountInfo) {
-        //       const productInConsideration = this.itemListMap.get(idToFilter)
-        //       if (productInConsideration) {
-        //         const discountTimes = Math.floor(
-        //           productInConsideration.quantity / productDiscountInfo.quantity
-        //         )
-        //         /* Update the discount = discount times * productDiscountInfo.amount */
-        //       }
       }
     } catch (err) {
       sweetalert2error(err)
@@ -300,18 +342,27 @@ export class CustomerPage implements OnInit, AfterViewInit {
     })
   }
   calculateTotalQuantity(): number {
-    return +this.items
+    return +this.originals
       .reduce((total, item) => total + item.quantity, 0)
       .toFixed(2)
   }
 
   calculateTotalPrice(): number {
-    return +this.items.reduce((total, item) => total + item.price, 0).toFixed(2)
+    return +this.originals
+      .reduce((total, item) => total + item.price, 0)
+      .toFixed(2)
+  }
+
+  calculateTotalDiscount(): number {
+    return +this.discounts
+      .reduce((total, discount) => total + discount.price, 0)
+      .toFixed(2)
   }
 
   calculateBalance(): number {
     const totalPrice = this.calculateTotalPrice()
-    return +(totalPrice - this.discountAmount).toFixed(2)
+    const totalDiscount = this.calculateTotalDiscount()
+    return +(totalPrice - totalDiscount).toFixed(2)
   }
 
   // summarizeItem2() {

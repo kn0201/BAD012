@@ -27,11 +27,11 @@
                         <th scope="col" width="5%">#</th>
                         <th scope="col" width="45%">Name</th>
                         <th scope="col" width="15%" class="text-center">
-                          Unit Price
+                          Unit Price($)
                         </th>
                         <th scope="col" width="10%" class="text-center">Qty</th>
                         <th scope="col" width="15%" class="text-center">
-                          Total Amount
+                          Total Amount($)
                         </th>
                         <th
                           scope="col"
@@ -45,9 +45,9 @@
                         <tr>
                           <th scope="row">{{ i + 1}}</th>
                           <td>{{item.name}}</td>
-                          <td class="text-center">${{item.unit_price}}</td>
-                          <td class="text-center">{{item.quantity}}</td>
-                          <td class="text-center">${{item.price}}</td>
+                          <td class="text-center">{{item.unit_price||null}}</td>
+                          <td class="text-center">{{item.quantity||null}}</td>
+                          <td class="text-center">{{item.price}}</td>
                           <td *ngIf="showDeleteButton">
                             <button
                               class="btn btn-danger delete-button"
@@ -58,14 +58,18 @@
                             </button>
                           </td>
                         </tr>
-                        <tr>
-                          <th></th>
-                          <td></td>
-                          <td class="text-center"></td>
-                          <td class="text-center"></td>
-                          <td class="text-center">-$10</td>
-                          <td *ngIf="showDeleteButton"></td>
-                        </tr>
+                        <!-- <ng-container
+                          *ngFor="let discount of discounts"
+                          *ngIf="showDiscountList"
+                        >
+                          <tr>
+                            <th scope="row"></th>
+                            <td>{{discounts.name}}</td>
+                            <td class="text-center"></td>
+                            <td class="text-center"></td>
+                            <td class="text-center">${{discounts.price}}</td>
+                            <td *ngIf="showDeleteButton"></td></tr
+                        ></ng-container> -->
                       </ng-container>
                     </tbody>
                   </table>
@@ -138,7 +142,7 @@
               >
               <ion-item
                 >Discount Amount<span slot="end"
-                  >-${{discountAmount}}</span
+                  >-${{calculateTotalDiscount()}}</span
                 ></ion-item
               >
               <ion-item
