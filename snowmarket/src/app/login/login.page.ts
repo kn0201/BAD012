@@ -1,7 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
+import { number } from 'cast.ts'
+import { NotFoundError } from 'rxjs'
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2error } from 'utils/sweetalert2'
+import { LoginService } from '../login.service'
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,7 +21,9 @@ export class LoginPage implements OnInit {
 
   signUpPageVisible: boolean = false
 
-  constructor(private router: Router) {}
+  email: string | null = null
+
+  constructor(private Login: LoginService) {}
 
   ngOnInit() {}
 
@@ -44,16 +49,20 @@ export class LoginPage implements OnInit {
   }
 
   async login(): Promise<any> {
-    let res = await fetch(`${DOMAIN}/login`, {
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-    let json = await res.json()
-    if (json.error) {
-      sweetalert2error(json.error)
-      return
-    }
-    // console.log(json.user)
+    await this.login
   }
+
+  // async login(): Promise<any> {
+  //   let res = await fetch(`${DOMAIN}/login`, {
+  //     headers: {
+  //       Accept: 'application/json',
+  //     },
+  //   })
+  //   let json = await res.json()
+  //   if (json.error) {
+  //     sweetalert2error(json.error)
+  //     return
+  //   }
+  //   // console.log(json.user)
+  // }
 }

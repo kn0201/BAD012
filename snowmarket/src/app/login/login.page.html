@@ -20,13 +20,31 @@
                     id="loginform"
                     title="loginForm"
                     method="post"
-                    action="/login"
+                    action="/signin"
                   >
                     <h1>Create Account</h1>
                     <span>or use your email for registration</span>
-                    <input type="text" placeholder="Name" />
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
+                    <ion-item>
+                      <ion-input
+                        type="text"
+                        [(ngModel)]="user.username"
+                        name="username"
+                        labelPlacement="username"
+                        placeholder="user name"
+                      />
+                    </ion-item>
+                    <ion-item>
+                      <ion-input
+                        type="email"
+                        [(ngModel)]="email"
+                        name="email"
+                        labelPlacement="Email"
+                        placeholder="Email"
+                      />
+                    </ion-item>
+                    <ion-item>
+                      <ion-input type="password" placeholder="Password" />
+                    </ion-item>
                     <button>Sign Up</button>
                   </form>
                 </div>

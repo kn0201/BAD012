@@ -15,6 +15,7 @@ export class LoginService {
     username: string;
     password: string;
     email: string;
+    e;
   }) {
     try {
       return await knex.transaction(async (knew) => {
