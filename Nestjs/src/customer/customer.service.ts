@@ -50,7 +50,12 @@ export class CustomerService {
         .first();
       console.log(item);
       let price_discount = await this.knex
-        .select('title', 'total_price', 'discount_rate')
+        .select(
+          'id as price_discount_id',
+          'title as price_discount_title',
+          'total_price as price_discount_total',
+          'discount_rate as price_discount_rate',
+        )
         .from('price_discount')
         .where('start_date', '<=', currentDate)
         .andWhere('end_date', '>=', currentDate)

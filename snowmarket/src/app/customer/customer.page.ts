@@ -43,6 +43,11 @@ export class CustomerPage implements OnInit, AfterViewInit {
     quantity: number
     price: number
   }[] = []
+  price_discount: {
+    id: number
+    name: string
+    price: number
+  }[] = []
   newDiscount: {
     id: number
     name: string
@@ -50,12 +55,12 @@ export class CustomerPage implements OnInit, AfterViewInit {
     quantity: number
     price: number
   } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0 }
-  summarizedItems: {
-    id: number
-    name: string
-    quantity: number
-    price: number
-  }[] = []
+  // summarizedItems: {
+  //   id: number
+  //   name: string
+  //   quantity: number
+  //   price: number
+  // }[] = []
 
   findID: number | string = ''
 
@@ -250,9 +255,51 @@ export class CustomerPage implements OnInit, AfterViewInit {
             }
           }
         }
+        if (json.price_discount) {
+          let discountAmount
+          for (const discount of json.price_discount) {
+            const {
+              price_discount_id,
+              price_discount_title,
+              price_discount_total,
+              price_discount_rate,
+            } = discount
+            let total = this.calculateBalance()
+            if (total > price_discount_total) {
+              if (price_discount_rate.startsWith('-')) {
+                discountAmount = parseFloat(price_discount_rate)
+              } else if (price_discount_rate.startsWith('*')) {
+                const discountMultiplier = parseFloat(
+                  price_discount_rate.slice(1)
+                )
+                discountAmount = -(total - total * discountMultiplier)
+              }
+              console.log('discountAmount', discountAmount)
+              if (typeof discountAmount !== 'undefined') {
+                const PriceDiscount = {
+                  id: price_discount_id,
+                  name: price_discount_title,
+                  price: +discountAmount.toFixed(2),
+                }
+                console.log('PriceDiscount', PriceDiscount)
+                let checkPriceDiscountList = this.price_discount.length > 0
+                console.log('checkPriceDiscountList', checkPriceDiscountList)
+                if (!checkPriceDiscountList) {
+                  this.price_discount.push(PriceDiscount)
+                } else {
+                  this.price_discount[0].id = price_discount_id
+                  this.price_discount[0].name = price_discount_title
+                  this.price_discount[0].price = +discountAmount.toFixed(2)
+                }
+                console.log('this.price_discount', this.price_discount)
+              }
+            }
+          }
+        }
         console.log('this.item', this.items)
         console.log('this.discounts', this.discounts)
         console.log('this.originals', this.originals)
+        console.log('this.price_discount', this.price_discount[0])
         this.findID = ''
       }
     } catch (err) {
@@ -454,6 +501,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
             this.items = []
             this.discounts = []
             this.originals = []
+            this.price_discount = []
             this.cancel()
           }
         })

@@ -27,6 +27,27 @@ let productParser = object({
 let deleteProductParser = object({
   deleteId: number(),
 });
+
+let addProductDiscountParser = object({
+  selectedDiscount: string(),
+  title: string(),
+  product_id: string(),
+  brand_id: string(),
+  categories_id: string(),
+  quantity: string(),
+  discount_amount: string(),
+  start_date: string(),
+  end_date: string(),
+});
+
+let addPriceDiscountParser = object({
+  selectedDiscount: string(),
+  title: string(),
+  total_price: string(),
+  discount_rate: string(),
+  start_date: string(),
+  end_date: string(),
+});
 @Controller('admin')
 @Dependencies(AdminService)
 export class AdminController {
@@ -67,15 +88,30 @@ export class AdminController {
     let input = bcParser.parse(body);
     return this.AdminService.addBrandCategory(input);
   }
+
   @Post('/product-list/add')
   async addProduct(@Body() body: Body) {
     let input = productParser.parse(body);
     return this.AdminService.addProduct(input);
   }
 
+  @Post('/discount-list/addProductDiscount')
+  async addProductDiscount(@Body() body: Body) {
+    let input = addProductDiscountParser.parse(body);
+    return this.AdminService.addProductDiscount(input);
+  }
+
+  @Post('/discount-list/addPriceDiscount')
+  async addPriceDiscount(@Body() body: Body) {
+    let input = addPriceDiscountParser.parse(body);
+    return this.AdminService.addPriceDiscount(input);
+  }
+
   @Patch('/product-list/delete')
   async deleteProduct(@Body() body: Body) {
     let input = deleteProductParser.parse(body);
+    console.log('Back C');
+
     return this.AdminService.deleteProduct(input);
   }
 }
