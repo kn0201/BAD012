@@ -110,9 +110,25 @@ export class AdminService {
       .where('is_delete', 'false');
 
     let productDiscountList = await this.knex
-      .select('*')
+      .select(
+        'quantity_discount.id',
+        'quantity_discount.title',
+        'quantity_discount.product_id',
+        'quantity_discount.brand_id',
+        'quantity_discount.categories_id',
+        'quantity_discount.quantity',
+        'quantity_discount.discount_amount',
+        'quantity_discount.start_date',
+        'quantity_discount.end_date',
+        'product.name as product_name',
+        'brand.name as brand_name',
+        'categories.name as category_name',
+      )
       .from('quantity_discount')
-      .where('is_delete', 'false');
+      .leftJoin('brand', 'brand_id', 'brand.id')
+      .leftJoin('categories', 'categories_id', 'categories.id')
+      .leftJoin('product', 'product_id', 'product.id')
+      .where('quantity_discount.is_delete', 'false');
 
     let brandList = await this.knex.select('*').from('brand').orderBy('id');
 
@@ -134,9 +150,8 @@ export class AdminService {
       )
       .from('product')
       .leftJoin('brand', 'brand_id', 'brand.id')
-      .leftJoin('categories', 'categories_id', 'categories.id');
-
-    console.log(productDiscountList);
+      .leftJoin('categories', 'categories_id', 'categories.id')
+      .where('is_delete', false);
 
     return {
       productDiscountList,
@@ -145,6 +160,35 @@ export class AdminService {
       brandList,
       categoriesList,
     };
+  }
+
+  async addProductDiscount(body) {
+    await this.knex('quantity_discount').insert({
+      title: body.title,
+      product_id: body.product_id,
+      brand_id: body.brand_id,
+      categories_id: body.categories_id,
+      quantity: body.quantity,
+      discount_amount: body.discount_amount,
+      start_date: body.start_date,
+      end_date: body.end_date,
+      is_delete: false,
+    });
+    let result = 'Added';
+    return { result };
+  }
+
+  async addPriceDiscount(body) {
+    await this.knex('price_discount').insert({
+      title: body.title,
+      total_price: body.total_price,
+      discount_rate: body.discount_rate,
+      start_date: body.start_date,
+      end_date: body.end_date,
+      is_delete: false,
+    });
+    let result = 'Added';
+    return { result };
   }
 
   async getTrashList() {

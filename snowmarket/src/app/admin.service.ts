@@ -55,7 +55,13 @@ let deletedProductList = object({
   deletedProductList: array(deletedProduct),
 })
 
-let addProductDiscount = object({})
+let addProductDiscount = object({
+  result: string(),
+})
+
+let addPriceDiscount = object({
+  result: string(),
+})
 @Injectable({
   providedIn: 'root',
 })
@@ -114,6 +120,21 @@ export class AdminService {
       '/admin/discount-list/addProductDiscount',
       body,
       addProductDiscount
+    )
+  }
+
+  addPriceDiscount(body: {
+    selectedDiscount: string
+    title: string
+    total_price: string
+    discount_rate: string
+    start_date: string
+    end_date: string
+  }) {
+    return this.api.post(
+      '/admin/discount-list/addPriceDiscount',
+      body,
+      addPriceDiscount
     )
   }
 

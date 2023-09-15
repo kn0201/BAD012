@@ -16,7 +16,8 @@ import {
 } from 'src/assets/type'
 
 import { AdminService } from '../admin.service'
-import { sweetalert2error } from 'utils/sweetalert2'
+import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-admin-discount-list',
@@ -84,6 +85,14 @@ export class AdminDiscountListPage implements OnInit {
   discount_rate: any | null = ''
   total_price: any | null = ''
 
+  selectedChecked = new Set()
+  selectedProductChecked = new Set()
+  selectedPriceChecked = new Set()
+
+  arrayID: Array<number> = []
+  ProductArrayID: Array<number> = []
+  PriceArrayID: Array<number> = []
+
   selectedDiscount = 'product_discount'
   selectedStartDate = ''
   selectedEndDate = ''
@@ -112,24 +121,24 @@ export class AdminDiscountListPage implements OnInit {
     this.loadList()
 
     this.productDiscountColumns = [
-      { key: 'id', title: 'Discount ID' },
+      { key: 'id', title: 'Product Discount ID' },
       { key: 'title', title: 'Title' },
       {
-        key: 'product_id',
-        title: 'Product ID',
-        headerActionTemplate: this.productHeaderActionTemplate,
+        key: 'product_name',
+        title: 'Product Name',
+        // headerActionTemplate: this.productHeaderActionTemplate,
       },
       {
-        key: 'brand_id',
-        title: 'Brand ID',
-        headerActionTemplate: this.brandHeaderActionTemplate,
+        key: 'brand_name',
+        title: 'Brand Name',
+        // headerActionTemplate: this.brandHeaderActionTemplate,
       },
       {
-        key: 'categories_id',
-        title: 'Category ID',
-        headerActionTemplate: this.categoryHeaderActionTemplate,
+        key: 'category_name',
+        title: 'Category Name',
+        // headerActionTemplate: this.categoryHeaderActionTemplate,
       },
-      { key: 'amount', title: 'Quantity' },
+      { key: 'quantity', title: 'Quantity' },
       { key: 'discount_amount', title: 'Discount Amount' },
       { key: 'start_date', title: 'Start date' },
       { key: 'end_date', title: 'End date' },
@@ -138,10 +147,12 @@ export class AdminDiscountListPage implements OnInit {
     this.productDiscountList.fixedColumnWidth = false
     this.productDiscountList.orderEnabled = true
     this.productDiscountList.rows = 4
+    this.productDiscountList.checkboxes = true
     this.priceDiscountList = { ...DefaultConfig }
     this.priceDiscountList.fixedColumnWidth = true
     this.priceDiscountList.orderEnabled = true
     this.priceDiscountList.threeWaySort = true
+    this.priceDiscountList.checkboxes = true
     this.priceDiscountList.rows = 4
   }
 
@@ -180,7 +191,7 @@ export class AdminDiscountListPage implements OnInit {
 
     for (let item of productDiscountList) {
       item.start_date = new Date(item.start_date).toLocaleDateString()
-      item.end_date = new Date(item.start_date).toLocaleDateString()
+      item.end_date = new Date(item.end_date).toLocaleDateString()
     }
 
     this.productDiscountData = productDiscountList
@@ -191,7 +202,7 @@ export class AdminDiscountListPage implements OnInit {
 
     for (let item of priceDiscountList) {
       item.start_date = new Date(item.start_date).toLocaleDateString()
-      item.end_date = new Date(item.start_date).toLocaleDateString()
+      item.end_date = new Date(item.end_date).toLocaleDateString()
     }
     this.productListData = json.productList
     this.filteredProduct = json.productList
@@ -357,20 +368,102 @@ export class AdminDiscountListPage implements OnInit {
     )
   }
 
+  eventEmittedProduct($event: { event: string; value: any }): void {
+    switch ($event.event) {
+      case 'onCheckboxSelect':
+        if (this.selectedProductChecked.has($event.value.rowId)) {
+          this.selectedProductChecked.delete($event.value.rowId)
+          let index = this.ProductArrayID.indexOf(+$event.value.row.id)
+          if (index !== -1) {
+            this.ProductArrayID.splice(index, 1)
+          }
+        } else {
+          this.selectedProductChecked.add($event.value.rowId)
+          this.ProductArrayID.push(+$event.value.row.id)
+        }
+        console.log(this.ProductArrayID)
+
+        break
+    }
+  }
+
+  eventEmittedPrice($event: { event: string; value: any }): void {
+    switch ($event.event) {
+      case 'onCheckboxSelect':
+        if (this.selectedPriceChecked.has($event.value.rowId)) {
+          this.selectedPriceChecked.delete($event.value.rowId)
+          let index = this.PriceArrayID.indexOf(+$event.value.row.id)
+          if (index !== -1) {
+            this.PriceArrayID.splice(index, 1)
+          }
+        } else {
+          this.selectedPriceChecked.add($event.value.rowId)
+          this.PriceArrayID.push(+$event.value.row.id)
+        }
+        console.log(this.PriceArrayID)
+
+        break
+    }
+  }
+
+  deleteConfirm() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      heightAuto: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        for (let id of this.arrayID) {
+          console.log(id)
+          this.delete(id)
+        }
+      }
+    })
+  }
+
+  async delete(id: number) {
+    await this.adminService.deleteProduct({
+      deleteId: id,
+    })
+    Swal.fire({
+      title: 'Finish',
+      text: 'Product Deleted',
+      icon: 'success',
+      heightAuto: false,
+      didClose: () => {
+        this.loadList()
+      },
+    })
+  }
+
   async addRow(): Promise<void> {
     if (this.title == '') {
       sweetalert2error('Missing title')
       return
     }
-    if (this.selectedProductID == '') {
+    if (
+      this.selectedDiscount == 'product_discount' &&
+      this.selectedProductID == ''
+    ) {
       sweetalert2error('Missing Product')
       return
     }
-    if (this.selectedBrandID == '') {
+    if (
+      this.selectedDiscount == 'product_discount' &&
+      this.selectedBrandID == ''
+    ) {
       sweetalert2error('Missing Brand')
       return
     }
-    if (this.selectedCategoryID == '') {
+    if (
+      this.selectedDiscount == 'product_discount' &&
+      this.selectedCategoryID == ''
+    ) {
       sweetalert2error('Missing Product')
       return
     }
@@ -401,7 +494,9 @@ export class AdminDiscountListPage implements OnInit {
       sweetalert2error('Missing End Date')
       return
     }
-    if (this.selectedDiscount == 'price_discount') {
+    if (this.selectedDiscount == 'product_discount') {
+      console.log('adding Product')
+
       let json = await this.adminService.addProductDiscount({
         selectedDiscount: this.selectedDiscount,
         title: this.title,
@@ -410,15 +505,24 @@ export class AdminDiscountListPage implements OnInit {
         categories_id: this.selectedCategoryID,
         quantity: this.quantity,
         discount_amount: this.discount_amount,
-        start_date: this.selectedStartDate,
-        end_date: this.selectedEndDate,
+        start_date: new Date(this.selectedStartDate).toLocaleDateString(),
+        end_date: new Date(this.selectedEndDate).toLocaleDateString(),
       })
+      sweetalert2Success(json.result)
     } else if (this.selectedDiscount == 'price_discount') {
-      // let json = await this.adminService.addPriceDiscount({
-      // })
+      let json = await this.adminService.addPriceDiscount({
+        selectedDiscount: this.selectedDiscount,
+        title: this.title,
+        total_price: this.total_price,
+        discount_rate: this.discount_rate,
+        start_date: new Date(this.selectedStartDate).toLocaleDateString(),
+        end_date: new Date(this.selectedEndDate).toLocaleDateString(),
+      })
+      sweetalert2Success(json.result)
     }
 
-    // this.clear()
-    // this.addModal.dismiss()
+    this.clear()
+    this.loadList()
+    this.dismiss(this.addModal)
   }
 }

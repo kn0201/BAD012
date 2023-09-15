@@ -95,6 +95,9 @@ export let productDiscount = object({
   discount_amount: string(),
   start_date: string(),
   end_date: string(),
+  product_name: nullable(string()),
+  brand_name: nullable(string()),
+  category_name: nullable(string()),
 })
 export interface Receipt {
   id: number
