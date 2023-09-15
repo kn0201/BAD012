@@ -49,7 +49,14 @@ export class CustomerService {
         })
         .first();
       console.log(item);
-      return { item };
+      let price_discount = await this.knex
+        .select('title', 'total_price', 'discount_rate')
+        .from('price_discount')
+        .where('start_date', '<=', currentDate)
+        .andWhere('end_date', '>=', currentDate)
+        .andWhere('is_delete', '=', false);
+      console.log(price_discount);
+      return { item, price_discount };
     } catch (err) {
       throw new Error(err);
     }
