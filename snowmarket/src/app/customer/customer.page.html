@@ -30,7 +30,7 @@
                           Unit Price($)
                         </th>
                         <th scope="col" width="10%" class="text-center">Qty</th>
-                        <th scope="col" width="15%" class="text-center">
+                        <th scope="col" width="17%" class="text-center">
                           Total Amount($)
                         </th>
                         <th
@@ -167,45 +167,49 @@
                       </ion-toolbar>
                     </ion-header>
                     <ion-content class="modal-background">
-                      <table class="table table-striped table-hover">
+                      <!-- <table class="table table-striped table-hover">
                         <thead>
                           <tr>
-                            <th scope="col" width="45%">Name</th>
-                            <th scope="col" width="15%" class="text-center">
-                              Unit Price
+                            <th scope="col" width="40%">Name</th>
+                            <th scope="col" width="17%" class="text-center">
+                              Unit Price($)
                             </th>
                             <th scope="col" width="10%" class="text-center">
                               Qty
                             </th>
-                            <th scope="col" width="20%" class="text-center">
-                              Total Amount
+                            <th scope="col" width="22%" class="text-center">
+                              Total Amount($)
                             </th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let item of items; let i = index">
                             <td>{{item.name}}</td>
-                            <td class="text-center">${{item.unit_price}}</td>
-                            <td class="text-center">{{item.quantity}}</td>
-                            <td class="text-center">${{item.price}}</td>
-                            <!-- <tr *ngFor="let summarizedItem of summarizedItems">
+                            <td class="text-center">
+                              {{item.unit_price||null}}
+                            </td>
+                            <td class="text-center">{{item.quantity||null}}</td>
+                            <td class="text-center">{{item.price}}</td> -->
+                      <!-- <tr *ngFor="let summarizedItem of summarizedItems">
                             <td>{{summarizedItem.name}}</td>
                             <td>${{summarizedItem.unit_price}}</td>
                             <td>{{summarizedItem.quantity}}</td>
                             <td>${{summarizedItem.price}}</td> -->
-                          </tr>
+                      <!-- </tr>
                         </tbody>
                         <tfoot>
                           <tr>
                             <th scope="row">Total</th>
                             <td></td>
-                            <td class="text-center">
+                            <td class="text-center" style="font-weight: 900">
                               {{calculateTotalQuantity()}}
                             </td>
-                            <td class="text-center">${{calculateBalance()}}</td>
+                            <td class="text-center" style="font-weight: 900">
+                              ${{calculateBalance()}}
+                            </td>
                           </tr>
                         </tfoot>
-                      </table>
+                      </table> -->
                     </ion-content>
                   </ng-template>
                 </ion-modal>

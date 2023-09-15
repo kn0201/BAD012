@@ -50,12 +50,12 @@ export class CustomerPage implements OnInit, AfterViewInit {
     quantity: number
     price: number
   } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0 }
-  // summarizedItems: {
-  //   id: number
-  //   name: string
-  //   quantity: number
-  //   price: number
-  // }[] = []
+  summarizedItems: {
+    id: number
+    name: string
+    quantity: number
+    price: number
+  }[] = []
 
   findID: number | string = ''
 
@@ -181,6 +181,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
     const idToFilter = +this.findID
     try {
       let json = await this.customerService.postID({ id: idToFilter })
+      console.log(json)
+
       if (json) {
         const {
           discount_id,
@@ -192,6 +194,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
           discount_amount,
           ...itemData
         } = json.item
+
         const newItem = {
           id: itemData.id,
           name: itemData.name,
@@ -237,10 +240,19 @@ export class CustomerPage implements OnInit, AfterViewInit {
               } else {
                 checkDiscountList.quantity++
                 checkDiscountList.price += newDiscount.unit_price
+                let checkDiscountListItem = this.items.find(
+                  (discount) => discount.name == discount_title
+                )
+                if (checkDiscountListItem) {
+                  checkDiscountListItem.price -= newDiscount.unit_price
+                }
               }
             }
           }
         }
+        console.log('this.item', this.items)
+        console.log('this.discounts', this.discounts)
+        console.log('this.originals', this.originals)
         this.findID = ''
       }
     } catch (err) {
@@ -440,6 +452,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
         }).then((result) => {
           if (result.isConfirmed) {
             this.items = []
+            this.discounts = []
+            this.originals = []
             this.cancel()
           }
         })
