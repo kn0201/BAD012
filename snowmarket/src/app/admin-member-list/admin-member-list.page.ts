@@ -50,7 +50,7 @@ export class AdminMemberListPage implements OnInit {
       { key: 'point', title: 'points' },
     ]
     this.configuration = { ...DefaultConfig }
-    this.configuration.checkboxes = true
+    this.configuration.checkboxes = false
     this.configuration.fixedColumnWidth = true
   }
   filter(field: string, event: Event | string): void {

@@ -14,7 +14,29 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <h1 class="capitalize">Trash List</h1>
+  <h2>Deleted Product</h2>
+  <div class="columns">
+    <div class="column col-12">
+      <ngx-table
+        [configuration]="configuration"
+        [data]="data"
+        #table
+        [columns]="columns"
+      >
+      </ngx-table>
+    </div>
   </div>
+  <ng-template #productHeaderActionTemplate>
+    <div class="search-template">
+      <label for="filterHeaderSearch">Search Product</label>
+      <input
+        class="form-input"
+        id="filterHeaderSearch"
+        [value]="selectedProduct"
+        (input)="filter('name', $event)"
+        type="search"
+        placeholder="Search"
+      />
+    </div>
+  </ng-template>
 </ion-content>

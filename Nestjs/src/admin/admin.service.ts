@@ -5,7 +5,10 @@ export class AdminService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async deleteProduct(body) {
-    console.log(body);
+    // console.log(body.deleteId);
+    await this.knex('product')
+      .where({ id: body.deleteId })
+      .update({ is_delete: 'true' });
     return {};
   }
 
@@ -46,7 +49,8 @@ export class AdminService {
     let memberList = await this.knex
       .select('id', 'username', 'email', 'birthday', 'point')
       .from('users')
-      .where('is_delete', 'false');
+      .where('is_delete', 'false')
+      .where('role', 'member');
 
     return { memberList };
   }
@@ -86,6 +90,7 @@ export class AdminService {
       .from('product')
       .leftJoin('brand', 'brand_id', 'brand.id')
       .leftJoin('categories', 'categories_id', 'categories.id')
+      .where('is_delete', 'false')
       .orderBy('product.id');
 
     let brandList = await this.knex.select('*').from('brand').orderBy('id');
@@ -140,5 +145,15 @@ export class AdminService {
       brandList,
       categoriesList,
     };
+  }
+
+  async getTrashList() {
+    let deletedProductList = await this.knex
+      .select('id', 'name')
+      .from('product')
+      .where('is_delete', 'true')
+      .orderBy('id');
+
+    return { deletedProductList };
   }
 }

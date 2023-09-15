@@ -4,6 +4,7 @@ import { array, object, string } from 'cast.ts'
 import {
   brand,
   category,
+  deletedProduct,
   item,
   priceDiscount,
   product,
@@ -50,6 +51,11 @@ let addProductResult = object({
 })
 
 let deleteProductResult = object({})
+let deletedProductList = object({
+  deletedProductList: array(deletedProduct),
+})
+
+let addProductDiscount = object({})
 @Injectable({
   providedIn: 'root',
 })
@@ -76,6 +82,10 @@ export class AdminService {
     return this.api.get('/admin/discount-list', discountPageList)
   }
 
+  getTrashList() {
+    return this.api.get('/admin/trash-list', deletedProductList)
+  }
+
   addBrandCategory(body: { name: string; selectValue: string }) {
     return this.api.post('/admin/b&c-list/add', body, addBrandCategoryResult)
   }
@@ -89,10 +99,28 @@ export class AdminService {
     return this.api.post('/admin/product-list/add', body, addProductResult)
   }
 
-  deleteProduct(selectedChecked: Set<unknown>) {
+  addProductDiscount(body: {
+    selectedDiscount: string
+    title: string
+    product_id: string
+    brand_id: string
+    categories_id: string
+    quantity: string
+    discount_amount: string
+    start_date: string
+    end_date: string
+  }) {
+    return this.api.post(
+      '/admin/discount-list/addProductDiscount',
+      body,
+      addProductDiscount
+    )
+  }
+
+  deleteProduct(body: { deleteId: number }) {
     return this.api.patch(
       '/admin/product-list/delete',
-      selectedChecked,
+      body,
       deleteProductResult
     )
   }
