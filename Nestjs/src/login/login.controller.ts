@@ -16,38 +16,41 @@ import { LoginService } from './login.service';
 
 let loginParser = object({
   username: string({ trim: true, nonEmpty: true }),
-  password: string({ trim: true, minLength: 6 }),
+  password: string({ trim: true, minLength: 5 }),
 });
 @Controller('login')
 export class LoginController {
   constructor(private loginService: LoginService) {}
 
-  @Post('login')
-  async register(@Body() body: unknown, @Session() session: RequestSession) {
-    let input = loginParser.parse(body, { name: 'body' });
-    let json = await this.loginService.login(input);
-    session.user_id = json.id;
-    session.save();
-    return json;
-  }
+  // @Post('login')
+  // async register(@Body() body: unknown, @Session() session: RequestSession) {
+  // 	let input = loginParser.parse(body, { name: 'body' })
+  // 	let json = await this.loginService.login(input)
+  // 	session.user_id = json.id
+  // 	session.save()
+  // 	return json
+  // }
 
-  @Get('session')
-  getCurrentUser(@Session() session: RequestSession) {
-    return {
-      user_id: session.user_id,
-    };
-  }
+  // @Get('session')
+  // getCurrentUser(@Session() session: RequestSession) {
+  // 	return {
+  // 		user_id: session.user_id,
+  // 	}
+  // }
 
-  @Get('profile')
-  async getProfile(@Session() session: RequestSession) {
-    let user_id = session.user_id;
-    if (!user_id)
-      throw new UnauthorizedException('This API is only for authorized users');
-    let { username } = await this.loginService.getUserProfile(user_id);
-    return {
-      profile: {
-        username,
-      },
-    };
+  // @Get('profile')
+  // async getProfile(@Session() session: RequestSession) {
+  //   let user_id = session.user_id;
+  //   if (!user_id)
+  //     throw new UnauthorizedException('This API is only for authorized users');
+  //   let { username } = await this.loginService.getUserProfile(user_id);
+  //   return {
+  //     profile: {
+  //       username,
+
+  @Post()
+  async login(@Body() body: Body) {
+    let input = loginParser.parse(body);
+    return this.loginService.login(input);
   }
 }

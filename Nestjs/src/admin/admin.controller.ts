@@ -24,7 +24,9 @@ let productParser = object({
   price: number(),
 });
 
-let deleteProductParser = object({});
+let deleteProductParser = object({
+  deleteId: number(),
+});
 @Controller('admin')
 @Dependencies(AdminService)
 export class AdminController {
@@ -53,6 +55,11 @@ export class AdminController {
   @Get('/discount-list')
   getDiscountList() {
     return this.AdminService.getDiscountList();
+  }
+
+  @Get('/trash-list')
+  getTrashList() {
+    return this.AdminService.getTrashList();
   }
 
   @Post('/b&c-list/add')
