@@ -9,11 +9,10 @@ import {
   product,
   productDiscount,
   receipt,
-  test,
   user,
 } from 'src/assets/type'
 
-let bcList = object({
+let bcPageList = object({
   brandList: array(brand),
   categoriesList: array(category),
 })
@@ -22,16 +21,18 @@ let memberList = object({
   memberList: array(user),
 })
 
-let receiptList = object({
+let receiptPageList = object({
   receiptList: array(receipt),
   receiptItemList: array(item),
 })
 
-let productList = object({
+let productPageList = object({
   productList: array(product),
+  brandList: array(brand),
+  categoriesList: array(category),
 })
 
-let discountList = object({
+let discountPageList = object({
   brandList: array(brand),
   categoriesList: array(category),
   productList: array(product),
@@ -39,8 +40,16 @@ let discountList = object({
   priceDiscountList: array(priceDiscount),
 })
 
-let addBrandCategoryResult = object({ result: string() })
+let addBrandCategoryResult = object({
+  name: string(),
+  param: string(),
+})
 
+let addProductResult = object({
+  name: string(),
+})
+
+let deleteProductResult = object({})
 @Injectable({
   providedIn: 'root',
 })
@@ -48,7 +57,7 @@ export class AdminService {
   constructor(private api: ApiService) {}
 
   getBCList() {
-    return this.api.get('/admin/b&c-list', bcList)
+    return this.api.get('/admin/b&c-list', bcPageList)
   }
 
   getMemberList() {
@@ -56,22 +65,35 @@ export class AdminService {
   }
 
   getReceiptList() {
-    return this.api.get('/admin/receipt-list', receiptList)
+    return this.api.get('/admin/receipt-list', receiptPageList)
   }
 
   getProductList() {
-    return this.api.get('/admin/product-list', productList)
+    return this.api.get('/admin/product-list', productPageList)
   }
 
   getDiscountList() {
-    return this.api.get('/admin/discount-list', discountList)
+    return this.api.get('/admin/discount-list', discountPageList)
   }
 
-  addBrandCategory(body: { msgName: string; selectValue: string }) {
+  addBrandCategory(body: { name: string; selectValue: string }) {
     return this.api.post('/admin/b&c-list/add', body, addBrandCategoryResult)
   }
 
-  getHello() {
-    return this.api.delete('/admin/trash-list', {}, test)
+  addProduct(body: {
+    categoryID: string
+    brandID: string
+    name: string
+    price: number
+  }) {
+    return this.api.post('/admin/product-list/add', body, addProductResult)
+  }
+
+  deleteProduct(selectedChecked: Set<unknown>) {
+    return this.api.patch(
+      '/admin/product-list/delete',
+      selectedChecked,
+      deleteProductResult
+    )
   }
 }

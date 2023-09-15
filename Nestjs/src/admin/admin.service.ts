@@ -1,31 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
-
-import { productList } from 'source/product';
-
 @Injectable()
 export class AdminService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
-  addBrandCategory(req) {
-    let param = req.selectValue;
-    if (param === 'brand') {
-      console.log(param + ':' + req.msgName);
-      let result = 'brand';
-      return { result };
-    } else if (param === 'category') {
-      console.log(param + ':' + req.msgName);
-      let result = 'Category';
-      return { result };
-    } else {
-      return;
-    }
+  async deleteProduct(body) {
+    console.log(body);
+    return {};
+  }
+
+  async addBrandCategory(body) {
+    let param = body.selectValue;
+    let name = body.name;
+    let result = await this.knex(param).insert({ name: name });
+    console.log(result);
+
+    return { param, name };
+  }
+
+  async addProduct(body) {
+    let name = body.name;
+    await this.knex('product').insert({
+      brand_id: body.brandID,
+      categories_id: body.categoryID,
+      name: name,
+      price: body.price,
+      stock: 100,
+      is_delete: false,
+    });
+    return { name };
   }
 
   async getBCList() {
-    let brandList = await this.knex.select('*').from('brand');
+    let brandList = await this.knex.select('*').from('brand').orderBy('id');
 
-    let categoriesList = await this.knex.select('*').from('categories');
+    let categoriesList = await this.knex
+      .select('*')
+      .from('categories')
+      .orderBy('id');
 
     return { brandList, categoriesList };
   }
@@ -52,12 +64,6 @@ export class AdminService {
       .from('receipt')
       .leftJoin('users', 'user_id', 'users.id')
       .leftJoin('pos', 'pos_id', 'pos.id');
-    receiptList = receiptList.map((receipt) => {
-      return {
-        ...receipt,
-        date: receipt.date.toISOString().split('T')[0],
-      };
-    });
 
     let receiptItemList = await this.knex.select('*').from('receipt_item');
     console.log(receiptItemList);
@@ -79,11 +85,17 @@ export class AdminService {
       )
       .from('product')
       .leftJoin('brand', 'brand_id', 'brand.id')
-      .leftJoin('categories', 'categories_id', 'categories.id');
+      .leftJoin('categories', 'categories_id', 'categories.id')
+      .orderBy('product.id');
 
-    console.log(productList);
+    let brandList = await this.knex.select('*').from('brand').orderBy('id');
 
-    return { productList };
+    let categoriesList = await this.knex
+      .select('*')
+      .from('categories')
+      .orderBy('id');
+
+    return { productList, brandList, categoriesList };
   }
 
   async getDiscountList() {
@@ -97,9 +109,12 @@ export class AdminService {
       .from('quantity_discount')
       .where('is_delete', 'false');
 
-    let brandList = await this.knex.select('*').from('brand');
+    let brandList = await this.knex.select('*').from('brand').orderBy('id');
 
-    let categoriesList = await this.knex.select('*').from('categories');
+    let categoriesList = await this.knex
+      .select('*')
+      .from('categories')
+      .orderBy('id');
 
     let productList = await this.knex
       .select(
@@ -125,10 +140,5 @@ export class AdminService {
       brandList,
       categoriesList,
     };
-  }
-
-  getHello() {
-    let result = 'Hello World';
-    return { result };
   }
 }

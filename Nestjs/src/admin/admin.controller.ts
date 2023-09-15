@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Dependencies,
@@ -9,7 +10,21 @@ import {
   Req,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
+import { array, number, object, string } from 'cast.ts';
 
+let bcParser = object({
+  name: string(),
+  selectValue: string(),
+});
+
+let productParser = object({
+  categoryID: string(),
+  brandID: string(),
+  name: string(),
+  price: number(),
+});
+
+let deleteProductParser = object({});
 @Controller('admin')
 @Dependencies(AdminService)
 export class AdminController {
@@ -41,13 +56,19 @@ export class AdminController {
   }
 
   @Post('/b&c-list/add')
-  addBrandCategory(@Req() request: Request) {
-    let req = request.body;
-    return this.AdminService.addBrandCategory(req);
+  async addBrandCategory(@Body() body: Body) {
+    let input = bcParser.parse(body);
+    return this.AdminService.addBrandCategory(input);
+  }
+  @Post('/product-list/add')
+  async addProduct(@Body() body: Body) {
+    let input = productParser.parse(body);
+    return this.AdminService.addProduct(input);
   }
 
-  @Delete('/trash-list')
-  getHello() {
-    return this.AdminService.getHello();
+  @Patch('/product-list/delete')
+  async deleteProduct(@Body() body: Body) {
+    let input = deleteProductParser.parse(body);
+    return this.AdminService.deleteProduct(input);
   }
 }

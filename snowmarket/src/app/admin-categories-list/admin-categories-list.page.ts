@@ -13,7 +13,7 @@ import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table'
 import { Brand, Category } from 'src/assets/type'
 import { IonModal } from '@ionic/angular'
 
-import { sweetalert2error } from 'utils/sweetalert2'
+import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { AdminService } from '../admin.service'
 
 @Component({
@@ -40,7 +40,7 @@ export class AdminCategoriesListPage implements OnInit {
 
   brandList: Config = {
     ...DefaultConfig,
-    checkboxes: true,
+    checkboxes: false,
     fixedColumnWidth: true,
     orderEnabled: true,
     rows: 4,
@@ -84,7 +84,7 @@ export class AdminCategoriesListPage implements OnInit {
     ]
 
     this.categoriesList = { ...DefaultConfig }
-    this.categoriesList.checkboxes = true
+    this.categoriesList.checkboxes = false
     this.categoriesList.fixedColumnWidth = true
     this.categoriesList.orderEnabled = true
     this.categoriesList.threeWaySort = true
@@ -114,8 +114,13 @@ export class AdminCategoriesListPage implements OnInit {
     }
   }
 
-  cancel() {
-    this.modal.dismiss()
+  normalize() {
+    this.canDismiss = false
+  }
+
+  dismiss(modal: any) {
+    this.canDismiss = true
+    modal.dismiss()
   }
 
   confirm() {
@@ -126,7 +131,6 @@ export class AdminCategoriesListPage implements OnInit {
       sweetalert2error('Missing Name')
       return
     } else if (this.selectValue && this.name != '') {
-      this.canDismiss = true
       this.addRow(this.selectValue)
     }
   }
@@ -135,19 +139,22 @@ export class AdminCategoriesListPage implements OnInit {
     this.selectValue = event.target.value
   }
 
-  @Output() async addRow(selectValue: string): Promise<void> {
+  async addRow(selectValue: string): Promise<void> {
     if (!this.name) {
+      sweetalert2error('Missing Name')
+      return
+    } else if (!this.selectValue) {
+      sweetalert2error('Missing Brand/Category')
       return
     }
 
     let json = await this.adminService.addBrandCategory({
-      msgName: this.name,
+      name: this.name,
       selectValue,
     })
-
-    let result = json.result
-    console.log(' From Nestjs : ' + result)
-
+    this.loadList()
+    await sweetalert2Success(`Adding ${json.param} : ${json.name}`)
+    this.canDismiss = true
     this.name = ''
     this.modal.dismiss()
   }

@@ -18,5 +18,8 @@ export function sweetalert2Success(msg: string) {
     confirmButtonColor: '#ffa065',
     confirmButtonText: 'OK',
     heightAuto: false,
+    didClose: () => {
+      return
+    },
   })
 }

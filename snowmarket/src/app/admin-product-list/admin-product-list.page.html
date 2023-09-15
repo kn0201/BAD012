@@ -19,17 +19,176 @@
       <ngx-table
         [configuration]="configuration"
         [data]="data"
+        (event)="eventEmitted($event)"
         #table
         [columns]="columns"
       >
       </ngx-table>
     </div>
   </div>
+
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
+    <ion-fab-button><ion-icon name="menu"></ion-icon></ion-fab-button
+    ><ion-fab-list side="top">
+      <ion-fab-button id="open-modal">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="trash" (click)="deleteConfirm()"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
+
+  <ion-modal
+    trigger="open-modal"
+    [canDismiss]="canDismiss"
+    (didDismiss)="normalize()"
+    #productModal
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="dismiss(productModal)">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title class="text-center">Adding Product</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="submit()" [strong]="true">Confirm</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item [button]="true" [detail]="false" id="select-categoryID">
+          <ion-label>Category ID</ion-label>
+          <div slot="end" id="selectedCategoryID">{{ this.categoryMsg }}</div>
+          <ion-modal
+            trigger="select-categoryID"
+            #categoryModal
+            [canDismiss]="canDismiss"
+            (didDismiss)="normalize()"
+          >
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-buttons slot="start">
+                    <ion-button (click)="dismiss(categoryModal)"
+                      >Cancel</ion-button
+                    >
+                  </ion-buttons>
+                  <ion-title class="text-center">Category ID</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button
+                      method="submit"
+                      (click)="dismiss(categoryModal)"
+                      [strong]="true"
+                      >Confirm</ion-button
+                    >
+                  </ion-buttons>
+                </ion-toolbar>
+                <ion-toolbar>
+                  <ion-searchbar
+                    (ionInput)="searchCategory($event)"
+                  ></ion-searchbar>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content class="ion-padding">
+                <ion-list [inset]="true">
+                  <ion-item *ngFor="let category of filteredCategory">
+                    <ion-checkbox
+                      [value]="category.id"
+                      [name]="category.name"
+                      (ionChange)="selected($event,'selectedCategoryID','searchCategoryParam','categoryMsg','selectedCategoryName','categories_id')"
+                      [checked]="category.id.toString() == selectedCategoryID"
+                    >
+                      {{category.id}} : {{ category.name }}</ion-checkbox
+                    >
+                  </ion-item>
+                </ion-list>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+
+        <ion-item [button]="true" [detail]="false" id="select-brandID">
+          <ion-label>Brand ID</ion-label>
+          <div slot="end" id="selectedBrandID">{{ this.brandMsg }}</div>
+          <ion-modal
+            trigger="select-brandID"
+            #brandModal
+            [canDismiss]="canDismiss"
+            (didDismiss)="normalize()"
+          >
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-buttons slot="start">
+                    <ion-button (click)="dismiss(brandModal)"
+                      >Cancel</ion-button
+                    >
+                  </ion-buttons>
+                  <ion-title class="text-center">Brand ID</ion-title>
+                  <ion-buttons slot="end">
+                    <ion-button
+                      method="submit"
+                      (click)="dismiss(brandModal)"
+                      [strong]="true"
+                      >Confirm</ion-button
+                    >
+                  </ion-buttons>
+                </ion-toolbar>
+                <ion-toolbar>
+                  <ion-searchbar
+                    (ionInput)="searchBrand($event)"
+                  ></ion-searchbar>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content class="ion-padding">
+                <ion-list [inset]="true">
+                  <ion-item *ngFor="let brand of filteredBrand">
+                    <ion-checkbox
+                      [value]="brand.id"
+                      [name]="brand.name"
+                      (ionChange)="selected($event,'selectedBrandID','searchBrandParam','brandMsg','selectedBrandName','brand_id')"
+                      [checked]="brand.id.toString() == selectedBrandID"
+                    >
+                      {{brand.id}} : {{ brand.name }}</ion-checkbox
+                    >
+                  </ion-item>
+                </ion-list>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Product Name*</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Product Name"
+            [(ngModel)]="name"
+            required="true"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Price*</ion-label>
+          <ion-input
+            type="text"
+            placeholder="Price"
+            [(ngModel)]="price"
+            required="true"
+          ></ion-input>
+        </ion-item>
+      </ion-content>
+      <ion-footer>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button [strong]="true" (click)="clear()">Clear</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
   <ng-template #productHeaderActionTemplate>
     <div class="search-template">
       <label for="filterHeaderSearch">Search Product</label>
