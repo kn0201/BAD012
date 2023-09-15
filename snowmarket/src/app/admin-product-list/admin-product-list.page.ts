@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { AdminService } from '../admin.service'
+import { number } from 'cast.ts'
 
 @Component({
   selector: 'app-admin-product-list',
@@ -72,6 +73,8 @@ export class AdminProductListPage implements OnInit {
   categoryMsg = this.originalMsg
 
   canDismiss = false
+
+  arrayID: Array<number> = []
 
   ngOnInit() {
     this.loadList()
@@ -244,20 +247,26 @@ export class AdminProductListPage implements OnInit {
       case 'onCheckboxSelect':
         if (this.selectedChecked.has($event.value.rowId)) {
           this.selectedChecked.delete($event.value.rowId)
-          console.log(this.selectedChecked)
+          let index = this.arrayID.indexOf($event.value.row.id)
+          if (index !== -1) {
+            this.arrayID.splice(index, 1)
+          }
         } else {
           this.selectedChecked.add($event.value.rowId)
-          console.log(this.selectedChecked)
+          this.arrayID.push($event.value.row.id)
         }
         break
       case 'onSelectAll':
         this.data.forEach((_, key) => {
           if (this.selectedChecked.has(key)) {
             this.selectedChecked.delete(key)
-            console.log(this.selectedChecked)
+            let index = this.arrayID.indexOf(_.id)
+            if (index !== -1) {
+              this.arrayID.splice(index, 1)
+            }
           } else {
             this.selectedChecked.add(key)
-            console.log(this.selectedChecked)
+            this.arrayID.push(_.id)
           }
         })
         break
@@ -265,12 +274,6 @@ export class AdminProductListPage implements OnInit {
   }
 
   deleteConfirm() {
-    let arrayID = []
-    for (let id of this.selectedChecked) {
-      arrayID.push(id)
-      console.log(arrayID)
-    }
-
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -282,13 +285,18 @@ export class AdminProductListPage implements OnInit {
       heightAuto: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.delete()
+        for (let id of this.arrayID) {
+          console.log(id)
+          this.delete(id)
+        }
       }
     })
   }
 
-  async delete() {
-    await this.adminService.deleteProduct(this.selectedChecked)
+  async delete(id: number) {
+    await this.adminService.deleteProduct({
+      deleteId: id,
+    })
     Swal.fire({
       title: 'Finish',
       text: 'Product Deleted',

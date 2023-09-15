@@ -130,9 +130,9 @@ export class CustomerPage implements OnInit, AfterViewInit {
   async detectFrame() {
     this.context.drawImage(this.video.nativeElement, 0, 0)
     let predictions = await this.model.detect(this.video.nativeElement)
-    // console.log('predictions', predictions)
 
     for (let prediction of predictions) {
+      console.log('predictions', prediction.class)
       this.context.strokeStyle = 'red'
       this.context.beginPath()
       this.context.rect(

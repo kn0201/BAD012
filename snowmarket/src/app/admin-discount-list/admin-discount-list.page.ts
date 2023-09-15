@@ -1,12 +1,10 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   OnInit,
   Output,
   TemplateRef,
   ViewChild,
 } from '@angular/core'
-import { IonModal, LoadingController, ModalController } from '@ionic/angular'
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table'
 
 import {
@@ -77,7 +75,7 @@ export class AdminDiscountListPage implements OnInit {
   categoriesListData: Category[] = []
   filteredCategory: Category[] = []
 
-  title: string | null = ''
+  title: string = ''
   product_id!: number
   brand_id!: number
   categories_id!: number
@@ -359,11 +357,67 @@ export class AdminDiscountListPage implements OnInit {
     )
   }
 
-  @Output() async addRow(): Promise<void> {
+  async addRow(): Promise<void> {
     if (this.title == '') {
-      sweetalert2error('miss title')
+      sweetalert2error('Missing title')
       return
     }
+    if (this.selectedProductID == '') {
+      sweetalert2error('Missing Product')
+      return
+    }
+    if (this.selectedBrandID == '') {
+      sweetalert2error('Missing Brand')
+      return
+    }
+    if (this.selectedCategoryID == '') {
+      sweetalert2error('Missing Product')
+      return
+    }
+    if (this.selectedDiscount == 'product_discount' && this.quantity == '') {
+      sweetalert2error('Missing Quantity')
+      return
+    }
+    if (
+      this.selectedDiscount == 'product_discount' &&
+      this.discount_amount == ''
+    ) {
+      sweetalert2error('Missing Discount Amount')
+      return
+    }
+    if (this.selectedDiscount == 'price_discount' && this.total_price == '') {
+      sweetalert2error('Missing Total Price')
+      return
+    }
+    if (this.selectedDiscount == 'price_discount' && this.discount_rate == '') {
+      sweetalert2error('Missing Discount Rate')
+      return
+    }
+    if (this.selectedStartDate == '') {
+      sweetalert2error('Missing Start Date')
+      return
+    }
+    if (this.selectedEndDate == '') {
+      sweetalert2error('Missing End Date')
+      return
+    }
+    if (this.selectedDiscount == 'price_discount') {
+      let json = await this.adminService.addProductDiscount({
+        selectedDiscount: this.selectedDiscount,
+        title: this.title,
+        product_id: this.selectedProductID,
+        brand_id: this.selectedBrandID,
+        categories_id: this.selectedCategoryID,
+        quantity: this.quantity,
+        discount_amount: this.discount_amount,
+        start_date: this.selectedStartDate,
+        end_date: this.selectedEndDate,
+      })
+    } else if (this.selectedDiscount == 'price_discount') {
+      // let json = await this.adminService.addPriceDiscount({
+      // })
+    }
+
     // this.clear()
     // this.addModal.dismiss()
   }

@@ -129,3 +129,13 @@ export let item = object({
 export let test = object({
   result: string(),
 })
+
+export interface DeletedProduct {
+  id: number
+  name: string
+}
+
+export let deletedProduct = object({
+  id: number(),
+  name: string(),
+})

@@ -5,8 +5,16 @@
       src="../../assets/image/Biglogo.webp"
     ></ion-img>
     <ion-buttons class="login">
-      <button id="click-trigger">會員登入</button>
-      <ion-popover trigger="click-trigger" triggerAction="click">
+      <button id="click-trigger" (click)="presentPopover($event)">
+        會員登入
+      </button>
+      <ion-popover
+        #popover
+        trigger="click-trigger"
+        triggerAction="click"
+        [isOpen]="isOpen"
+        (didDismiss)="isOpen = false"
+      >
         <ng-template>
           <ion-content class="ion-padding">
             <div class="form">
@@ -35,23 +43,22 @@
                     <h1>Sign in</h1>
                     <ion-item>
                       <ion-input
-                        type="email"
-                        [(ngModel)]="user.username"
+                        type="text"
+                        [(ngModel)]="username"
                         name="username"
                         labelPlacement="Email"
-                        placeholder="Email"
+                        placeholder="Username"
                       />
                     </ion-item>
                     <ion-item>
                       <ion-input
                         type="password"
-                        [(ngModel)]="user.password"
+                        [(ngModel)]="password"
                         name="password"
                         labelPlacement="Password"
                         placeholder="password"
                       />
                     </ion-item>
-
                     <ion-button (click)="login()">Login In</ion-button>
                   </form>
                 </div>

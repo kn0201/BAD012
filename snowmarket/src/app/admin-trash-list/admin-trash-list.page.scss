@@ -1,8 +1,56 @@
-ion-content.background{
-    --background: none;
-    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url(../../assets/image/backgroundLogo.png);
-    background-color: white;
-    background-position: center center;
-    background-size: contain;
-    background-repeat: no-repeat;
+ion-content.background {
+  --background: none;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url(../../assets/image/backgroundLogo.png);
+  background-color: white;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.position {
+  cursor: pointer;
+  font-weight: lighter;
+}
+
+.position:hover {
+  background-color: #e6e6e6;
+}
+
+.search-template {
+  min-width: max-content;
+  padding: 0.25rem 0.4rem;
+}
+
+.columns {
+  margin: 0.5rem;
+}
+.categoriesColumn {
+  padding-bottom: 3rem;
+}
+.form-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: #fff;
+  background-image: none;
+  border: 0.05rem solid #bcc3ce;
+  border-radius: 0.1rem;
+  color: #3b4351;
+  display: block;
+  font-size: 0.8rem;
+  height: 1.8rem;
+  line-height: 1.2rem;
+  max-width: 100%;
+  outline: 0;
+  // padding: 0.25rem 0.4rem;
+  position: relative;
+  transition: background 0.2s, border 0.2s, box-shadow 0.2s, color 0.2s;
+  width: 100%;
+}
+
+h2 {
+  margin-left: 0.5rem;
 }
