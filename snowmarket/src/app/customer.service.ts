@@ -17,7 +17,18 @@ let item = object({
   discount_quantity: nullable(number()),
   discount_amount: nullable(number()),
 })
-let product = object({ item })
+
+let price_discount = object({
+  price_discount_id: number(),
+  price_discount_title: string(),
+  price_discount_total: number(),
+  price_discount_rate: string(),
+})
+
+let product = object({
+  item: item,
+  price_discount: nullable(array(price_discount)),
+})
 @Injectable({
   providedIn: 'root',
 })

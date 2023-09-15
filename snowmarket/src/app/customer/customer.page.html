@@ -72,6 +72,16 @@
                         ></ng-container> -->
                       </ng-container>
                     </tbody>
+                    <tfoot>
+                      <tr *ngFor="let discount of price_discount">
+                        <th scope="row"></th>
+                        <td>{{discount.name||null}}</td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center">{{discount.price||null}}</td>
+                        <td *ngIf="showDeleteButton"></td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </ion-list>
