@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
 
 const routes: Routes = [
   {
@@ -20,6 +20,11 @@ const routes: Routes = [
       import('./login/login.module').then((m) => m.LoginPageModule),
   },
   {
+    path: 'customer',
+    loadChildren: () =>
+      import('./customer/customer.module').then((m) => m.CustomerPageModule),
+  },
+  {
     path: 'customer/:id',
     loadChildren: () =>
       import('./customer/customer.module').then((m) => m.CustomerPageModule),
@@ -29,7 +34,7 @@ const routes: Routes = [
   //   loadChildren: () =>
   //     import('./login/login.module').then((m) => m.LoginPageModule),
   // },
-];
+]
 
 @NgModule({
   imports: [

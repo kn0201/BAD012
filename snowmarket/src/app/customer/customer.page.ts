@@ -120,7 +120,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
     var publishable_key = 'rf_lmQyrjb8JIWuxlFLi7CDwWUSPZq1'
     var toLoad = {
-      model: 'bad-ovtnr',
+      model: 'bad012-r9unv',
       version: 1,
     }
 

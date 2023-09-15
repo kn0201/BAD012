@@ -5,7 +5,7 @@ import { NotFoundError } from 'rxjs'
 import { DOMAIN } from 'utils/domain'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { LoginService } from '../login.service'
-import { LoginService } from '../login.service'
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -32,9 +32,7 @@ export class LoginPage implements OnInit {
   // errors = {
   //   username: '',
   // }
-  email: string | null = null
-
-  constructor(private Login: LoginService) {}
+  email: string = ''
 
   ngOnInit() {}
 
@@ -80,6 +78,9 @@ export class LoginPage implements OnInit {
     console.log(json)
 
     if (json.role == 'member') {
+      sweetalert2Success('Logined')
+      this.popover.dismiss()
+      this.router.navigate(['/customer'])
     } else if (json.role == 'admin') {
       sweetalert2Success('Logined')
       this.popover.dismiss()
@@ -90,6 +91,24 @@ export class LoginPage implements OnInit {
     }
   }
 
+  async reigist() {
+    if (this.username == '') {
+      sweetalert2error('Missing User Name')
+      return
+    } else if (this.email == '') {
+      sweetalert2error('Missing Email Address')
+      return
+    } else if (this.password == '') {
+      sweetalert2error('Missing Password')
+      return
+    }
+    let json = await this.loginService.reigist({
+      username: this.username,
+      email: this.email,
+      password: this.password,
+    })
+    await sweetalert2Success(`reigist ${json.name}`)
+  }
   // async login(): Promise<any> {
   //   let res = await fetch(`${DOMAIN}/login`, {
   //     headers: {

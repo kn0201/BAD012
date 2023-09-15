@@ -10,6 +10,14 @@ import { string } from 'cast.ts';
 import { InjectKnex } from 'nestjs-knex';
 @Injectable()
 export class LoginService {
+  //   } catch (error) {
+  //     if (String(error).includes('username_unique')) {
+  //       throw new ConflictException('this username is already used');
+  //     } else {
+  //       throw error;
+  //     }
+  //   }
+  // }
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
   // async reregister(input: {
@@ -64,6 +72,19 @@ export class LoginService {
   //     }
   //   }
   // }
+
+  async addUser(body) {
+    let name = body.name;
+    await this.knex('users').insert({
+      username: body.username,
+      email: body.email,
+      password: body.password,
+      role: 'member',
+      point: 0,
+      is_delete: false,
+    });
+    return { name };
+  }
 
   async login(input) {
     let foundUser = await this.knex('users')
