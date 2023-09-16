@@ -70,7 +70,10 @@ export class CustomerPage implements OnInit, AfterViewInit {
   canDismiss = true
   showDeleteButton = false
 
+  totalQuantity: number = 0
+  totalPrice: number = 0
   totalDiscount: number = 0
+  totalBalance: number = 0
 
   // Add Item Section
   // searchedItemIDList: number[] = []
@@ -251,9 +254,11 @@ export class CustomerPage implements OnInit, AfterViewInit {
           this.calculateTotalDiscount()
         }
       }
+      this.calculateTotalQuantity()
+      this.calculateTotalPrice()
+      this.calculateBalance()
       if (json.price_discount) {
         let discountAmount
-        let maxDiscountAmount
         for (const discount of json.price_discount) {
           const {
             price_discount_id,
@@ -262,36 +267,26 @@ export class CustomerPage implements OnInit, AfterViewInit {
             price_discount_rate,
           } = discount
           let total =
-            this.calculateTotalPrice() -
+            this.totalPrice -
             +this.discounts
               .reduce((total, discount) => total + discount.price, 0)
               .toFixed(2)
-          console.log(total)
-
           if (total >= price_discount_total) {
             if (price_discount_rate.startsWith('-')) {
               discountAmount = parseFloat(price_discount_rate)
-              maxDiscountAmount = discountAmount
             } else if (price_discount_rate.startsWith('*')) {
               const discountMultiplier = parseFloat(
                 price_discount_rate.slice(1)
               )
               discountAmount = total * (discountMultiplier - 1)
-              maxDiscountAmount = discountAmount
             }
-            console.log('discountAmount', discountAmount)
-            if (
-              typeof discountAmount !== 'undefined' &&
-              maxDiscountAmount !== undefined
-            ) {
+            if (typeof discountAmount !== 'undefined') {
               const PriceDiscount = {
                 id: price_discount_id,
                 name: price_discount_title,
                 price: +discountAmount.toFixed(2),
               }
-              console.log('PriceDiscount', PriceDiscount)
               let checkPriceDiscountList = this.price_discount.length > 0
-              console.log('checkPriceDiscountList', checkPriceDiscountList)
               if (!checkPriceDiscountList) {
                 this.price_discount.push(PriceDiscount)
               } else {
@@ -299,13 +294,11 @@ export class CustomerPage implements OnInit, AfterViewInit {
                 this.price_discount[0].name = price_discount_title
                 this.price_discount[0].price = +discountAmount.toFixed(2)
               }
-              console.log('this.price_discount', this.price_discount)
             }
           }
         }
         this.calculateTotalDiscount()
       }
-
       console.log('this.item', this.items)
       console.log('this.discounts', this.discounts)
       console.log('this.originals', this.originals)
@@ -408,15 +401,17 @@ export class CustomerPage implements OnInit, AfterViewInit {
     })
   }
   calculateTotalQuantity(): number {
-    return +this.originals
+    this.totalQuantity = +this.originals
       .reduce((total, item) => total + item.quantity, 0)
       .toFixed(2)
+    return this.totalQuantity
   }
 
   calculateTotalPrice(): number {
-    return +this.originals
+    this.totalPrice = +this.originals
       .reduce((total, item) => total + item.price, 0)
       .toFixed(2)
+    return this.totalPrice
   }
 
   calculateTotalDiscount() {
@@ -432,9 +427,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
   }
 
   calculateBalance(): number {
-    const totalPrice = this.calculateTotalPrice()
-    // const totalDiscount = this.calculateTotalDiscount()
-    return +(totalPrice - this.totalDiscount).toFixed(2)
+    this.totalBalance = +(this.totalPrice - this.totalDiscount).toFixed(2)
+    return this.totalBalance
   }
 
   // summarizeItem2() {
