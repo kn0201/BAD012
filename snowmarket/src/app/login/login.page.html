@@ -1,14 +1,13 @@
 <ion-content [fullscreen]="true" padding class="background">
   <div id="container">
-    <ion-img
-      class="logo position-absolute top-0 start-50 translate-middle-x"
-      src="../../assets/image/Biglogo.webp"
-    ></ion-img>
+    <div class="image-container">
+      <ion-img class="logo" src="../../assets/image/Biglogo.webp"></ion-img>
+    </div>
     <ion-buttons class="login">
       <button id="click-trigger" (click)="presentPopover($event)">
         會員登入
       </button>
-      <ion-popover
+      <ion-modal
         #popover
         trigger="click-trigger"
         triggerAction="click"
@@ -37,8 +36,9 @@
                         type="text"
                         [(ngModel)]="username"
                         name="username"
+                        [clearInput]="true"
                         labelPlacement="username"
-                        placeholder="user name"
+                        placeholder="Username"
                       />
                     </ion-item>
                     <ion-item>
@@ -46,6 +46,7 @@
                         type="email"
                         [(ngModel)]="email"
                         name="email"
+                        [clearInput]="true"
                         labelPlacement="Email"
                         placeholder="Email"
                       />
@@ -55,6 +56,7 @@
                         type="password"
                         [(ngModel)]="password"
                         name="password"
+                        [clearInput]="true"
                         labelPlacement="Password"
                         placeholder="password"
                       />
@@ -70,6 +72,7 @@
                         type="text"
                         [(ngModel)]="username"
                         name="username"
+                        [clearInput]="true"
                         labelPlacement="Email"
                         placeholder="Username"
                       />
@@ -79,6 +82,7 @@
                         type="password"
                         [(ngModel)]="password"
                         name="password"
+                        [clearInput]="true"
                         labelPlacement="Password"
                         placeholder="password"
                       />
@@ -120,7 +124,7 @@
             </div>
           </ion-content>
         </ng-template>
-      </ion-popover>
+      </ion-modal>
       <a href="../customer/customer.page.html">
         <button href="../customer/customer.page.html">非會員</button>
       </a>

@@ -27,17 +27,17 @@ export class LoginService {
 
   async login(input) {
     let foundUser = await this.knex('users')
-      .select('role')
+      .select('role', 'id')
       .where('username', input.username)
       .where('password', input.password)
       .first();
-
     if (!foundUser) {
       return { error: 'Wrong Username/Password' };
     }
     let role = foundUser.role;
+    let id = foundUser.id;
     console.log(role);
 
-    return { role: role, error: null };
+    return { role: role, error: null, id: id };
   }
 }

@@ -53,6 +53,13 @@ let addPriceDiscountParser = object({
   start_date: string(),
   end_date: string(),
 });
+
+let receiptParser = object({
+  items: array(object()),
+  discount: number(),
+  balance: number(),
+});
+
 @Controller('admin')
 export class AdminController {
   constructor(private AdminService: AdminService) {}
