@@ -136,7 +136,10 @@
                   placeholder="Enter Product ID to add item into cart..."
                   [(ngModel)]="findID"
                 ></ion-input>
-                <ion-button slot="end" color="secondary" (click)="addItem()"
+                <ion-button
+                  slot="end"
+                  color="secondary"
+                  (click)="addItemFromInput()"
                   >Add
                 </ion-button>
               </ion-item>

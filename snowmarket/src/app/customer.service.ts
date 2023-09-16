@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { ApiService } from './api.service'
-import { array, nullable, number, object, string } from 'cast.ts'
+import { ParseResult, array, nullable, number, object, string } from 'cast.ts'
 
 let item = object({
   id: number(),
@@ -25,10 +25,12 @@ let price_discount = object({
   price_discount_rate: string(),
 })
 
-let product = object({
+let addToCartResult = object({
   item: item,
   price_discount: nullable(array(price_discount)),
 })
+
+export type AddToCartResult = ParseResult<typeof addToCartResult>
 
 let receipt_return = object({})
 @Injectable({
@@ -36,9 +38,15 @@ let receipt_return = object({})
 })
 export class CustomerService {
   constructor(private api: ApiService) {}
-  postID(body: { id: number }) {
-    return this.api.post('/customer', body, product)
+
+  addToCartByProductId(id: number) {
+    return this.api.post('/customer/cart/by-id', { id }, addToCartResult)
   }
+
+  addToCartByProductLabel(label: string) {
+    return this.api.post('/customer/cart/by-label', { label }, addToCartResult)
+  }
+
   postReceipt(body: {
     items: Array<object>
     discount: number

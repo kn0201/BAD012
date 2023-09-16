@@ -14,14 +14,15 @@ export class LoginService {
 
   async addUser(body) {
     let username = body.username;
-    await this.knex('users').insert({
-      username: body.username,
-      email: body.email,
-      password: body.password,
-      role: 'member',
-      point: 0,
-      is_delete: false,
-    });
+    password_hash: await hashPassword(body.password),
+      await this.knex('users').insert({
+        username: body.username,
+        email: body.email,
+        password: body.password,
+        role: 'member',
+        point: 0,
+        is_delete: false,
+      });
     return { username };
   }
 
