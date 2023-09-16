@@ -14,7 +14,7 @@ export class LoginService {
 
   async addUser(body) {
     let username = body.username;
-    let id = await this.knex('users')
+    let result = await this.knex('users')
       .insert({
         username: body.username,
         email: body.email,
@@ -24,6 +24,7 @@ export class LoginService {
         is_delete: false,
       })
       .returning('id');
+    let id = result[0].id;
     return { username: username, id: id };
   }
 

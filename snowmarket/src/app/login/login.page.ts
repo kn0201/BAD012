@@ -56,6 +56,8 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/customer'])
       } else if (json.role == 'admin') {
         sweetalert2Success('Logined')
+        sessionStorage.setItem('username', this.username)
+        sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
         this.router.navigate(['/admin'])
       }
