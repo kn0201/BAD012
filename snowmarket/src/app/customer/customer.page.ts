@@ -75,6 +75,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
   totalDiscount: number = 0
   totalBalance: number = 0
 
+  username: string = 'Guest'
+
   // Add Item Section
   // searchedItemIDList: number[] = []
   // itemListMap: Map<
@@ -106,10 +108,10 @@ export class CustomerPage implements OnInit, AfterViewInit {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
       }
     )
-  }
 
-  isLogin() {
-    return sessionStorage.getItem('user') !== null
+    if (sessionStorage.getItem('username') !== null) {
+      this.username = sessionStorage['username']
+    }
   }
 
   ngAfterViewInit() {
