@@ -157,7 +157,11 @@
                 >Balance<span slot="end">${{totalBalance}}</span></ion-item
               >
               <ion-item>
-                <ion-button slot="end" color="secondary" id="open-modal"
+                <ion-button
+                  slot="end"
+                  color="secondary"
+                  id="open-modal"
+                  [disabled]="totalQuantity === 0"
                   >Checkout</ion-button
                 ><ion-modal trigger="open-modal" [canDismiss]="canDismiss">
                   <ng-template>
@@ -195,23 +199,18 @@
                               {{item.unit_price||null}}
                             </td>
                             <td class="text-center">{{item.quantity||null}}</td>
-                            <td class="text-center">{{item.price}}</td> -->
-                      <!-- <tr *ngFor="let summarizedItem of summarizedItems">
-                            <td>{{summarizedItem.name}}</td>
-                            <td>${{summarizedItem.unit_price}}</td>
-                            <td>{{summarizedItem.quantity}}</td>
-                            <td>${{summarizedItem.price}}</td> -->
-                      <!-- </tr>
+                            <td class="text-center">{{item.price}}</td>
+                      </tr>
                         </tbody>
                         <tfoot>
                           <tr>
                             <th scope="row">Total</th>
                             <td></td>
                             <td class="text-center" style="font-weight: 900">
-                              {{calculateTotalQuantity()}}
+                              {{totalQuantity}}
                             </td>
                             <td class="text-center" style="font-weight: 900">
-                              ${{calculateBalance()}}
+                              ${{totalBalance}}
                             </td>
                           </tr>
                         </tfoot>

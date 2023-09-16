@@ -60,8 +60,15 @@ export class CustomerService {
         .where('start_date', '<=', currentDate)
         .andWhere('end_date', '>=', currentDate)
         .andWhere('is_delete', '=', false);
-      console.log(price_discount);
       return { item, price_discount };
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async postReceipt(receipt) {
+    try {
+      console.log(receipt);
     } catch (err) {
       throw new Error(err);
     }
