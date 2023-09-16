@@ -126,6 +126,12 @@ export class CustomerPage implements OnInit, AfterViewInit {
     this.startCam()
   }
 
+  exit() {
+    sessionStorage.removeItem('user_id')
+    sessionStorage.removeItem('username')
+    this.router.navigate(['/login'])
+  }
+
   async startCam() {
     let stream = await navigator.mediaDevices.getUserMedia({
       audio: false,

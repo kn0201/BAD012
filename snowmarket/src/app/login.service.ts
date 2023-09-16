@@ -10,6 +10,7 @@ let loginResult = object({
 
 let reigist = object({
   username: string(),
+  id: number(),
 })
 @Injectable({
   providedIn: 'root',
