@@ -1,18 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotImplementedException,
-  Param,
-  Post,
-  Session,
-  Sse,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { RouterModule } from '@nestjs/core';
-import { array, id, int, object, string } from 'cast.ts';
-import { RequestSession } from 'utils/session';
+import { Body, Controller, Post } from '@nestjs/common';
+
+import { object, string } from 'cast.ts';
+
 import { LoginService } from './login.service';
 import session from 'express-session';
 import { json } from 'stream/consumers';
@@ -38,11 +27,10 @@ export class LoginController {
     return this.loginService.login(input);
   }
 
-  @Post('/reigist')
-  async addUser(@Body() body: Body, @Session() session: RequestSession) {
+  @Post('/register')
+  async register(@Body() body: Body) {
     let input = userParser.parse(body);
-    session.save();
-    return this.loginService.addUser(input);
+    return this.loginService.register(input);
   }
 
   @Get('session')

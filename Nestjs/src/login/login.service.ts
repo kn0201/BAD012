@@ -1,18 +1,14 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
-import { knex } from 'utils/knex';
+
 import { comparePassword, hashPassword } from 'utils/hash';
-import { string } from 'cast.ts';
+
 import { InjectKnex } from 'nestjs-knex';
 @Injectable()
 export class LoginService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
-  async addUser(body) {
+  async register(body) {
     let username = body.username;
     let hashedPW = hashPassword(body.password);
     let result = await this.knex('users')

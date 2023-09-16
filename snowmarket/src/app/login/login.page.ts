@@ -1,8 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { number } from 'cast.ts'
-import { NotFoundError } from 'rxjs'
-import { DOMAIN } from 'utils/domain'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { LoginService } from '../login.service'
 
@@ -49,13 +46,15 @@ export class LoginPage implements OnInit {
       let user_id = json.id.toString()
 
       if (json.role == 'member') {
-        sweetalert2Success('Logined')
+        sweetalert2Success('Login Success')
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
         this.router.navigate(['/customer'])
       } else if (json.role == 'admin') {
-        sweetalert2Success('Logined')
+        sweetalert2Success('Login Success')
+        sessionStorage.setItem('username', this.username)
+        sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
         this.router.navigate(['/admin'])
       }
@@ -69,7 +68,7 @@ export class LoginPage implements OnInit {
     return sessionStorage.getItem('user') !== null
   }
 
-  async reigist() {
+  async register() {
     if (this.username == '') {
       sweetalert2error('Missing User Name')
       return
@@ -80,7 +79,7 @@ export class LoginPage implements OnInit {
       sweetalert2error('Missing Password')
       return
     }
-    let json = await this.loginService.reigist({
+    let json = await this.loginService.register({
       username: this.username,
       email: this.email,
       password: this.password,

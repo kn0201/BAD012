@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core'
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { APIDefinition, Columns, Config, DefaultConfig } from 'ngx-easy-table'
 
 import {

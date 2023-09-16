@@ -1,14 +1,14 @@
 ion-content.background {
   --background: none;
   background: linear-gradient(
-      rgba(255, 255, 255, 0.7),
-      rgba(255, 255, 255, 0.7)
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0.6)
     ),
-    url(../../assets/image/百鬼あやめ11月メン限イラスト.webp) 100%;
+    url(../../assets/image/sunset.jpg) 100%;
   background-color: white;
   background-position: center center;
   background-size: 100%;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
 }
 
 h1 {
@@ -16,6 +16,8 @@ h1 {
   display: flex;
   justify-content: center;
   color: #ff4b2b;
+  font-weight: bold;
+  margin: 0;
 }
 
 .image-container {
@@ -24,19 +26,22 @@ h1 {
   align-items: center;
 }
 .logo {
+  margin-top: 3rem;
   align-items: center;
   width: 40%;
 }
 
 ion-modal {
   --width: 800px;
+  --height: 520px;
 }
 
 .login {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 7rem;
   border: 0;
-
+  margin-top: 3rem;
   margin-bottom: 5%;
   text-align: center;
 }
@@ -118,7 +123,8 @@ body {
   margin: -20px 0 50px;
 }
 
-h1 {
+h1.h1Word {
+  color: #eee;
   font-weight: bold;
   margin: 0;
 }

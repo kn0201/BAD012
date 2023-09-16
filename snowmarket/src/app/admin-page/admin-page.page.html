@@ -40,6 +40,11 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
+        <ion-fab slot="fixed" vertical="bottom" horizontal="start">
+          <ion-fab-button>
+            <ion-icon name="log-out" (click)="logout()"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content" class="background">
