@@ -29,6 +29,8 @@ let product = object({
   item: item,
   price_discount: nullable(array(price_discount)),
 })
+
+let receipt_return = object({})
 @Injectable({
   providedIn: 'root',
 })
@@ -36,5 +38,12 @@ export class CustomerService {
   constructor(private api: ApiService) {}
   postID(body: { id: number }) {
     return this.api.post('/customer', body, product)
+  }
+  postReceipt(body: {
+    items: Array<object>
+    discount: number
+    balance: number
+  }) {
+    return this.api.post('/customer/receipt', body, receipt_return)
   }
 }

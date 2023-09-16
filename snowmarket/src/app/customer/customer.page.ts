@@ -481,7 +481,17 @@ export class CustomerPage implements OnInit, AfterViewInit {
     this.showDeleteButton = !this.showDeleteButton
   }
 
-  payment() {
+  async payment() {
+    let receipt_items = this.originals.map((item) => {
+      return { name: item.name, price: item.price }
+    })
+    let json = await this.customerService.postReceipt({
+      items: receipt_items,
+      discount: this.totalDiscount,
+      balance: this.totalBalance,
+    })
+    console.log('receipt json', json)
+
     let timerInterval: any
     Swal.fire({
       title: 'Payment Processing...',
