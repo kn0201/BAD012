@@ -14,6 +14,7 @@ import Swal from 'sweetalert2'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { CustomerService } from '../customer.service'
 import { sweetalert2error } from 'utils/sweetalert2'
+import { Router } from '@angular/router'
 
 declare var roboflow: any
 @Component({
@@ -28,6 +29,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
     unit_price: number
     quantity: number
     price: number
+    stock: number
   }[] = []
   originals: {
     id: number
@@ -35,6 +37,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
     unit_price: number
     quantity: number
     price: number
+    stock: number
   }[] = []
   discounts: {
     id: number
@@ -54,7 +57,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
     unit_price: number
     quantity: number
     price: number
-  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0 }
+    stock: number
+  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0, stock: 0 }
   // summarizedItems: {
   //   id: number
   //   name: string
@@ -62,6 +66,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
   //   price: number
   // }[] = []
 
+  user_id = null
+  username = 'Guest'
   findID: number | string = ''
 
   discountAmount: number = +''
@@ -74,6 +80,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
   totalPrice: number = 0
   totalDiscount: number = 0
   totalBalance: number = 0
+  totalBagAmount: number = 0
 
   // Add Item Section
   // searchedItemIDList: number[] = []
@@ -98,7 +105,10 @@ export class CustomerPage implements OnInit, AfterViewInit {
   model: any
   context!: CanvasRenderingContext2D
 
-  constructor(private customerService: CustomerService) {}
+  constructor(
+    private customerService: CustomerService,
+    private router: Router
+  ) {}
 
   public ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(
@@ -106,6 +116,10 @@ export class CustomerPage implements OnInit, AfterViewInit {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
       }
     )
+    if (sessionStorage['user_id'] != null) {
+      this.user_id = sessionStorage['user_id']
+      this.username = sessionStorage['username']
+    }
   }
 
   ngAfterViewInit() {
@@ -207,6 +221,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
         unit_price: itemData.unit_price,
         quantity: 1,
         price: itemData.unit_price,
+        stock: itemData.product_stock - 1,
       }
       let check = this.items.find((item) => item.id == idToFilter)
       if (!check) {
@@ -215,6 +230,15 @@ export class CustomerPage implements OnInit, AfterViewInit {
       } else {
         check.quantity++
         check.price += newItem.unit_price
+        check.stock--
+        // let checkOriginalsList = this.originals.find(
+        //   (item) => item.id == idToFilter
+        // )
+        // if (checkOriginalsList) {
+        //   checkOriginalsList.quantity++
+        //   checkOriginalsList.price += newItem.unit_price
+        //   checkOriginalsList.stock--
+        // }
         if (
           discount_id &&
           discount_title &&
@@ -235,6 +259,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
             unit_price: +'',
             quantity: +'',
             price: discount_amount,
+            stock: +'',
           }
           let checkDiscountList = this.discounts.find(
             (discount) => discount.id == discount_id
@@ -261,44 +286,46 @@ export class CustomerPage implements OnInit, AfterViewInit {
       if (json.price_discount) {
         let discountAmount
         for (const discount of json.price_discount) {
-          const {
-            price_discount_id,
-            price_discount_title,
-            price_discount_total,
-            price_discount_rate,
-          } = discount
-          let total =
-            this.totalPrice -
-            +this.discounts
-              .reduce((total, discount) => total + discount.price, 0)
-              .toFixed(2)
-          if (total >= price_discount_total) {
-            if (price_discount_rate.startsWith('-')) {
-              discountAmount = parseFloat(price_discount_rate)
-            } else if (price_discount_rate.startsWith('*')) {
-              const discountMultiplier = parseFloat(
-                price_discount_rate.slice(1)
-              )
-              discountAmount = total * (discountMultiplier - 1)
-            }
-            if (typeof discountAmount !== 'undefined') {
-              const PriceDiscount = {
-                id: price_discount_id,
-                name: price_discount_title,
-                price: +discountAmount.toFixed(2),
+          if (discount) {
+            const {
+              price_discount_id,
+              price_discount_title,
+              price_discount_total,
+              price_discount_rate,
+            } = discount
+            let total =
+              this.totalPrice -
+              +this.discounts
+                .reduce((total, discount) => total + discount.price, 0)
+                .toFixed(2)
+            if (total >= price_discount_total) {
+              if (price_discount_rate.startsWith('-')) {
+                discountAmount = parseFloat(price_discount_rate)
+              } else if (price_discount_rate.startsWith('*')) {
+                const discountMultiplier = parseFloat(
+                  price_discount_rate.slice(1)
+                )
+                discountAmount = total * (discountMultiplier - 1)
               }
-              let checkPriceDiscountList = this.price_discount.length > 0
-              if (!checkPriceDiscountList) {
-                this.price_discount.push(PriceDiscount)
-              } else {
-                this.price_discount[0].id = price_discount_id
-                this.price_discount[0].name = price_discount_title
-                this.price_discount[0].price = +discountAmount.toFixed(2)
+              if (typeof discountAmount !== 'undefined') {
+                const PriceDiscount = {
+                  id: price_discount_id,
+                  name: price_discount_title,
+                  price: +discountAmount.toFixed(2),
+                }
+                let checkPriceDiscountList = this.price_discount.length > 0
+                if (!checkPriceDiscountList) {
+                  this.price_discount.push(PriceDiscount)
+                } else {
+                  this.price_discount[0].id = price_discount_id
+                  this.price_discount[0].name = price_discount_title
+                  this.price_discount[0].price = +discountAmount.toFixed(2)
+                }
               }
             }
           }
+          this.calculateTotalDiscount()
         }
-        this.calculateTotalDiscount()
       }
       console.log('this.item', this.items)
       console.log('this.discounts', this.discounts)
@@ -355,26 +382,37 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
   async addBag() {
     const idToFilter = 1
-    try {
-      let json = await this.customerService.postID({ id: idToFilter })
-      if (json) {
-        const newItem = {
-          id: json.item.id,
-          name: json.item.name,
-          unit_price: json.item.unit_price,
-          quantity: 1,
-          price: json.item.unit_price,
-        }
-        let check = this.items.find((item) => item.id == idToFilter)
-        if (!check) {
-          this.items.push(newItem)
-        } else {
-          check.quantity++
-          check.price += newItem.unit_price
-        }
+    let json = await this.customerService.postID({ id: idToFilter })
+    if (json) {
+      const newItem = {
+        id: json.item.id,
+        name: json.item.name,
+        unit_price: json.item.unit_price,
+        quantity: 1,
+        price: json.item.unit_price,
+        stock: json.item.product_stock - 1,
       }
-    } catch (err) {
-      sweetalert2error(err)
+      let check = this.items.find((item) => item.id == idToFilter)
+      if (!check) {
+        this.items.push(newItem)
+        this.originals.push(newItem)
+      } else {
+        check.quantity++
+        check.price += newItem.unit_price
+        check.stock--
+        // let checkOriginalsList = this.originals.find(
+        //   (item) => item.id == idToFilter
+        // )
+        // if (checkOriginalsList) {
+        //   checkOriginalsList.quantity++
+        //   checkOriginalsList.price += newItem.unit_price
+        //   checkOriginalsList.stock--
+        // }
+      }
+      this.calculateTotalQuantity()
+      this.calculateTotalPrice()
+      this.calculateTotalDiscount()
+      this.calculateBalance()
     }
   }
 
@@ -484,46 +522,54 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
   async payment() {
     let receipt_items = this.originals.map((item) => {
-      return { name: item.name, price: item.price }
+      return { name: item.name, quantity: item.quantity, price: item.price }
     })
+    let pos_id = sessionStorage['POS']
+
     let json = await this.customerService.postReceipt({
       items: receipt_items,
+      user_id: this.user_id,
+      pos_id: pos_id,
       discount: this.totalDiscount,
       balance: this.totalBalance,
     })
     console.log('receipt json', json)
-
-    let timerInterval: any
-    Swal.fire({
-      title: 'Payment Processing...',
-      timer: 1500,
-      timerProgressBar: true,
-      heightAuto: false,
-      didOpen: () => {
-        Swal.showLoading()
-      },
-      willClose: () => {
-        clearInterval(timerInterval)
-      },
-    }).then((result) => {
-      if (result.dismiss === Swal.DismissReason.timer) {
-        Swal.fire({
-          title: 'Payment Success!',
-          text: 'You have paid the items.',
-          icon: 'success',
-          confirmButtonColor: '#ffa065',
-          confirmButtonText: 'OK',
-          heightAuto: false,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.items = []
-            this.discounts = []
-            this.originals = []
-            this.price_discount = []
-            this.cancel()
-          }
-        })
-      }
-    })
+    if (json) {
+      let timerInterval: any
+      Swal.fire({
+        title: 'Payment Processing...',
+        timer: 1500,
+        timerProgressBar: true,
+        heightAuto: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+        willClose: () => {
+          clearInterval(timerInterval)
+        },
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          Swal.fire({
+            title: 'Payment Success!',
+            text: 'You have paid the items.',
+            icon: 'success',
+            confirmButtonColor: '#ffa065',
+            confirmButtonText: 'OK',
+            heightAuto: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.items = []
+              this.discounts = []
+              this.originals = []
+              this.price_discount = []
+              this.cancel()
+              this.router.navigate(['/login'])
+              sessionStorage.removeItem('user_id')
+              sessionStorage.removeItem('username')
+            }
+          })
+        }
+      })
+    }
   }
 }

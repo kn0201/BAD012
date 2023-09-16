@@ -8,9 +8,12 @@ let receiptParser = object({
   items: array(
     object({
       name: string(),
+      quantity: number(),
       price: number(),
     }),
   ),
+  user_id: number(),
+  pos_id: number(),
   discount: number(),
   balance: number(),
 });

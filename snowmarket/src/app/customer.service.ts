@@ -18,16 +18,19 @@ let item = object({
   discount_amount: nullable(number()),
 })
 
-let price_discount = object({
-  price_discount_id: number(),
-  price_discount_title: string(),
-  price_discount_total: number(),
-  price_discount_rate: string(),
-})
+let price_discount = nullable(
+  object({
+    price_discount_id: number(),
+    price_discount_title: string(),
+    price_discount_total: number(),
+    price_discount_rate: string(),
+  })
+)
 
 let product = object({
   item: item,
   price_discount: nullable(array(price_discount)),
+  // error: nullable(string()),
 })
 
 let receipt_return = object({})
@@ -41,6 +44,8 @@ export class CustomerService {
   }
   postReceipt(body: {
     items: Array<object>
+    user_id: number | null
+    pos_id: number
     discount: number
     balance: number
   }) {
