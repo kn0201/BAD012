@@ -101,7 +101,7 @@ export let productDiscount = object({
 })
 export interface Receipt {
   id: number
-  username: string
+  username: string | null
   pos_name: string
   total: number
   discount_total: number
@@ -110,7 +110,7 @@ export interface Receipt {
 
 export let receipt = object({
   id: number(),
-  username: string(),
+  username: nullable(string()),
   pos_name: string(),
   total: number(),
   discount_total: number(),

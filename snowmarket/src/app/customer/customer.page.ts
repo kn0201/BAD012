@@ -30,7 +30,6 @@ export class CustomerPage {
     unit_price: number
     quantity: number
     price: number
-    stock: number
   }[] = []
   originals: {
     id: number
@@ -38,7 +37,6 @@ export class CustomerPage {
     unit_price: number
     quantity: number
     price: number
-    stock: number
   }[] = []
   discounts: {
     id: number
@@ -58,8 +56,7 @@ export class CustomerPage {
     unit_price: number
     quantity: number
     price: number
-    stock: number
-  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0, stock: 0 }
+  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0 }
   // summarizedItems: {
   //   id: number
   //   name: string
@@ -118,13 +115,12 @@ export class CustomerPage {
     private router: Router
   ) {}
 
-  // public ngOnInit(): void {
-  //   WebcamUtil.getAvailableVideoInputs().then(
-  //     (mediaDevices: MediaDeviceInfo[]) => {
-  //       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
-  //     }
-  //   )
-  // }
+  public ngOnInit(): void {
+    if (sessionStorage['user_id'] != null) {
+      this.user_id = sessionStorage['user_id']
+      this.username = sessionStorage['username']
+    }
+  }
 
   async ionViewDidEnter() {
     await this.startCam()
@@ -133,12 +129,6 @@ export class CustomerPage {
     if (this.mediaStream) {
       this.mediaStream.getTracks().forEach((track) => track.stop())
     }
-  }
-
-  exit() {
-    sessionStorage.removeItem('user_id')
-    sessionStorage.removeItem('username')
-    this.router.navigate(['/login'])
   }
 
   exit() {
@@ -329,37 +319,41 @@ export class CustomerPage {
     if (json.price_discount) {
       let discountAmount
       for (const discount of json.price_discount) {
-        const {
-          price_discount_id,
-          price_discount_title,
-          price_discount_total,
-          price_discount_rate,
-        } = discount
-        let total =
-          this.totalPrice -
-          +this.discounts
-            .reduce((total, discount) => total + discount.price, 0)
-            .toFixed(2)
-        if (total >= price_discount_total) {
-          if (price_discount_rate.startsWith('-')) {
-            discountAmount = parseFloat(price_discount_rate)
-          } else if (price_discount_rate.startsWith('*')) {
-            const discountMultiplier = parseFloat(price_discount_rate.slice(1))
-            discountAmount = total * (discountMultiplier - 1)
-          }
-          if (typeof discountAmount !== 'undefined') {
-            const PriceDiscount = {
-              id: price_discount_id,
-              name: price_discount_title,
-              price: +discountAmount.toFixed(2),
+        if (discount) {
+          const {
+            price_discount_id,
+            price_discount_title,
+            price_discount_total,
+            price_discount_rate,
+          } = discount
+          let total =
+            this.totalPrice -
+            +this.discounts
+              .reduce((total, discount) => total + discount.price, 0)
+              .toFixed(2)
+          if (total >= price_discount_total) {
+            if (price_discount_rate.startsWith('-')) {
+              discountAmount = parseFloat(price_discount_rate)
+            } else if (price_discount_rate.startsWith('*')) {
+              const discountMultiplier = parseFloat(
+                price_discount_rate.slice(1)
+              )
+              discountAmount = total * (discountMultiplier - 1)
             }
-            let checkPriceDiscountList = this.price_discount.length > 0
-            if (!checkPriceDiscountList) {
-              this.price_discount.push(PriceDiscount)
-            } else {
-              this.price_discount[0].id = price_discount_id
-              this.price_discount[0].name = price_discount_title
-              this.price_discount[0].price = +discountAmount.toFixed(2)
+            if (typeof discountAmount !== 'undefined') {
+              const PriceDiscount = {
+                id: price_discount_id,
+                name: price_discount_title,
+                price: +discountAmount.toFixed(2),
+              }
+              let checkPriceDiscountList = this.price_discount.length > 0
+              if (!checkPriceDiscountList) {
+                this.price_discount.push(PriceDiscount)
+              } else {
+                this.price_discount[0].id = price_discount_id
+                this.price_discount[0].name = price_discount_title
+                this.price_discount[0].price = +discountAmount.toFixed(2)
+              }
             }
           }
         }

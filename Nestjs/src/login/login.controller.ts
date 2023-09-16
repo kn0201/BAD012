@@ -21,9 +21,8 @@ export class LoginController {
   constructor(private loginService: LoginService) {}
 
   @Post()
-  async login(@Body() body: Body, @Session() session: RequestSession) {
+  async login(@Body() body: Body) {
     let input = loginParser.parse(body);
-    session.save();
     return this.loginService.login(input);
   }
 
@@ -31,12 +30,5 @@ export class LoginController {
   async register(@Body() body: Body) {
     let input = userParser.parse(body);
     return this.loginService.register(input);
-  }
-
-  @Get('session')
-  getCurrentUser(@Session() session: RequestSession) {
-    return {
-      user_id: session.user_id,
-    };
   }
 }
