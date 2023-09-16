@@ -125,7 +125,7 @@ export class CustomerPage implements OnInit, AfterViewInit {
 
     var publishable_key = 'rf_lmQyrjb8JIWuxlFLi7CDwWUSPZq1'
     var toLoad = {
-      model: 'bad012-r9unv',
+      model: 'bad012-pldqj',
       version: 1,
     }
 
@@ -149,9 +149,10 @@ export class CustomerPage implements OnInit, AfterViewInit {
   async detectFrame() {
     this.context.drawImage(this.video.nativeElement, 0, 0)
     let predictions = await this.model.detect(this.video.nativeElement)
+    console.log({ predictions })
 
     for (let prediction of predictions) {
-      console.log('predictions', prediction.class)
+      console.log(prediction.class)
       this.context.strokeStyle = 'red'
       this.context.beginPath()
       this.context.rect(

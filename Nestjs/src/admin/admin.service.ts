@@ -2,9 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
 @Injectable()
 export class AdminService {
-  getTrashList() {
-    throw new Error('Method not implemented.');
-  }
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async deleteProduct(body) {

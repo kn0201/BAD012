@@ -7,8 +7,8 @@ let loginResult = object({
   error: nullable(string()),
 })
 
-let addUser = object({
-  name: string(),
+let reigist = object({
+  username: string(),
 })
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,6 @@ export class LoginService {
     return this.api.post('/login', body, loginResult)
   }
   reigist(body: { username: string; email: string; password: string }) {
-    return this.api.post('/login/reigist', body, addUser)
+    return this.api.post('/login/reigist', body, reigist)
   }
 }

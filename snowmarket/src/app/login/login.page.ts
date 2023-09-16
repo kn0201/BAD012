@@ -25,13 +25,6 @@ export class LoginPage implements OnInit {
     this.popover.event = e
     this.isOpen = true
   }
-  // user = {
-  //   username: '',
-  //   password: '',
-  // }
-  // errors = {
-  //   username: '',
-  // }
   email: string = ''
 
   ngOnInit() {}
@@ -40,36 +33,6 @@ export class LoginPage implements OnInit {
     this.signUpPageVisible = switchToSignUp
   }
 
-  // getPasswordError() {
-  //   // console.log('get password error...')
-  //   if (this.user.password.length < 8) {
-  //     return 'Password should has at least 8 characters'
-  //   }
-  //   return ''
-  // }
-
-  // async checkUsername() {
-  //   // console.log('check username...')
-  //   if (this.user.username === 'alice') {
-  //     this.errors.username = 'This username is already in use'
-  //     return
-  //   }
-  //   this.errors.username = ''
-  // }
-
-  // async login(): Promise<any> {
-  //   let res = await fetch(`${DOMAIN}/login`, {
-  //     headers: {
-  //       Accept: 'application/json',
-  //     },
-  //   })
-  //   let json = await res.json()
-  //   if (json.error) {
-  //     sweetalert2error(json.error)
-  //     return
-  //   }
-  //   console.log(json.user)
-  // }
   async login() {
     let json = await this.loginService.login({
       username: this.username,
@@ -107,19 +70,8 @@ export class LoginPage implements OnInit {
       email: this.email,
       password: this.password,
     })
-    await sweetalert2Success(`reigist ${json.name}`)
+    sweetalert2Success(`Welcome ${json.username}`)
+    this.popover.dismiss()
+    this.router.navigate(['/customer'])
   }
-  // async login(): Promise<any> {
-  //   let res = await fetch(`${DOMAIN}/login`, {
-  //     headers: {
-  //       Accept: 'application/json',
-  //     },
-  //   })
-  //   let json = await res.json()
-  //   if (json.error) {
-  //     sweetalert2error(json.error)
-  //     return
-  //   }
-  //   // console.log(json.user)
-  // }
 }
