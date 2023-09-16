@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular'
 
-import { AdminDiscountListPageRoutingModule } from './admin-discount-list-routing.module';
+import { AdminDiscountListPageRoutingModule } from './admin-discount-list-routing.module'
 
-import { AdminDiscountListPage } from './admin-discount-list.page';
-import { TableModule } from 'ngx-easy-table';
+import { AdminDiscountListPage } from './admin-discount-list.page'
+import { TableModule } from 'ngx-easy-table'
 
 @NgModule({
   imports: [

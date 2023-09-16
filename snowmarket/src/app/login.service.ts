@@ -8,7 +8,7 @@ let loginResult = object({
   error: nullable(string()),
 })
 
-let reigist = object({
+let register = object({
   username: string(),
   id: number(),
 })
@@ -21,7 +21,7 @@ export class LoginService {
   login(body: { username: string; password: string }) {
     return this.api.post('/login', body, loginResult)
   }
-  reigist(body: { username: string; email: string; password: string }) {
-    return this.api.post('/login/reigist', body, reigist)
+  register(body: { username: string; email: string; password: string }) {
+    return this.api.post('/login/register', body, register)
   }
 }

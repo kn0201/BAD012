@@ -1,13 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  TemplateRef,
-  ViewChild,
-  Output,
-  EventEmitter,
-  Input,
-} from '@angular/core'
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { Columns, Config, DefaultConfig, APIDefinition } from 'ngx-easy-table'
 
 import { Brand, Category } from 'src/assets/type'

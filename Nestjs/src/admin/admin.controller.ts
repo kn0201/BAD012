@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Dependencies,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { array, number, object, string } from 'cast.ts';
 
