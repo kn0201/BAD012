@@ -70,6 +70,8 @@ export class CustomerPage implements OnInit, AfterViewInit {
   canDismiss = true
   showDeleteButton = false
 
+  totalDiscount: number = 0
+
   // Add Item Section
   // searchedItemIDList: number[] = []
   // itemListMap: Map<
@@ -182,128 +184,133 @@ export class CustomerPage implements OnInit, AfterViewInit {
       sweetalert2error('Empty Product ID')
       return
     }
-
     const idToFilter = +this.findID
-    try {
-      let json = await this.customerService.postID({ id: idToFilter })
-      console.log(json)
-
-      if (json) {
-        const {
-          discount_id,
-          discount_title,
-          discount_product_id,
-          discount_brand_id,
-          discount_categories_id,
-          discount_quantity,
-          discount_amount,
-          ...itemData
-        } = json.item
-
-        const newItem = {
-          id: itemData.id,
-          name: itemData.name,
-          unit_price: itemData.unit_price,
-          quantity: 1,
-          price: itemData.unit_price,
-        }
-        let check = this.items.find((item) => item.id == idToFilter)
-        if (!check) {
-          this.items.push(newItem)
-          this.originals.push(newItem)
-        } else {
-          check.quantity++
-          check.price += newItem.unit_price
-          if (
-            discount_id &&
-            discount_title &&
-            discount_quantity &&
-            discount_amount
-          ) {
-            let checkDiscount = check.quantity % discount_quantity == 0
-            if (checkDiscount == true) {
-              const newDiscount = {
-                id: discount_id,
-                name: discount_title,
-                unit_price: -discount_amount,
-                quantity: 1,
-                price: -discount_amount,
-              }
-              const newDiscountItem = {
-                id: discount_id,
-                name: discount_title,
-                unit_price: +'',
-                quantity: +'',
-                price: discount_amount,
-              }
-              let checkDiscountList = this.discounts.find(
-                (discount) => discount.id == discount_id
-              )
-              if (!checkDiscountList) {
-                this.items.push(newDiscountItem)
-                this.discounts.push(newDiscount)
-              } else {
-                checkDiscountList.quantity++
-                checkDiscountList.price += newDiscount.unit_price
-                let checkDiscountListItem = this.items.find(
-                  (discount) => discount.name == discount_title
-                )
-                if (checkDiscountListItem) {
-                  checkDiscountListItem.price -= newDiscount.unit_price
-                }
-              }
-            }
-          }
-        }
-        if (json.price_discount) {
-          let discountAmount
-          for (const discount of json.price_discount) {
-            const {
-              price_discount_id,
-              price_discount_title,
-              price_discount_total,
-              price_discount_rate,
-            } = discount
-            let total = this.calculateBalance()
-            if (total > price_discount_total) {
-              if (price_discount_rate.startsWith('-')) {
-                discountAmount = parseFloat(price_discount_rate)
-              } else if (price_discount_rate.startsWith('*')) {
-                const discountMultiplier = parseFloat(
-                  price_discount_rate.slice(1)
-                )
-                discountAmount = -(total - total * discountMultiplier)
-              }
-              console.log('discountAmount', discountAmount)
-              if (typeof discountAmount !== 'undefined') {
-                const PriceDiscount = {
-                  id: price_discount_id,
-                  name: price_discount_title,
-                  price: +discountAmount.toFixed(2),
-                }
-                console.log('PriceDiscount', PriceDiscount)
-                let checkPriceDiscountList = this.price_discount.length > 0
-                console.log('checkPriceDiscountList', checkPriceDiscountList)
-                if (!checkPriceDiscountList) {
-                  this.price_discount.push(PriceDiscount)
-                } else {
-                  this.price_discount[0].id = price_discount_id
-                  this.price_discount[0].name = price_discount_title
-                  this.price_discount[0].price = +discountAmount.toFixed(2)
-                }
-                console.log('this.price_discount', this.price_discount)
-              }
-            }
-          }
-        }
-        console.log('this.item', this.items)
-        console.log('this.discounts', this.discounts)
-        console.log('this.originals', this.originals)
-        console.log('this.price_discount', this.price_discount[0])
-        this.findID = ''
+    let json = await this.customerService.postID({ id: idToFilter })
+    if (json) {
+      const {
+        discount_id,
+        discount_title,
+        discount_product_id,
+        discount_brand_id,
+        discount_categories_id,
+        discount_quantity,
+        discount_amount,
+        ...itemData
+      } = json.item
+      const newItem = {
+        id: itemData.id,
+        name: itemData.name,
+        unit_price: itemData.unit_price,
+        quantity: 1,
+        price: itemData.unit_price,
       }
-    } catch (err) {
-      sweetalert2error(err)
+      let check = this.items.find((item) => item.id == idToFilter)
+      if (!check) {
+        this.items.push(newItem)
+        this.originals.push(newItem)
+      } else {
+        check.quantity++
+        check.price += newItem.unit_price
+        if (
+          discount_id &&
+          discount_title &&
+          discount_quantity &&
+          discount_amount &&
+          check.quantity % discount_quantity == 0
+        ) {
+          const newDiscount = {
+            id: discount_id,
+            name: discount_title,
+            unit_price: -discount_amount,
+            quantity: 1,
+            price: -discount_amount,
+          }
+          const newDiscountItem = {
+            id: discount_id,
+            name: discount_title,
+            unit_price: +'',
+            quantity: +'',
+            price: discount_amount,
+          }
+          let checkDiscountList = this.discounts.find(
+            (discount) => discount.id == discount_id
+          )
+          if (!checkDiscountList) {
+            this.items.push(newDiscountItem)
+            this.discounts.push(newDiscount)
+          } else {
+            checkDiscountList.quantity++
+            checkDiscountList.price += newDiscount.unit_price
+            let checkDiscountListItem = this.items.find(
+              (discount) => discount.name == discount_title
+            )
+            if (checkDiscountListItem) {
+              checkDiscountListItem.price -= newDiscount.unit_price
+            }
+          }
+          this.calculateTotalDiscount()
+        }
+      }
+      if (json.price_discount) {
+        let discountAmount
+        let maxDiscountAmount
+        for (const discount of json.price_discount) {
+          const {
+            price_discount_id,
+            price_discount_title,
+            price_discount_total,
+            price_discount_rate,
+          } = discount
+          let total =
+            this.calculateTotalPrice() -
+            +this.discounts
+              .reduce((total, discount) => total + discount.price, 0)
+              .toFixed(2)
+          console.log(total)
+
+          if (total >= price_discount_total) {
+            if (price_discount_rate.startsWith('-')) {
+              discountAmount = parseFloat(price_discount_rate)
+              maxDiscountAmount = discountAmount
+            } else if (price_discount_rate.startsWith('*')) {
+              const discountMultiplier = parseFloat(
+                price_discount_rate.slice(1)
+              )
+              discountAmount = total * (discountMultiplier - 1)
+              maxDiscountAmount = discountAmount
+            }
+            console.log('discountAmount', discountAmount)
+            if (
+              typeof discountAmount !== 'undefined' &&
+              maxDiscountAmount !== undefined
+            ) {
+              const PriceDiscount = {
+                id: price_discount_id,
+                name: price_discount_title,
+                price: +discountAmount.toFixed(2),
+              }
+              console.log('PriceDiscount', PriceDiscount)
+              let checkPriceDiscountList = this.price_discount.length > 0
+              console.log('checkPriceDiscountList', checkPriceDiscountList)
+              if (!checkPriceDiscountList) {
+                this.price_discount.push(PriceDiscount)
+              } else {
+                this.price_discount[0].id = price_discount_id
+                this.price_discount[0].name = price_discount_title
+                this.price_discount[0].price = +discountAmount.toFixed(2)
+              }
+              console.log('this.price_discount', this.price_discount)
+            }
+          }
+        }
+        this.calculateTotalDiscount()
+      }
+
+      console.log('this.item', this.items)
+      console.log('this.discounts', this.discounts)
+      console.log('this.originals', this.originals)
+      console.log('this.price_discount', this.price_discount[0])
+      this.findID = ''
     }
     //   let dummyArray = new Set([...this.searchedItemIDList, idToFilter])
     //   if (dummyArray.size === this.searchedItemIDList.length) {
@@ -412,16 +419,22 @@ export class CustomerPage implements OnInit, AfterViewInit {
       .toFixed(2)
   }
 
-  calculateTotalDiscount(): number {
-    return +this.discounts
-      .reduce((total, discount) => total + discount.price, 0)
-      .toFixed(2)
+  calculateTotalDiscount() {
+    const priceDiscountAmount = this.price_discount[0]
+      ? this.price_discount[0].price
+      : 0
+
+    this.totalDiscount =
+      +this.discounts
+        .reduce((total, discount) => total + discount.price, 0)
+        .toFixed(2) - priceDiscountAmount
+    return this.totalDiscount
   }
 
   calculateBalance(): number {
     const totalPrice = this.calculateTotalPrice()
-    const totalDiscount = this.calculateTotalDiscount()
-    return +(totalPrice - totalDiscount).toFixed(2)
+    // const totalDiscount = this.calculateTotalDiscount()
+    return +(totalPrice - this.totalDiscount).toFixed(2)
   }
 
   // summarizeItem2() {
