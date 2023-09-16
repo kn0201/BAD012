@@ -5,7 +5,22 @@ export class AdminService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async deleteProduct(body) {
-    console.log(body);
+    await this.knex('product')
+      .where({ id: body.deleteId })
+      .update({ is_delete: 'true' });
+    return {};
+  }
+
+  async deleteDiscount(body) {
+    await this.knex(body.value)
+      .where({ id: body.deleteId })
+      .update({ is_delete: 'true' });
+  }
+
+  async reDeleteProduct(body) {
+    await this.knex('product')
+      .where({ id: body.deleteId })
+      .update({ is_delete: 'false' });
     return {};
   }
 
@@ -45,7 +60,8 @@ export class AdminService {
     let memberList = await this.knex
       .select('id', 'username', 'email', 'birthday', 'point')
       .from('users')
-      .where('is_delete', 'false');
+      .where('is_delete', 'false')
+      .where('role', 'member');
 
     return { memberList };
   }
@@ -85,6 +101,7 @@ export class AdminService {
       .from('product')
       .leftJoin('brand', 'brand_id', 'brand.id')
       .leftJoin('categories', 'categories_id', 'categories.id')
+      .where('is_delete', 'false')
       .orderBy('product.id');
 
     let brandList = await this.knex.select('*').from('brand').orderBy('id');
@@ -192,6 +209,22 @@ export class AdminService {
       .where('is_delete', 'true')
       .orderBy('id');
 
-    return { deletedProductList };
+    let deletedProductDiscountList = await this.knex
+      .select('id', 'title')
+      .from('quantity_discount')
+      .where('is_delete', 'true')
+      .orderBy('id');
+
+    let deletedPriceDiscountList = await this.knex
+      .select('id', 'title')
+      .from('price_discount')
+      .where('is_delete', 'true')
+      .orderBy('id');
+
+    return {
+      deletedProductList,
+      deletedProductDiscountList,
+      deletedPriceDiscountList,
+    };
   }
 }

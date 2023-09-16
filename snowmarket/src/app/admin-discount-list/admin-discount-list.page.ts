@@ -146,14 +146,14 @@ export class AdminDiscountListPage implements OnInit {
     this.productDiscountList = { ...DefaultConfig }
     this.productDiscountList.fixedColumnWidth = false
     this.productDiscountList.orderEnabled = true
-    this.productDiscountList.rows = 4
+    this.productDiscountList.rows = 5
     this.productDiscountList.checkboxes = true
     this.priceDiscountList = { ...DefaultConfig }
     this.priceDiscountList.fixedColumnWidth = true
     this.priceDiscountList.orderEnabled = true
     this.priceDiscountList.threeWaySort = true
     this.priceDiscountList.checkboxes = true
-    this.priceDiscountList.rows = 4
+    this.priceDiscountList.rows = 5
   }
 
   filter(field: string, event: Event | string): void {
@@ -380,6 +380,7 @@ export class AdminDiscountListPage implements OnInit {
         } else {
           this.selectedProductChecked.add($event.value.rowId)
           this.ProductArrayID.push(+$event.value.row.id)
+          console.log($event.value)
         }
         console.log(this.ProductArrayID)
 
@@ -399,6 +400,7 @@ export class AdminDiscountListPage implements OnInit {
         } else {
           this.selectedPriceChecked.add($event.value.rowId)
           this.PriceArrayID.push(+$event.value.row.id)
+          console.log($event.value)
         }
         console.log(this.PriceArrayID)
 
@@ -406,28 +408,48 @@ export class AdminDiscountListPage implements OnInit {
     }
   }
 
-  deleteConfirm() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+  async deleteConfirm() {
+    const { value: discountType } = await Swal.fire({
+      title: 'What type you want to Delete',
       icon: 'warning',
+      input: 'select',
+      inputOptions: {
+        Product: 'Product Discount',
+        Price: 'Price Discount',
+      },
+      inputPlaceholder: 'Choose One',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       heightAuto: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        for (let id of this.arrayID) {
-          console.log(id)
-          this.delete(id)
-        }
-      }
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value === 'Product') {
+            let type = 'quantity_discount'
+            for (let id of this.ProductArrayID) {
+              this.delete(id, type)
+            }
+            resolve()
+          } else if (value === 'Price') {
+            let type = 'price_discount'
+            for (let id of this.PriceArrayID) {
+              this.delete(id, type)
+            }
+            resolve()
+          }
+        })
+      },
     })
+    if (discountType) {
+      sweetalert2Success(`Delete a ${discountType} Discount`)
+      this.loadList()
+    }
   }
 
-  async delete(id: number) {
-    await this.adminService.deleteProduct({
+  async delete(id: number, type: string) {
+    await this.adminService.deleteDiscount({
+      value: type,
       deleteId: id,
     })
     Swal.fire({
@@ -439,6 +461,7 @@ export class AdminDiscountListPage implements OnInit {
         this.loadList()
       },
     })
+    this.loadList()
   }
 
   async addRow(): Promise<void> {
