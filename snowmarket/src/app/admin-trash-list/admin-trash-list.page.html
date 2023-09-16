@@ -14,14 +14,50 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="trash" (click)="deleteConfirm()"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <h2>Deleted Product</h2>
   <div class="columns">
     <div class="column col-12">
       <ngx-table
         [configuration]="configuration"
         [data]="data"
+        (event)="eventEmitted($event)"
         #table
         [columns]="columns"
+      >
+      </ngx-table>
+    </div>
+  </div>
+
+  <hr />
+
+  <h2>Deleted Product Discount</h2>
+
+  <div class="columns">
+    <div class="column col-12">
+      <ngx-table
+        [configuration]="deletedProductDiscountConfig"
+        [data]="deletedProductDiscountData"
+        [columns]="deletedProductDiscountColumns"
+      >
+      </ngx-table>
+    </div>
+  </div>
+
+  <hr />
+
+  <h2>Deleted Price Discount</h2>
+  <div class="columns priceDiscountColumn">
+    <div class="column col-12">
+      <ngx-table
+        [configuration]="deletedPriceDiscountConfig"
+        [data]="deletedPriceDiscountData"
+        [columns]="deletedPriceDiscountColumns"
       >
       </ngx-table>
     </div>

@@ -142,3 +142,23 @@ export let deletedProduct = object({
   id: number(),
   name: string(),
 })
+
+export interface DeletedProductDiscount {
+  id: number
+  title: string
+}
+
+export let deletedProductDiscount = object({
+  id: number(),
+  title: string(),
+})
+
+export interface DeletedPriceDiscount {
+  id: number
+  title: string
+}
+
+export let deletedPriceDiscount = object({
+  id: number(),
+  title: string(),
+})

@@ -28,6 +28,11 @@ let deleteProductParser = object({
   deleteId: number(),
 });
 
+let deleteDiscountParser = object({
+  value: string(),
+  deleteId: number(),
+});
+
 let addProductDiscountParser = object({
   selectedDiscount: string(),
   title: string(),
@@ -49,9 +54,8 @@ let addPriceDiscountParser = object({
   end_date: string(),
 });
 @Controller('admin')
-@Dependencies(AdminService)
 export class AdminController {
-  constructor(private readonly AdminService: AdminService) {}
+  constructor(private AdminService: AdminService) {}
 
   @Get('/b&c-list')
   getBCList() {
@@ -110,8 +114,17 @@ export class AdminController {
   @Patch('/product-list/delete')
   async deleteProduct(@Body() body: Body) {
     let input = deleteProductParser.parse(body);
-    console.log('Back C');
-
     return this.AdminService.deleteProduct(input);
+  }
+  @Patch('/product-list/reDelete')
+  async reDeleteProduct(@Body() body: Body) {
+    let input = deleteProductParser.parse(body);
+    return this.AdminService.reDeleteProduct(input);
+  }
+
+  @Patch('/discount-list/delete')
+  async deleteDiscount(@Body() body: Body) {
+    let input = deleteDiscountParser.parse(body);
+    return this.AdminService.deleteDiscount(input);
   }
 }
