@@ -142,23 +142,19 @@
               </ion-item>
               <ion-item
                 >Number of Items<span slot="end"
-                  >{{calculateTotalQuantity()}}</span
+                  >{{totalQuantity}}</span
                 ></ion-item
               >
               <ion-item
-                >Total Price<span slot="end"
-                  >${{calculateTotalPrice()}}</span
-                ></ion-item
+                >Total Price<span slot="end">${{totalPrice}}</span></ion-item
               >
               <ion-item
                 >Discount Amount<span slot="end"
-                  >-${{calculateTotalDiscount()}}</span
+                  >-${{totalDiscount}}</span
                 ></ion-item
               >
               <ion-item
-                >Balance<span slot="end"
-                  >${{calculateBalance()}}</span
-                ></ion-item
+                >Balance<span slot="end">${{totalBalance}}</span></ion-item
               >
               <ion-item>
                 <ion-button slot="end" color="secondary" id="open-modal"
