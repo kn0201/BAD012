@@ -85,8 +85,11 @@ export class LoginPage implements OnInit {
       email: this.email,
       password: this.password,
     })
+    let id = json.id.toString()
     sweetalert2Success(`Welcome ${json.username}`)
     this.clear()
+    sessionStorage.setItem('username', json.username)
+    sessionStorage.setItem('user_id', id)
     this.popover.dismiss()
     this.router.navigate(['/customer'])
   }

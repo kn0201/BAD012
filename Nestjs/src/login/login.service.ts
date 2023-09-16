@@ -14,15 +14,17 @@ export class LoginService {
 
   async addUser(body) {
     let username = body.username;
-    await this.knex('users').insert({
-      username: body.username,
-      email: body.email,
-      password: body.password,
-      role: 'member',
-      point: 0,
-      is_delete: false,
-    });
-    return { username };
+    let id = await this.knex('users')
+      .insert({
+        username: body.username,
+        email: body.email,
+        password: body.password,
+        role: 'member',
+        point: 0,
+        is_delete: false,
+      })
+      .returning('id');
+    return { username: username, id: id };
   }
 
   async login(input) {
