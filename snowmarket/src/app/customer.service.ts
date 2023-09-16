@@ -30,7 +30,6 @@ let price_discount = nullable(
 let product = object({
   item: item,
   price_discount: nullable(array(price_discount)),
-  // error: nullable(string()),
 })
 
 let receipt_return = object({})

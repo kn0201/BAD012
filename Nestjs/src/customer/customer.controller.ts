@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { array, number, object, string } from 'cast.ts';
+import { array, nullable, number, object, string } from 'cast.ts';
 import { CustomerService } from './customer.service';
 // import { CustomerService } from './customer.service'
 
@@ -12,7 +12,7 @@ let receiptParser = object({
       price: number(),
     }),
   ),
-  user_id: number(),
+  user_id: nullable(number()),
   pos_id: number(),
   discount: number(),
   balance: number(),
