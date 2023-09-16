@@ -4,14 +4,14 @@ export interface Users {
   id: string
   username: string
   email: string
-  birthday: string
+  birthday: string | null
   point: number
 }
 export let user = object({
   id: string(),
   username: string(),
   email: string(),
-  birthday: string(),
+  birthday: nullable(string()),
   point: number(),
 })
 

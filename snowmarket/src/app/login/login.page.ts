@@ -33,25 +33,40 @@ export class LoginPage implements OnInit {
     this.signUpPageVisible = switchToSignUp
   }
 
+  clear() {
+    this.username = ''
+    this.password = ''
+    this.email = ''
+  }
+
   async login() {
     let json = await this.loginService.login({
       username: this.username,
       password: this.password,
     })
-    console.log(json)
 
-    if (json.role == 'member') {
-      sweetalert2Success('Logined')
-      this.popover.dismiss()
-      this.router.navigate(['/customer'])
-    } else if (json.role == 'admin') {
-      sweetalert2Success('Logined')
-      this.popover.dismiss()
-      this.router.navigate(['/admin'])
+    if (json.id) {
+      let user_id = json.id.toString()
+
+      if (json.role == 'member') {
+        sweetalert2Success('Logined')
+        sessionStorage.setItem('username', this.username)
+        sessionStorage.setItem('user_id', user_id)
+        this.popover.dismiss()
+        this.router.navigate(['/customer'])
+      } else if (json.role == 'admin') {
+        sweetalert2Success('Logined')
+        this.popover.dismiss()
+        this.router.navigate(['/admin'])
+      }
     }
     if (json.error != null) {
       sweetalert2error(json.error)
     }
+  }
+
+  isLogin() {
+    return sessionStorage.getItem('user') !== null
   }
 
   async reigist() {
@@ -70,7 +85,11 @@ export class LoginPage implements OnInit {
       email: this.email,
       password: this.password,
     })
+    let id = json.id.toString()
     sweetalert2Success(`Welcome ${json.username}`)
+    this.clear()
+    sessionStorage.setItem('username', json.username)
+    sessionStorage.setItem('user_id', id)
     this.popover.dismiss()
     this.router.navigate(['/customer'])
   }

@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core'
 import { ApiService } from './api.service'
-import { nullable, object, string } from 'cast.ts'
+import { nullable, number, object, string } from 'cast.ts'
 
 let loginResult = object({
   role: nullable(string()),
+  id: nullable(number()),
   error: nullable(string()),
 })
 
 let reigist = object({
   username: string(),
+  id: number(),
 })
 @Injectable({
   providedIn: 'root',

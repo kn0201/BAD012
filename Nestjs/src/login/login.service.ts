@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Knex } from 'knex';
 import { knex } from 'utils/knex';
-import { hashPassword } from 'utils/hash';
+import { comparePassword, hashPassword } from 'utils/hash';
 import { string } from 'cast.ts';
 import { InjectKnex } from 'nestjs-knex';
 @Injectable()
@@ -14,31 +14,37 @@ export class LoginService {
 
   async addUser(body) {
     let username = body.username;
-    password_hash: await hashPassword(body.password),
-      await this.knex('users').insert({
+    let hashedPW = hashPassword(body.password);
+    let result = await this.knex('users')
+      .insert({
         username: body.username,
         email: body.email,
-        password: body.password,
+        password: hashedPW,
         role: 'member',
         point: 0,
         is_delete: false,
-      });
-    return { username };
+      })
+      .returning('id');
+    let id = result[0].id;
+    return { username: username, id: id };
   }
 
   async login(input) {
     let foundUser = await this.knex('users')
-      .select('role')
+      .select('role', 'id', 'password')
       .where('username', input.username)
-      .where('password', input.password)
       .first();
-
-    if (!foundUser) {
+    let match: boolean = await comparePassword({
+      password: input.password,
+      password_hash: foundUser.password,
+    });
+    if (!foundUser || !match) {
       return { error: 'Wrong Username/Password' };
     }
     let role = foundUser.role;
+    let id = foundUser.id;
     console.log(role);
 
-    return { role: role, error: null };
+    return { role: role, error: null, id: id };
   }
 }

@@ -61,7 +61,50 @@ export class CustomerService {
   }
 
   async postReceipt(receipt) {
-    // TODO
-    console.log(receipt);
+    console.log('receipt', receipt);
+    let receipt_id: number;
+    let currentPoint: number;
+    let receipt_rows = await this.knex('receipt')
+      .insert({
+        user_id: receipt.user_id,
+        pos_id: receipt.pos_id,
+        total: receipt.balance,
+        discount_total: receipt.discount,
+      })
+      .returning('id');
+    receipt_id = receipt_rows[0].id;
+    for (let item of receipt.items) {
+      let currentStock: number;
+      await this.knex('receipt_item').insert({
+        receipt_id: receipt_id,
+        name: item.name,
+        price: item.price,
+      });
+      let currentStocks = await this.knex
+        .select('stock')
+        .from('product')
+        .where('name', item.name);
+      currentStock = currentStocks[0].stock;
+      console.log('currentStock', currentStock);
+      let remainingStock = currentStock - item.quantity;
+      console.log('remainingStock', remainingStock);
+      await this.knex('product')
+        .where('name', item.name)
+        .update('stock', remainingStock);
+    }
+    if (receipt.user_id) {
+      let currentPoints = await this.knex
+        .select('point')
+        .from('users')
+        .where('id', receipt.user_id);
+      currentPoint = currentPoints[0].point;
+      console.log('currentPoint', currentPoint);
+      let updatedPoint = currentPoint + Math.floor(receipt.balance / 10);
+      console.log('updatedPoint', updatedPoint);
+      await this.knex('users')
+        .where('id', receipt.user_id)
+        .update('point', updatedPoint);
+    }
+    return {};
   }
 }

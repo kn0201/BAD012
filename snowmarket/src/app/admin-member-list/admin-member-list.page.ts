@@ -52,6 +52,7 @@ export class AdminMemberListPage implements OnInit {
     this.configuration = { ...DefaultConfig }
     this.configuration.checkboxes = false
     this.configuration.fixedColumnWidth = true
+    this.configuration.rows = 15
   }
   filter(field: string, event: Event | string): void {
     const value =
@@ -75,7 +76,9 @@ export class AdminMemberListPage implements OnInit {
     this.dataCopy = json.memberList
 
     for (let item of json.memberList) {
-      item.birthday = new Date(item.birthday).toLocaleDateString()
+      if (item.birthday) {
+        item.birthday = new Date(item.birthday).toLocaleDateString()
+      }
     }
   }
 }

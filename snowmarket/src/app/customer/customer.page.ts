@@ -14,6 +14,7 @@ import Swal from 'sweetalert2'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { AddToCartResult, CustomerService } from '../customer.service'
 import { sweetalert2error } from 'utils/sweetalert2'
+import { Router } from '@angular/router'
 import { ProductService } from '../product.service'
 
 declare var roboflow: any
@@ -29,6 +30,7 @@ export class CustomerPage {
     unit_price: number
     quantity: number
     price: number
+    stock: number
   }[] = []
   originals: {
     id: number
@@ -36,6 +38,7 @@ export class CustomerPage {
     unit_price: number
     quantity: number
     price: number
+    stock: number
   }[] = []
   discounts: {
     id: number
@@ -55,7 +58,8 @@ export class CustomerPage {
     unit_price: number
     quantity: number
     price: number
-  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0 }
+    stock: number
+  } = { id: 0, name: '', unit_price: 0, quantity: 0, price: 0, stock: 0 }
   // summarizedItems: {
   //   id: number
   //   name: string
@@ -63,6 +67,8 @@ export class CustomerPage {
   //   price: number
   // }[] = []
 
+  user_id = null
+  username = 'Guest'
   findID: number | string = ''
 
   discountAmount: number = +''
@@ -75,6 +81,7 @@ export class CustomerPage {
   totalPrice: number = 0
   totalDiscount: number = 0
   totalBalance: number = 0
+  totalBagAmount: number = 0
 
   mediaStream?: MediaStream
 
@@ -107,7 +114,8 @@ export class CustomerPage {
 
   constructor(
     private customerService: CustomerService,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {}
 
   // public ngOnInit(): void {
@@ -125,6 +133,18 @@ export class CustomerPage {
     if (this.mediaStream) {
       this.mediaStream.getTracks().forEach((track) => track.stop())
     }
+  }
+
+  exit() {
+    sessionStorage.removeItem('user_id')
+    sessionStorage.removeItem('username')
+    this.router.navigate(['/login'])
+  }
+
+  exit() {
+    sessionStorage.removeItem('user_id')
+    sessionStorage.removeItem('username')
+    this.router.navigate(['/login'])
   }
 
   async startCam() {
@@ -299,8 +319,8 @@ export class CustomerPage {
           if (checkDiscountListItem) {
             checkDiscountListItem.price -= newDiscount.unit_price
           }
+          this.calculateTotalDiscount()
         }
-        this.calculateTotalDiscount()
       }
     }
     this.calculateTotalQuantity()
@@ -510,46 +530,54 @@ export class CustomerPage {
 
   async payment() {
     let receipt_items = this.originals.map((item) => {
-      return { name: item.name, price: item.price }
+      return { name: item.name, quantity: item.quantity, price: item.price }
     })
+    let pos_id = sessionStorage['POS']
+
     let json = await this.customerService.postReceipt({
       items: receipt_items,
+      user_id: this.user_id,
+      pos_id: pos_id,
       discount: this.totalDiscount,
       balance: this.totalBalance,
     })
     console.log('receipt json', json)
-
-    let timerInterval: any
-    Swal.fire({
-      title: 'Payment Processing...',
-      timer: 1500,
-      timerProgressBar: true,
-      heightAuto: false,
-      didOpen: () => {
-        Swal.showLoading()
-      },
-      willClose: () => {
-        clearInterval(timerInterval)
-      },
-    }).then((result) => {
-      if (result.dismiss === Swal.DismissReason.timer) {
-        Swal.fire({
-          title: 'Payment Success!',
-          text: 'You have paid the items.',
-          icon: 'success',
-          confirmButtonColor: '#ffa065',
-          confirmButtonText: 'OK',
-          heightAuto: false,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.items = []
-            this.discounts = []
-            this.originals = []
-            this.price_discount = []
-            this.cancel()
-          }
-        })
-      }
-    })
+    if (json) {
+      let timerInterval: any
+      Swal.fire({
+        title: 'Payment Processing...',
+        timer: 1500,
+        timerProgressBar: true,
+        heightAuto: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+        willClose: () => {
+          clearInterval(timerInterval)
+        },
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          Swal.fire({
+            title: 'Payment Success!',
+            text: 'You have paid the items.',
+            icon: 'success',
+            confirmButtonColor: '#ffa065',
+            confirmButtonText: 'OK',
+            heightAuto: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.items = []
+              this.discounts = []
+              this.originals = []
+              this.price_discount = []
+              this.cancel()
+              this.router.navigate(['/login'])
+              sessionStorage.removeItem('user_id')
+              sessionStorage.removeItem('username')
+            }
+          })
+        }
+      })
+    }
   }
 }
