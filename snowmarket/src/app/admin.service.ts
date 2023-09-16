@@ -4,7 +4,9 @@ import { array, object, string } from 'cast.ts'
 import {
   brand,
   category,
+  deletedPriceDiscount,
   deletedProduct,
+  deletedProductDiscount,
   item,
   priceDiscount,
   product,
@@ -51,8 +53,13 @@ let addProductResult = object({
 })
 
 let deleteProductResult = object({})
+
+let deleteDiscountResult = object({})
+
 let deletedProductList = object({
   deletedProductList: array(deletedProduct),
+  deletedProductDiscountList: array(deletedProductDiscount),
+  deletedPriceDiscountList: array(deletedPriceDiscount),
 })
 
 let addProductDiscount = object({
@@ -143,6 +150,22 @@ export class AdminService {
       '/admin/product-list/delete',
       body,
       deleteProductResult
+    )
+  }
+
+  reDeleteProduct(body: { deleteId: number }) {
+    return this.api.patch(
+      '/admin/product-list/reDelete',
+      body,
+      deleteProductResult
+    )
+  }
+
+  deleteDiscount(body: { deleteId: number; value: string }) {
+    return this.api.patch(
+      '/admin/discount-list/delete',
+      body,
+      deleteDiscountResult
     )
   }
 }
