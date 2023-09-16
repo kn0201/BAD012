@@ -2,12 +2,12 @@
   <ion-toolbar>
     <ion-item lines="none">
       <ion-label>
-        <h3>Hello, <span>Guest</span></h3>
+        <h3>Hello, <span *ngIf="isLogin()">Guest</span></h3>
       </ion-label>
     </ion-item>
 
     <ion-button slot="end" color="primary" class="login" routerLink="/login">
-      Login
+      Exit
     </ion-button>
   </ion-toolbar>
 </ion-header>

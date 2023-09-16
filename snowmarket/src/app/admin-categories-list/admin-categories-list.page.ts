@@ -43,7 +43,7 @@ export class AdminCategoriesListPage implements OnInit {
     checkboxes: false,
     fixedColumnWidth: true,
     orderEnabled: true,
-    rows: 4,
+    rows: 7,
   }
   categoriesList!: Config
 
@@ -88,7 +88,8 @@ export class AdminCategoriesListPage implements OnInit {
     this.categoriesList.fixedColumnWidth = true
     this.categoriesList.orderEnabled = true
     this.categoriesList.threeWaySort = true
-    this.categoriesList.rows = 4
+
+    this.categoriesList.rows = 7
   }
 
   filter(field: string, event: Event | string): void {

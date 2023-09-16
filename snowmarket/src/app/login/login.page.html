@@ -37,8 +37,9 @@
                         type="text"
                         [(ngModel)]="username"
                         name="username"
-                        labelPlacement="username"
-                        placeholder="user name"
+                        [clearInput]="true"
+                        labelPlacement="Username"
+                        placeholder="Username"
                       />
                     </ion-item>
                     <ion-item>
@@ -46,6 +47,7 @@
                         type="email"
                         [(ngModel)]="email"
                         name="email"
+                        [clearInput]="true"
                         labelPlacement="Email"
                         placeholder="Email"
                       />
@@ -55,6 +57,7 @@
                         type="password"
                         [(ngModel)]="password"
                         name="password"
+                        [clearInput]="true"
                         labelPlacement="Password"
                         placeholder="password"
                       />
@@ -70,6 +73,7 @@
                         type="text"
                         [(ngModel)]="username"
                         name="username"
+                        [clearInput]="true"
                         labelPlacement="Email"
                         placeholder="Username"
                       />
@@ -79,6 +83,7 @@
                         type="password"
                         [(ngModel)]="password"
                         name="password"
+                        [clearInput]="true"
                         labelPlacement="Password"
                         placeholder="password"
                       />

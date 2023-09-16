@@ -108,6 +108,10 @@ export class CustomerPage implements OnInit, AfterViewInit {
     )
   }
 
+  isLogin() {
+    return sessionStorage.getItem('user') !== null
+  }
+
   ngAfterViewInit() {
     this.startCam()
   }
