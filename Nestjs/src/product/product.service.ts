@@ -15,7 +15,7 @@ export class ProductService {
       .whereILike('name', '%' + label + '%')
       .andWhere('is_delete', false)
       .first();
-    if (!product) throw new NotFoundException('product not found or deleted');
+    if (!product) throw new NotFoundException('Product not found or deleted');
     return product.id as number;
   }
 }

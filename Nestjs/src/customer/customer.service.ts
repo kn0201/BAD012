@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class CustomerService {
         });
       })
       .first();
-    console.log(item);
+    if (!item) throw new NotFoundException('Product not found or deleted');
     let price_discount = await this.knex
       .select(
         'id as price_discount_id',
@@ -57,6 +57,9 @@ export class CustomerService {
       .where('start_date', '<=', currentDate)
       .andWhere('end_date', '>=', currentDate)
       .andWhere('is_delete', '=', false);
+    if (!price_discount) {
+      return { item, price_discount: null };
+    }
     return { item, price_discount };
   }
 

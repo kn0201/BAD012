@@ -2,7 +2,6 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { array, nullable, number, object, string } from 'cast.ts';
 import { CustomerService } from './customer.service';
 import { ProductService } from 'src/product/product.service';
-// import { CustomerService } from './customer.service'
 
 let idParser = object({ id: number() });
 let labelParser = object({ label: string() });
