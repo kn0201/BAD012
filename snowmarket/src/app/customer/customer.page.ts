@@ -412,6 +412,7 @@ export class CustomerPage {
         }
       }
       this.calculateTotalDiscount()
+      this.calculateTotalBalance()
     }
   }
 
@@ -577,6 +578,7 @@ export class CustomerPage {
       }
       this.calculateTotalDiscount()
       this.checkPriceDiscount(json.price_discount)
+      this.calculateTotalBalance()
     }
   }
 
@@ -737,11 +739,8 @@ export class CustomerPage {
       }
       this.calculateTotalDiscount()
       this.checkPriceDiscount(json.price_discount)
+      this.calculateTotalBalance()
     }
-    console.log('this.item', this.items)
-    console.log('this.discounts', this.discounts)
-    console.log('this.originals', this.originals)
-    console.log('this.price_discount', this.price_discount[0])
   }
 
   checkPriceDiscount(json: any) {
@@ -755,6 +754,7 @@ export class CustomerPage {
         return discount.price_discount_total > total
       })
     ) {
+      // this.price_discount[0].price = 0
       this.price_discount.splice(0, 1)
     }
     this.calculateTotalDiscount()
