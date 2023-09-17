@@ -47,7 +47,6 @@ export class AdminCategoriesListPage implements OnInit {
   selectedBrand = ''
   selectedCategory = ''
 
-  message = ''
   name: string | null = null
 
   selectValue = null
@@ -115,6 +114,11 @@ export class AdminCategoriesListPage implements OnInit {
     modal.dismiss()
   }
 
+  clear() {
+    this.name = ''
+    this.selectValue = null
+  }
+
   confirm() {
     if (!this.selectValue) {
       sweetalert2error('Missing Brand/Category')
@@ -145,9 +149,9 @@ export class AdminCategoriesListPage implements OnInit {
       selectValue,
     })
     this.loadList()
-    await sweetalert2Success(`Adding ${json.param} : ${json.name}`)
+    sweetalert2Success(`Adding ${json.param} : ${json.name}`)
     this.canDismiss = true
-    this.name = ''
+    this.clear()
     this.modal.dismiss()
   }
 

@@ -72,9 +72,7 @@
             >Adding Product / Price Discount</ion-title
           >
           <ion-buttons slot="end">
-            <ion-button method="submit" (click)="addRow()" [strong]="true"
-              >Confirm</ion-button
-            >
+            <ion-button method="submit" (click)="clear()">Clear</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -348,7 +346,7 @@
       <ion-footer>
         <ion-toolbar>
           <ion-buttons slot="end">
-            <ion-button [strong]="true" (click)="clear()">Clear</ion-button>
+            <ion-button [strong]="true" (click)="confirm()">Confirm</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-footer>

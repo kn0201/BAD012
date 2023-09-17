@@ -47,11 +47,13 @@ export class AdminPagePage implements OnInit {
           if (value === 'logout') {
             sessionStorage.removeItem('user_id')
             sessionStorage.removeItem('username')
-            this.router.navigate(['/admin'])
+            sessionStorage.removeItem('role')
+            this.router.navigate(['/login'])
             resolve()
           } else if (value === 'shutdown') {
             sessionStorage.removeItem('user_id')
             sessionStorage.removeItem('username')
+            sessionStorage.removeItem('role')
             sessionStorage.removeItem('POS')
             this.router.navigate(['/pos'])
             resolve()

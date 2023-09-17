@@ -82,14 +82,14 @@ export class AdminProductListPage implements OnInit {
     this.columns = [
       { key: 'id', title: 'Product ID' },
       {
-        key: 'brand_name',
-        title: 'Brand Name',
-        headerActionTemplate: this.brandHeaderActionTemplate,
-      },
-      {
         key: 'category_name',
         title: 'Category Name',
         headerActionTemplate: this.categoryHeaderActionTemplate,
+      },
+      {
+        key: 'brand_name',
+        title: 'Brand Name',
+        headerActionTemplate: this.brandHeaderActionTemplate,
       },
       {
         key: 'name',
@@ -168,23 +168,25 @@ export class AdminProductListPage implements OnInit {
       ;(this as any)[id] = ''
       ;(this as any)[param] = ''
       ;(this as any)[msg] = this.originalMsg
-      this.filterBy(id_param, id)
 
       return
     }
     ;(this as any)[id] = event.target.value
     ;(this as any)[name] = event.target.name
     ;(this as any)[msg] = `${event.target.value} : ${event.target.name}`
+    this.filterBy(id_param, (this as any)[name])
   }
+
   filterBy(field: string, param: string): void {
     if (field === 'categories_id') {
       this.searchCategoryParam = param
     }
 
-    this.filteredBrand = [...this.brandListData].filter(({ id }) => {
-      return id?.toString().includes(this.searchCategoryParam)
+    this.filteredBrand = [...this.brandListData].filter(({ name }) => {
+      return name?.toString().includes(this.searchCategoryParam)
     })
   }
+
   searchBrand(ev: any) {
     this.filterBrand(ev.target.value)
   }
@@ -242,7 +244,7 @@ export class AdminProductListPage implements OnInit {
     this.dismiss(this.productModal)
   }
 
-  eventEmitted($event: { event: string; value: any }): void {
+  checkBox($event: { event: string; value: any }): void {
     switch ($event.event) {
       case 'onCheckboxSelect':
         if (this.selectedChecked.has($event.value.rowId)) {
@@ -286,7 +288,6 @@ export class AdminProductListPage implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         for (let id of this.arrayID) {
-          console.log(id)
           this.delete(id)
         }
       }
