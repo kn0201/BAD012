@@ -59,7 +59,7 @@
           </ion-buttons>
           <ion-title class="text-center">Adding Brand / Category</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+            <ion-button (click)="clear()">Clear</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -85,6 +85,14 @@
           ></ion-input>
         </ion-item>
       </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button [strong]="true" (click)="confirm()">Confirm</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
     </ng-template>
   </ion-modal>
   <ng-template #brandHeaderActionTemplate>

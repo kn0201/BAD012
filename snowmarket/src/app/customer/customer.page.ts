@@ -219,6 +219,7 @@ export class CustomerPage {
   exit() {
     sessionStorage.removeItem('user_id')
     sessionStorage.removeItem('username')
+    sessionStorage.removeItem('role')
     this.router.navigate(['/login'])
   }
 

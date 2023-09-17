@@ -70,7 +70,6 @@ export class AdminMemberListPage implements OnInit {
   }
   async loadList(): Promise<any> {
     let json = await this.adminService.getMemberList()
-    console.log(json)
 
     this.data = json.memberList
     this.dataCopy = json.memberList

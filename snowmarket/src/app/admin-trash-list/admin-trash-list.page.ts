@@ -109,11 +109,9 @@ export class AdminTrashListPage implements OnInit {
           if (index !== -1) {
             this.arrayID.splice(index, 1)
           }
-          console.log(this.arrayID)
         } else {
           this.selectedChecked.add($event.value.rowId)
           this.arrayID.push($event.value.row.id)
-          console.log(this.arrayID)
         }
         break
       case 'onSelectAll':
@@ -146,7 +144,6 @@ export class AdminTrashListPage implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         for (let id of this.arrayID) {
-          console.log(id)
           this.delete(id)
         }
       }
