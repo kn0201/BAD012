@@ -10,6 +10,7 @@ import { env } from 'utils/env';
 import { ProductModule } from './product/product.module';
 import { PosModule } from './pos/pos.module';
 import { GuardGuard } from './guard/guard.guard';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -37,6 +38,6 @@ import { GuardGuard } from './guard/guard.guard';
     PosModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy],
 })
 export class AppModule {}

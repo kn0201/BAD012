@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 let loginParser = object({
   username: string({ trim: true, nonEmpty: true }),
-  password: string({ trim: true }),
+  password: string({ trim: true, nonEmpty: true }),
 });
 
 let userParser = object({
@@ -36,7 +36,7 @@ export class LoginController {
     return this.loginService.login(input);
   }
 
-  @Post('/register')
+  @Post('register')
   async register(@Body() body: Body) {
     let input = userParser.parse(body);
     return this.loginService.register(input);

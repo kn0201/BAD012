@@ -6,7 +6,6 @@
         src="../../assets/image/Biglogo.webp"
       ></ion-img>
     </div>
-
     <ion-buttons class="login">
       <button id="click-trigger" (click)="presentPopover($event)">
         會員登入
@@ -19,7 +18,8 @@
         (didDismiss)="isOpen = false"
       >
         <ng-template>
-          <ion-content class="ion-padding">
+<<<<<<< HEAD
+          <ion-content class="X">
             <div class="form">
               <div
                 class="container"
@@ -92,14 +92,17 @@
                       />
                     </ion-item>
                     <ion-button (click)="login()">Login In</ion-button>
-                    <a href=""><ion-button>Reset password</ion-button></a>
                   </form>
+                  <ion-button>RESET PASSWORD</ion-button>
                 </div>
                 <div class="overlay-container">
                   <div class="overlay">
                     <div class="overlay-panel overlay-left">
                       <h1 class="h1Word">Hello, Friend!</h1>
-                      <p>Already have Account?</p>
+                      <p>
+                        To keep connected with us please login with your
+                        personal info
+                      </p>
 
                       <button
                         class="ghost"
@@ -111,7 +114,7 @@
                     </div>
                     <div class="overlay-panel overlay-right">
                       <h1 class="h1Word">Welcome Back!</h1>
-                      <p>Sign up to get the Reward !</p>
+                      <p>Enter your personal details and start discount now!</p>
                       <button
                         class="ghost"
                         id="signUp"
@@ -120,11 +123,111 @@
                         Sign Up
                       </button>
                     </div>
+=======
+          <div class="form">
+            <div
+              class="container"
+              id="container"
+              [ngClass]="{'right-panel-active':signUpPageVisible}"
+            >
+              <div class="form-container sign-up-container">
+                <form
+                  id="loginform"
+                  title="loginForm"
+                  method="post"
+                  action="/register"
+                >
+                  <h2>Create Account</h2>
+
+                  <ion-item>
+                    <ion-input
+                      type="text"
+                      [(ngModel)]="username"
+                      name="username"
+                      clearInput="true"
+                      labelPlacement="username"
+                      placeholder="Username"
+                    />
+                  </ion-item>
+                  <ion-item>
+                    <ion-input
+                      type="email"
+                      [(ngModel)]="email"
+                      name="email"
+                      clearInput="true"
+                      labelPlacement="Email"
+                      placeholder="Email"
+                    />
+                  </ion-item>
+                  <ion-item style="padding-bottom: 2.5vh">
+                    <ion-input
+                      type="password"
+                      [(ngModel)]="password"
+                      name="password"
+                      clearInput="true"
+                      labelPlacement="Password"
+                      placeholder="Password"
+                    />
+                  </ion-item>
+                  <button (click)="register()">Sign Up</button>
+                </form>
+              </div>
+              <div class="form-container sign-in-container">
+                <form action="#">
+                  <h1>Sign In</h1>
+                  <ion-item style="padding-top: 2vh">
+                    <ion-input
+                      type="text"
+                      [(ngModel)]="username"
+                      name="username"
+                      clearInput="true"
+                      labelPlacement="Email"
+                      placeholder="Username"
+                    />
+                  </ion-item>
+                  <ion-item style="padding-bottom: 5vh">
+                    <ion-input
+                      type="password"
+                      [(ngModel)]="password"
+                      name="password"
+                      clearInput="true"
+                      labelPlacement="Password"
+                      placeholder="Password"
+                    />
+                  </ion-item>
+                  <button (click)="login()">Login In</button>
+                </form>
+              </div>
+              <div class="overlay-container">
+                <div class="overlay">
+                  <div class="overlay-panel overlay-left">
+                    <h1 class="h1Word">Hello, Friend!</h1>
+                    <p>Already have Account?</p>
+
+                    <button
+                      class="ghost"
+                      id="signIn"
+                      (click)="switchPage(false)"
+                    >
+                      Sign In
+                    </button>
+                  </div>
+                  <div class="overlay-panel overlay-right">
+                    <h2 class="h1Word">Welcome Back!</h2>
+                    <p>Sign up to get the Reward !</p>
+                    <button
+                      class="ghost"
+                      id="signUp"
+                      (click)="switchPage(true)"
+                    >
+                      Sign Up
+                    </button>
+>>>>>>> refs/remotes/origin/main
                   </div>
                 </div>
               </div>
             </div>
-          </ion-content>
+          </div>
         </ng-template>
       </ion-modal>
       <a href="../customer/customer.page.html">
