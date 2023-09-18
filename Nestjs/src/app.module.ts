@@ -8,11 +8,7 @@ import { CustomerModule } from './customer/customer.module';
 import { KnexModule } from 'nestjs-knex';
 import { env } from 'utils/env';
 import { ProductModule } from './product/product.module';
-<<<<<<< HEAD
-import { GoogleStrategy } from './google.strategy';
-=======
 import { PosModule } from './pos/pos.module';
->>>>>>> refs/remotes/origin/main
 
 @Module({
   imports: [
@@ -40,6 +36,6 @@ import { PosModule } from './pos/pos.module';
     PosModule,
   ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy],
+  providers: [AppService],
 })
 export class AppModule {}
