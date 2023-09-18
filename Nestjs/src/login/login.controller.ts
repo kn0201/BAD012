@@ -1,10 +1,20 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 
 import { object, string } from 'cast.ts';
 
 import { LoginService } from './login.service';
 import session from 'express-session';
 import { json } from 'stream/consumers';
+import { AppService } from 'src/app.service';
+import { AuthGuard } from '@nestjs/passport';
 
 let loginParser = object({
   username: string({ trim: true, nonEmpty: true }),

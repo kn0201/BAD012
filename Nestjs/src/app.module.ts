@@ -8,6 +8,7 @@ import { CustomerModule } from './customer/customer.module';
 import { KnexModule } from 'nestjs-knex';
 import { env } from 'utils/env';
 import { ProductModule } from './product/product.module';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -34,6 +35,6 @@ import { ProductModule } from './product/product.module';
     ProductModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy],
 })
 export class AppModule {}

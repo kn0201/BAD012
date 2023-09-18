@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
-
 import { comparePassword, hashPassword } from 'utils/hash';
 
 import { InjectKnex } from 'nestjs-knex';
@@ -8,9 +7,9 @@ import { InjectKnex } from 'nestjs-knex';
 export class LoginService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
-  async register(body) {
+  async register(body: { username: any; email: any; password: any }) {
     let username = body.username;
-    let hashedPW = hashPassword(body.password);
+    let hashedPW = await hashPassword(body.password);
     let result = await this.knex('users')
       .insert({
         username: body.username,
@@ -39,8 +38,6 @@ export class LoginService {
     }
     let role = foundUser.role;
     let id = foundUser.id;
-    console.log(role);
-
     return { role: role, error: null, id: id };
   }
 }
