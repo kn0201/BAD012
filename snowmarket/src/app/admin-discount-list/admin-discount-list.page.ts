@@ -91,13 +91,13 @@ export class AdminDiscountListPage implements OnInit {
   selectedStartDate = ''
   selectedEndDate = ''
 
-  selectedProductID = ''
+  selectedProductID = null
   selectedProductName = ''
 
-  selectedBrandID = ''
+  selectedBrandID = null
   selectedBrandName = ''
 
-  selectedCategoryID = ''
+  selectedCategoryID = null
   selectedCategoryName = ''
 
   searchBrandParam = ''
@@ -227,9 +227,9 @@ export class AdminDiscountListPage implements OnInit {
 
   clear() {
     this.title = ''
-    this.selectedProductID = ''
-    this.selectedBrandID = ''
-    this.selectedCategoryID = ''
+    this.selectedProductID = null
+    this.selectedBrandID = null
+    this.selectedCategoryID = null
     this.idMsg = 'Click to Select'
     this.brandMsg = 'Click to Select'
     this.categoryMsg = 'Click to Select'
@@ -248,7 +248,7 @@ export class AdminDiscountListPage implements OnInit {
 
   selectProductID(event: any) {
     if (!event.target.checked) {
-      this.selectedProductID = ''
+      this.selectedProductID = null
       this.idMsg = 'Click to Select'
       return
     }
@@ -440,27 +440,7 @@ export class AdminDiscountListPage implements OnInit {
       sweetalert2error('Missing title')
       return
     }
-    if (
-      this.selectedDiscount == 'product_discount' &&
-      this.selectedProductID == ''
-    ) {
-      sweetalert2error('Missing Product')
-      return
-    }
-    if (
-      this.selectedDiscount == 'product_discount' &&
-      this.selectedBrandID == ''
-    ) {
-      sweetalert2error('Missing Brand')
-      return
-    }
-    if (
-      this.selectedDiscount == 'product_discount' &&
-      this.selectedCategoryID == ''
-    ) {
-      sweetalert2error('Missing Product')
-      return
-    }
+
     if (this.selectedDiscount == 'product_discount' && this.quantity == '') {
       sweetalert2error('Missing Quantity')
       return

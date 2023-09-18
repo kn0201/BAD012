@@ -121,12 +121,20 @@ export interface Item {
   receipt_id: number
   name: string
   price: number
+  quantity: number
+  product_id: number | null
+  brand_id: number | null
+  category_id: number | null
 }
 
 export let item = object({
   receipt_id: number(),
   name: string(),
   price: number(),
+  quantity: number(),
+  product_id: nullable(number()),
+  brand_id: nullable(number()),
+  category_id: nullable(number()),
 })
 
 export let test = object({

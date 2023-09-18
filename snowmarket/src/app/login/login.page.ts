@@ -51,6 +51,7 @@ export class LoginPage implements OnInit {
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
+        this.clear()
         this.router.navigate(['/customer'])
       } else if (json.role == 'admin') {
         sweetalert2Success('Login Success')
@@ -58,6 +59,7 @@ export class LoginPage implements OnInit {
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
+        this.clear()
         this.router.navigate(['/admin'])
       }
     }
