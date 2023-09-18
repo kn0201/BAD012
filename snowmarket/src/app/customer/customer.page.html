@@ -76,18 +76,6 @@
                             </button>
                           </td>
                         </tr>
-                        <!-- <ng-container
-                          *ngFor="let discount of discounts"
-                          *ngIf="showDiscountList"
-                        >
-                          <tr>
-                            <th scope="row"></th>
-                            <td>{{discounts.name}}</td>
-                            <td class="text-center"></td>
-                            <td class="text-center"></td>
-                            <td class="text-center">${{discounts.price}}</td>
-                            <td *ngIf="showDeleteButton"></td></tr
-                        ></ng-container> -->
                       </ng-container>
                     </tbody>
                     <tfoot>
@@ -189,13 +177,32 @@
                         <ion-buttons slot="start">
                           <ion-button (click)="cancel()">Cancel</ion-button>
                         </ion-buttons>
-                        <ion-title class="text-center">Cart Summary</ion-title>
+                        <ion-title class="text-center"
+                          >Payment Methods</ion-title
+                        >
                         <ion-buttons slot="end">
                           <ion-button (click)="payment()">Confirm</ion-button>
                         </ion-buttons>
                       </ion-toolbar>
                     </ion-header>
                     <ion-content class="modal-background">
+                      <div class="row logoContainer">
+                        <div
+                          class="col-lg-5 mbr-col-md-10"
+                          *ngFor="let paymentMethod of paymentMethods"
+                        >
+                          <div
+                            class="wrap"
+                            (click)="select(paymentMethod)"
+                            [ngClass]="{active: isActive(paymentMethod)}"
+                          >
+                            <ion-icon
+                              name="{{paymentMethod.name}}"
+                              style="font-size: 20vh"
+                            ></ion-icon>
+                          </div>
+                        </div>
+                      </div>
                       <!-- <table class="table table-striped table-hover">
                         <thead>
                           <tr>
@@ -219,7 +226,7 @@
                             </td>
                             <td class="text-center">{{item.quantity||null}}</td>
                             <td class="text-center">{{item.price}}</td>
-                      </tr>
+                          </tr>
                         </tbody>
                         <tfoot>
                           <tr>
