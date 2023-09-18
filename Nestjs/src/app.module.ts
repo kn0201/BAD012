@@ -9,6 +9,7 @@ import { KnexModule } from 'nestjs-knex';
 import { env } from 'utils/env';
 import { ProductModule } from './product/product.module';
 import { PosModule } from './pos/pos.module';
+import { GuardGuard } from './guard/guard.guard';
 
 @Module({
   imports: [
