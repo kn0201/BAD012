@@ -99,6 +99,10 @@ export class AdminService {
     return this.api.get('/admin/trash-list', deletedProductList)
   }
 
+  getChartList() {
+    return this.api.get('/admin/chart-list', receiptPageList)
+  }
+
   addBrandCategory(body: { name: string; selectValue: string }) {
     return this.api.post('/admin/b&c-list/add', body, addBrandCategoryResult)
   }
@@ -115,9 +119,9 @@ export class AdminService {
   addProductDiscount(body: {
     selectedDiscount: string
     title: string
-    product_id: string
-    brand_id: string
-    categories_id: string
+    product_id: number | null
+    brand_id: number | null
+    categories_id: number | null
     quantity: string
     discount_amount: string
     start_date: string

@@ -16,3 +16,7 @@ async function bootstrap() {
   print(port);
 }
 bootstrap();
+
+import dotenv from 'dotenv';
+dotenv.config();
+import grant from 'grant';

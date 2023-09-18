@@ -5,7 +5,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular'
 import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { TableModule } from 'ngx-easy-table'
-
+import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts'
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -13,8 +13,12 @@ import { TableModule } from 'ngx-easy-table'
     IonicModule.forRoot(),
     AppRoutingModule,
     TableModule,
+    NgChartsModule.forRoot(),
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: NgChartsConfiguration, useValue: { generateColors: false } },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
