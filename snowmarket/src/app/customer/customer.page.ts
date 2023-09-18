@@ -443,6 +443,12 @@ export class CustomerPage {
         if (indexToRemove !== -1) {
           this.items.splice(indexToRemove, 1)
         }
+        const indexToRemoveOriginal = this.originals.findIndex(
+          (item) => item.id == itemData.id
+        )
+        if (indexToRemoveOriginal !== -1) {
+          this.originals.splice(indexToRemoveOriginal, 1)
+        }
       }
       if (
         discount_id &&
@@ -468,14 +474,20 @@ export class CustomerPage {
             checkDiscountListItem.price =
               -checkDiscountList.unit_price * discountQuantity
           }
-          // if (discountQuantity <= 0) {
-          //   const indexToRemove = this.items.findIndex(
-          //     (item) => item.id == checkDiscountList!.id
-          //   )
-          //   if (indexToRemove !== -1) {
-          //     this.items.splice(indexToRemove, 1)
-          //   }
-          // }
+          if (discountQuantity <= 0) {
+            const indexToRemove = this.items.findIndex(
+              (item) => item.id == checkDiscountList!.id
+            )
+            if (indexToRemove !== -1) {
+              this.items.splice(indexToRemove, 1)
+            }
+            const indexToRemoveDiscount = this.discounts.findIndex(
+              (discount) => discount.id == checkDiscountListItem!.id
+            )
+            if (indexToRemoveDiscount !== -1) {
+              this.discounts.splice(indexToRemoveDiscount, 1)
+            }
+          }
           this.calculateTotalDiscount()
         }
       }
@@ -516,14 +528,20 @@ export class CustomerPage {
               checkBrandDiscountListItem.price =
                 -checkBrandDiscountList.unit_price * brandDiscountQuantity
             }
-            // if (brandDiscountQuantity <= 0) {
-            //   const indexToRemove = this.items.findIndex(
-            //     (item) => item.id == checkBrandDiscountList!.id
-            //   )
-            //   if (indexToRemove !== -1) {
-            //     this.items.splice(indexToRemove, 1)
-            //   }
-            // }
+            if (brandDiscountQuantity <= 0) {
+              const indexToRemoveBrand = this.items.findIndex(
+                (item) => item.id == checkBrandDiscountList!.id
+              )
+              if (indexToRemoveBrand !== -1) {
+                this.items.splice(indexToRemoveBrand, 1)
+              }
+              const indexToRemoveBrandDiscount = this.discounts.findIndex(
+                (discount) => discount.id == checkBrandDiscountListItem!.id
+              )
+              if (indexToRemoveBrandDiscount !== -1) {
+                this.discounts.splice(indexToRemoveBrandDiscount, 1)
+              }
+            }
             this.calculateTotalDiscount()
           }
         }
@@ -565,6 +583,7 @@ export class CustomerPage {
             }
           }
           if (
+            this.price_discount[0] &&
             total < this.price_discount[0].price &&
             typeof discountAmount !== 'undefined'
           ) {
@@ -608,6 +627,12 @@ export class CustomerPage {
       if (indexToRemove !== -1) {
         this.items.splice(indexToRemove, 1)
       }
+      const indexToRemoveOriginal = this.originals.findIndex(
+        (item) => item.id == itemData.id
+      )
+      if (indexToRemoveOriginal !== -1) {
+        this.originals.splice(indexToRemoveOriginal, 1)
+      }
     }
     if (
       discount_id &&
@@ -626,18 +651,18 @@ export class CustomerPage {
         checkDiscountList.quantity = 0
         checkDiscountList.price = 0
         checkDiscountListItem.price = 0
-        // const indexToRemove = this.items.findIndex(
-        //   (item) => item.id == checkDiscountList!.id
-        // )
-        // if (indexToRemove !== -1) {
-        //   this.items.splice(indexToRemove, 1)
-        // }
-        // const indexToRemoveDiscount = this.discounts.findIndex(
-        //   (discount) => discount.id == checkDiscountListItem!.id
-        // )
-        // if (indexToRemoveDiscount !== -1) {
-        //   this.items.splice(indexToRemoveDiscount, 1)
-        // }
+        const indexToRemove = this.items.findIndex(
+          (item) => item.id == checkDiscountList!.id
+        )
+        if (indexToRemove !== -1) {
+          this.items.splice(indexToRemove, 1)
+        }
+        const indexToRemoveDiscount = this.discounts.findIndex(
+          (discount) => discount.id == checkDiscountListItem!.id
+        )
+        if (indexToRemoveDiscount !== -1) {
+          this.discounts.splice(indexToRemoveDiscount, 1)
+        }
       }
       this.calculateTotalDiscount()
     }
@@ -677,14 +702,20 @@ export class CustomerPage {
               checkBrandDiscountListItem.price =
                 -checkBrandDiscountList.unit_price * brandDiscountQuantity
             }
-            // if (brandDiscountQuantity <= 0) {
-            //   const indexToRemove = this.items.findIndex(
-            //     (item) => item.id == checkBrandDiscountList!.id
-            //   )
-            //   if (indexToRemove !== -1) {
-            //     this.items.splice(indexToRemove, 1)
-            //   }
-            // }
+            if (brandDiscountQuantity <= 0) {
+              const indexToRemoveBrand = this.items.findIndex(
+                (item) => item.id == checkBrandDiscountList!.id
+              )
+              if (indexToRemoveBrand !== -1) {
+                this.items.splice(indexToRemoveBrand, 1)
+              }
+              const indexToRemoveBrandDiscount = this.discounts.findIndex(
+                (discount) => discount.id == checkBrandDiscountListItem!.id
+              )
+              if (indexToRemoveBrandDiscount !== -1) {
+                this.discounts.splice(indexToRemoveBrandDiscount, 1)
+              }
+            }
             this.calculateTotalDiscount()
           }
         }
@@ -754,7 +785,6 @@ export class CustomerPage {
         return discount.price_discount_total > total
       })
     ) {
-      // this.price_discount[0].price = 0
       this.price_discount.splice(0, 1)
     }
     this.calculateTotalDiscount()
@@ -881,7 +911,6 @@ export class CustomerPage {
       return { name: item.name, quantity: item.quantity, price: item.price }
     })
     let pos_id = sessionStorage['POS']
-
     let json = await this.customerService.postReceipt({
       items: receipt_items,
       user_id: this.user_id,
@@ -921,6 +950,7 @@ export class CustomerPage {
               this.router.navigate(['/login'])
               sessionStorage.removeItem('user_id')
               sessionStorage.removeItem('username')
+              sessionStorage.removeItem('role')
             }
           })
         }

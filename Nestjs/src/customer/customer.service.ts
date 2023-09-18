@@ -64,7 +64,6 @@ export class CustomerService {
   }
 
   async postReceipt(receipt) {
-    console.log('receipt', receipt);
     let receipt_id: number;
     let currentPoint: number;
     let receipt_rows = await this.knex('receipt')
@@ -88,9 +87,7 @@ export class CustomerService {
         .from('product')
         .where('name', item.name);
       currentStock = currentStocks[0].stock;
-      console.log('currentStock', currentStock);
       let remainingStock = currentStock - item.quantity;
-      console.log('remainingStock', remainingStock);
       await this.knex('product')
         .where('name', item.name)
         .update('stock', remainingStock);
@@ -101,9 +98,7 @@ export class CustomerService {
         .from('users')
         .where('id', receipt.user_id);
       currentPoint = currentPoints[0].point;
-      console.log('currentPoint', currentPoint);
       let updatedPoint = currentPoint + Math.floor(receipt.balance / 10);
-      console.log('updatedPoint', updatedPoint);
       await this.knex('users')
         .where('id', receipt.user_id)
         .update('point', updatedPoint);
