@@ -16,3 +16,14 @@ export const adminGuard: CanActivateFn = (route, state) => {
   router.navigate(['/login'])
   return false
 }
+
+export const posGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router)
+  const token = sessionStorage.getItem('pos')
+  if (token) {
+    return true
+  }
+  sweetalert2error('Please Login System')
+  router.navigate(['/pos'])
+  return false
+}

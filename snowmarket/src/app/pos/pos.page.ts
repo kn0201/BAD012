@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import Swal from 'sweetalert2'
 import { sweetalert2Success } from 'utils/sweetalert2'
+import { PosService } from '../pos.service'
 
 @Component({
   selector: 'app-pos',
@@ -9,7 +10,7 @@ import { sweetalert2Success } from 'utils/sweetalert2'
   styleUrls: ['./pos.page.scss'],
 })
 export class PosPage implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private posService: PosService) {}
 
   ngOnInit() {}
 
@@ -20,10 +21,12 @@ export class PosPage implements OnInit {
       inputLabel: 'POS ID',
       heightAuto: false,
       showCancelButton: true,
-      inputValidator: (pos_id) => {
-        if (pos_id == '000161') {
+      inputValidator: async (pos_id) => {
+        let json = await this.posService.checkPOS({ pos: pos_id })
+        let id = json.id.toString()
+        if (pos_id == json.code) {
           sweetalert2Success('System Login')
-          sessionStorage.setItem('POS', '1')
+          sessionStorage.setItem('pos', id)
           this.router.navigate(['/login'])
         }
       },

@@ -8,6 +8,7 @@ import { CustomerModule } from './customer/customer.module';
 import { KnexModule } from 'nestjs-knex';
 import { env } from 'utils/env';
 import { ProductModule } from './product/product.module';
+import { PosModule } from './pos/pos.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProductModule } from './product/product.module';
       },
     }),
     ProductModule,
+    PosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
