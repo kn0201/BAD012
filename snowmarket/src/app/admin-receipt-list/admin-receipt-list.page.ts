@@ -37,6 +37,7 @@ export class AdminReceiptListPage implements OnInit {
 
     this.receiptListData = json.receiptList
     this.receiptItemData = json.receiptItemList
+    console.log(this.receiptItemData)
 
     for (let item of json.receiptList) {
       item.date = new Date(item.date).toLocaleDateString()

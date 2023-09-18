@@ -2,7 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { LoginService } from '../login.service'
+<<<<<<< HEAD
 import * as e from 'express'
+=======
+import Swal from 'sweetalert2'
+import { IonModal } from '@ionic/angular'
+>>>>>>> refs/remotes/origin/main
 
 @Component({
   selector: 'app-login',
@@ -12,14 +17,22 @@ import * as e from 'express'
 export class LoginPage implements OnInit {
   canDismiss: boolean | undefined
   constructor(private loginService: LoginService, private router: Router) {}
+
   username: string = ''
   password: string = ''
   email: string = ''
   signUpPageVisible: boolean = false
+  isOpen: boolean = false
+  canDismiss: boolean = true
+  model: any
 
+  @ViewChild(IonModal) modal!: IonModal
   @ViewChild('popover') popover: any
+<<<<<<< HEAD
   @ViewChild('productModal') productModal: any
   isOpen = false
+=======
+>>>>>>> refs/remotes/origin/main
 
   presentPopover(e: Event) {
     this.popover.event = e
@@ -42,20 +55,31 @@ export class LoginPage implements OnInit {
     this.isOpen = true
   }
   async login() {
+    if (this.username == '') {
+      this.loginSweetalert2error('Missing User Name')
+      return
+    } else if (this.password == '') {
+      this.loginSweetalert2error('Missing Password')
+      return
+    }
     let json = await this.loginService.login({
       username: this.username,
       password: this.password,
     })
-
+    if (json.error != null) {
+      this.cancel()
+      this.clear()
+      this.loginSweetalert2error(json.error)
+    }
     if (json.id) {
       let user_id = json.id.toString()
-
       if (json.role == 'member') {
         sweetalert2Success('Login Success')
         sessionStorage.setItem('role', json.role)
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
+        this.clear()
         this.router.navigate(['/customer'])
       } else if (json.role == 'admin') {
         sweetalert2Success('Login Success')
@@ -63,11 +87,9 @@ export class LoginPage implements OnInit {
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
+        this.clear()
         this.router.navigate(['/admin'])
       }
-    }
-    if (json.error != null) {
-      sweetalert2error(json.error)
     }
   }
 
@@ -77,13 +99,13 @@ export class LoginPage implements OnInit {
 
   async register() {
     if (this.username == '') {
-      sweetalert2error('Missing User Name')
+      this.loginSweetalert2error('Missing User Name')
       return
     } else if (this.email == '') {
-      sweetalert2error('Missing Email Address')
+      this.loginSweetalert2error('Missing Email Address')
       return
     } else if (this.password == '') {
-      sweetalert2error('Missing Password')
+      this.loginSweetalert2error('Missing Password')
       return
     }
     let json = await this.loginService.register({
@@ -99,5 +121,25 @@ export class LoginPage implements OnInit {
     sessionStorage.setItem('user_id', id)
     this.popover.dismiss()
     this.router.navigate(['/customer'])
+  }
+
+  cancel() {
+    this.modal.dismiss()
+  }
+
+  loginSweetalert2error(error: any) {
+    Swal.fire({
+      title: 'Error!',
+      text: error,
+      icon: 'error',
+      confirmButtonColor: '#ffa065',
+      confirmButtonText: 'OK',
+      heightAuto: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cancel()
+        this.clear()
+      }
+    })
   }
 }

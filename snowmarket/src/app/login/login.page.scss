@@ -20,20 +20,35 @@ h1 {
   margin: 0;
 }
 
+h2 {
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  color: #ff4b2b;
+  font-weight: bold;
+  margin: 0;
+}
+
 .image-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .logo {
-  margin-top: 3rem;
+  margin-top: 4rem;
   align-items: center;
-  width: 40%;
+  width: 35%;
 }
 
 ion-modal {
   --width: 800px;
   --height: 520px;
+  --background: transparent;
+  --box-shadow: 0;
+}
+
+ion-item {
+  --padding-start: 0;
 }
 
 .login {
@@ -48,7 +63,7 @@ ion-modal {
 
 button {
   appearance: button;
-  background-color: #1899d6;
+  background-color: #f35d2e;
   border: solid transparent;
   border-radius: 1px;
   border-width: 0 0 4px;
@@ -79,7 +94,7 @@ button {
 
 .button:after {
   background-clip: padding-box;
-  background-color: #1cb0f6;
+  background-color: #f35d2e;
   border: solid transparent;
   border-radius: 16px;
   border-width: 0 0 4px;
@@ -124,6 +139,12 @@ body {
 }
 
 h1.h1Word {
+  color: #eee;
+  font-weight: bold;
+  margin: 0;
+}
+
+h2.h1Word {
   color: #eee;
   font-weight: bold;
   margin: 0;
@@ -329,7 +350,6 @@ input {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin: 0 5px;
   height: 40px;
   width: 40px;
 }
@@ -355,6 +375,6 @@ footer i {
 }
 
 footer a {
-  color: #3c97bf;
+  color: #f35d2e;
   text-decoration: none;
 }

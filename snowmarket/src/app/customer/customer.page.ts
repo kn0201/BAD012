@@ -98,6 +98,16 @@ export class CustomerPage {
       this.user_id = sessionStorage['user_id']
       this.username = sessionStorage['username']
     }
+    setTimeout(() => {
+      this.router.navigate(['login'])
+      this.items = []
+      this.discounts = []
+      this.originals = []
+      this.price_discount = []
+      sessionStorage.removeItem('user_id')
+      sessionStorage.removeItem('username')
+      sessionStorage.removeItem('role')
+    }, 600000)
   }
 
   async ionViewDidEnter() {
