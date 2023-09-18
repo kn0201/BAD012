@@ -200,3 +200,25 @@ canvas {
   width: 100%;
   transform: scaleX();
 }
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  padding: 3vw;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center;
+  color: #ffa065;
+  padding: 1rem 1rem 1rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 7px 7px 30px -5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.wrap:hover,
+.active {
+  background: linear-gradient(135deg, #ffa065 0%, #f35d2e 100%);
+  color: white;
+}

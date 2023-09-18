@@ -50,17 +50,20 @@ export class CustomerPage {
     name: string
     price: number
   }[] = []
-  // summarizedItems: {
-  //   id: number
-  //   name: string
-  //   quantity: number
-  //   price: number
-  // }[] = []
+  paymentMethods: {
+    name: string
+    method: string
+  }[] = [
+    { name: 'logo-alipay', method: 'Alipay' },
+    { name: 'card-outline', method: 'Credit Card' },
+  ]
+  selected: any
 
   user_id = null
   username = 'Guest'
   findID: number | string = ''
 
+  quantity: number = 0
   discountAmount: number = +''
   idToFilter: number = +''
 
@@ -75,20 +78,6 @@ export class CustomerPage {
 
   mediaStream?: MediaStream
   coolDownProductLabels = new Set<string>()
-
-  // Add Item Section
-  // searchedItemIDList: number[] = []
-  // itemListMap: Map<
-  //   number /*product id */,
-  //   { name: string; quantity: number; unit_price: number; price: number }
-  // > = new Map()
-  // productDiscountMap: Map<
-  //   number /*product id */,
-  //   { amount: number; quantity: number }
-  // > = new Map()
-  // /* */
-
-  // public multipleWebcamsAvailable = false
 
   @ViewChild(IonModal) modal!: IonModal
 
@@ -219,6 +208,7 @@ export class CustomerPage {
   exit() {
     sessionStorage.removeItem('user_id')
     sessionStorage.removeItem('username')
+    sessionStorage.removeItem('role')
     this.router.navigate(['/login'])
   }
 
@@ -311,7 +301,6 @@ export class CustomerPage {
       }
     }
     if (brandItem) {
-      console.log('brandItem', brandItem)
       if (discount_quantity) {
         let sameBrand = this.items.filter((item) => {
           return (
@@ -367,9 +356,7 @@ export class CustomerPage {
         }
       }
     }
-    this.calculateTotalQuantity()
-    this.calculateTotalPrice()
-    this.calculateBalance()
+    this.calculateTotalBalance()
     if (json.price_discount) {
       let discountAmount
       for (const discount of json.price_discount) {
@@ -413,11 +400,382 @@ export class CustomerPage {
         }
       }
       this.calculateTotalDiscount()
+      this.calculateTotalBalance()
     }
-    console.log('this.item', this.items)
-    console.log('this.discounts', this.discounts)
-    console.log('this.originals', this.originals)
-    console.log('this.price_discount', this.price_discount[0])
+  }
+
+  handleRemoveItemResult(json: AddToCartResult) {
+    const {
+      discount_id,
+      discount_title,
+      discount_product_id,
+      discount_brand_id,
+      discount_categories_id,
+      discount_quantity,
+      discount_amount,
+      ...itemData
+    } = json.item
+    let item = this.items.find((item) => item.id == itemData.id)
+    let brandItem = this.items.find(
+      (item) =>
+        item.brand_id == itemData.product_brand_id &&
+        item.categories_id == itemData.product_categories_id
+    )
+    if (item) {
+      item.quantity--
+      item.price -= itemData.unit_price
+      if (item.quantity <= 0) {
+        const indexToRemove = this.items.findIndex(
+          (item) => item.id == itemData.id
+        )
+        if (indexToRemove !== -1) {
+          this.items.splice(indexToRemove, 1)
+        }
+        const indexToRemoveOriginal = this.originals.findIndex(
+          (item) => item.id == itemData.id
+        )
+        if (indexToRemoveOriginal !== -1) {
+          this.originals.splice(indexToRemoveOriginal, 1)
+        }
+      }
+      if (
+        discount_id &&
+        discount_title &&
+        discount_product_id &&
+        discount_quantity &&
+        discount_amount
+      ) {
+        let checkDiscountList = this.discounts.find(
+          (discount) => discount.id == discount_id
+        )
+        let checkDiscountListItem = this.items.find(
+          (discount) => discount.name == discount_title
+        )
+        if (checkDiscountList && checkDiscountListItem) {
+          let discountQuantity = +Math.floor(
+            item.quantity / discount_quantity
+          ).toFixed(0)
+          if (discountQuantity >= 0) {
+            checkDiscountList.quantity = discountQuantity
+            checkDiscountList.price =
+              checkDiscountList.unit_price * discountQuantity
+            checkDiscountListItem.price =
+              -checkDiscountList.unit_price * discountQuantity
+          }
+          if (discountQuantity <= 0) {
+            const indexToRemove = this.items.findIndex(
+              (item) => item.id == checkDiscountList!.id
+            )
+            if (indexToRemove !== -1) {
+              this.items.splice(indexToRemove, 1)
+            }
+            const indexToRemoveDiscount = this.discounts.findIndex(
+              (discount) => discount.id == checkDiscountListItem!.id
+            )
+            if (indexToRemoveDiscount !== -1) {
+              this.discounts.splice(indexToRemoveDiscount, 1)
+            }
+          }
+          this.calculateTotalDiscount()
+        }
+      }
+    }
+    if (brandItem) {
+      if (discount_quantity) {
+        let sameBrand = this.items.filter((item) => {
+          return (
+            item.brand_id == discount_brand_id &&
+            item.categories_id == discount_categories_id
+          )
+        })
+        let sameBrandNum = sameBrand.reduce(
+          (total, item) => total + item.quantity,
+          0
+        )
+        if (
+          discount_id &&
+          discount_title &&
+          discount_brand_id &&
+          discount_categories_id &&
+          discount_amount
+        ) {
+          let checkBrandDiscountList = this.discounts.find(
+            (discount) => discount.id == discount_id
+          )
+          let checkBrandDiscountListItem = this.items.find(
+            (discount) => discount.name == discount_title
+          )
+          if (checkBrandDiscountList && checkBrandDiscountListItem) {
+            let brandDiscountQuantity = +Math.floor(
+              sameBrandNum / discount_quantity
+            ).toFixed(0)
+            if (brandDiscountQuantity >= 0) {
+              checkBrandDiscountList.quantity = brandDiscountQuantity
+              checkBrandDiscountList.price =
+                checkBrandDiscountList.unit_price * brandDiscountQuantity
+              checkBrandDiscountListItem.price =
+                -checkBrandDiscountList.unit_price * brandDiscountQuantity
+            }
+            if (brandDiscountQuantity <= 0) {
+              const indexToRemoveBrand = this.items.findIndex(
+                (item) => item.id == checkBrandDiscountList!.id
+              )
+              if (indexToRemoveBrand !== -1) {
+                this.items.splice(indexToRemoveBrand, 1)
+              }
+              const indexToRemoveBrandDiscount = this.discounts.findIndex(
+                (discount) => discount.id == checkBrandDiscountListItem!.id
+              )
+              if (indexToRemoveBrandDiscount !== -1) {
+                this.discounts.splice(indexToRemoveBrandDiscount, 1)
+              }
+            }
+            this.calculateTotalDiscount()
+          }
+        }
+      }
+    }
+    this.calculateTotalBalance()
+    if (json.price_discount) {
+      let discountAmount
+      for (const discount of json.price_discount) {
+        if (discount) {
+          const {
+            price_discount_id,
+            price_discount_title,
+            price_discount_total,
+            price_discount_rate,
+          } = discount
+          let total =
+            this.totalPrice -
+            +this.discounts
+              .reduce((total, discount) => total + discount.price, 0)
+              .toFixed(2)
+          if (total >= price_discount_total) {
+            if (price_discount_rate.startsWith('-')) {
+              discountAmount = parseFloat(price_discount_rate)
+            } else if (price_discount_rate.startsWith('*')) {
+              const discountMultiplier = parseFloat(
+                price_discount_rate.slice(1)
+              )
+              discountAmount = total * (discountMultiplier - 1)
+            }
+            let checkPriceDiscountList = this.price_discount.length > 0
+            if (
+              checkPriceDiscountList &&
+              typeof discountAmount !== 'undefined'
+            ) {
+              this.price_discount[0].id = price_discount_id
+              this.price_discount[0].name = price_discount_title
+              this.price_discount[0].price = +discountAmount.toFixed(2)
+            }
+          }
+          if (
+            this.price_discount[0] &&
+            total < this.price_discount[0].price &&
+            typeof discountAmount !== 'undefined'
+          ) {
+            if (typeof discountAmount !== 'undefined') {
+              this.price_discount[0].id = price_discount_id
+              this.price_discount[0].name = price_discount_title
+              this.price_discount[0].price = +discountAmount.toFixed(2)
+            }
+          }
+        }
+      }
+      this.calculateTotalDiscount()
+      this.checkPriceDiscount(json.price_discount)
+      this.calculateTotalBalance()
+    }
+  }
+
+  handleDeleteItemResult(json: AddToCartResult) {
+    const {
+      discount_id,
+      discount_title,
+      discount_product_id,
+      discount_brand_id,
+      discount_categories_id,
+      discount_quantity,
+      discount_amount,
+      ...itemData
+    } = json.item
+    let item = this.items.find((item) => item.id == itemData.id)
+    let brandItem = this.items.find(
+      (item) =>
+        item.brand_id == itemData.product_brand_id &&
+        item.categories_id == itemData.product_categories_id
+    )
+    if (item) {
+      item.quantity = 0
+      item.price = 0
+      const indexToRemove = this.items.findIndex(
+        (item) => item.id == itemData.id
+      )
+      if (indexToRemove !== -1) {
+        this.items.splice(indexToRemove, 1)
+      }
+      const indexToRemoveOriginal = this.originals.findIndex(
+        (item) => item.id == itemData.id
+      )
+      if (indexToRemoveOriginal !== -1) {
+        this.originals.splice(indexToRemoveOriginal, 1)
+      }
+    }
+    if (
+      discount_id &&
+      discount_title &&
+      discount_product_id &&
+      discount_quantity &&
+      discount_amount
+    ) {
+      let checkDiscountList = this.discounts.find(
+        (discount) => discount.id == discount_id
+      )
+      let checkDiscountListItem = this.items.find(
+        (discount) => discount.name == discount_title
+      )
+      if (checkDiscountList && checkDiscountListItem) {
+        checkDiscountList.quantity = 0
+        checkDiscountList.price = 0
+        checkDiscountListItem.price = 0
+        const indexToRemove = this.items.findIndex(
+          (item) => item.id == checkDiscountList!.id
+        )
+        if (indexToRemove !== -1) {
+          this.items.splice(indexToRemove, 1)
+        }
+        const indexToRemoveDiscount = this.discounts.findIndex(
+          (discount) => discount.id == checkDiscountListItem!.id
+        )
+        if (indexToRemoveDiscount !== -1) {
+          this.discounts.splice(indexToRemoveDiscount, 1)
+        }
+      }
+      this.calculateTotalDiscount()
+    }
+    if (brandItem) {
+      if (discount_quantity) {
+        let sameBrand = this.items.filter((item) => {
+          return (
+            item.brand_id == discount_brand_id &&
+            item.categories_id == discount_categories_id
+          )
+        })
+        let sameBrandNum = sameBrand.reduce(
+          (total, item) => total + item.quantity,
+          0
+        )
+        if (
+          discount_id &&
+          discount_title &&
+          discount_brand_id &&
+          discount_categories_id &&
+          discount_amount
+        ) {
+          let checkBrandDiscountList = this.discounts.find(
+            (discount) => discount.id == discount_id
+          )
+          let checkBrandDiscountListItem = this.items.find(
+            (discount) => discount.name == discount_title
+          )
+          if (checkBrandDiscountList && checkBrandDiscountListItem) {
+            let brandDiscountQuantity = +Math.floor(
+              sameBrandNum / discount_quantity
+            ).toFixed(0)
+            if (brandDiscountQuantity >= 0) {
+              checkBrandDiscountList.quantity = brandDiscountQuantity
+              checkBrandDiscountList.price =
+                checkBrandDiscountList.unit_price * brandDiscountQuantity
+              checkBrandDiscountListItem.price =
+                -checkBrandDiscountList.unit_price * brandDiscountQuantity
+            }
+            if (brandDiscountQuantity <= 0) {
+              const indexToRemoveBrand = this.items.findIndex(
+                (item) => item.id == checkBrandDiscountList!.id
+              )
+              if (indexToRemoveBrand !== -1) {
+                this.items.splice(indexToRemoveBrand, 1)
+              }
+              const indexToRemoveBrandDiscount = this.discounts.findIndex(
+                (discount) => discount.id == checkBrandDiscountListItem!.id
+              )
+              if (indexToRemoveBrandDiscount !== -1) {
+                this.discounts.splice(indexToRemoveBrandDiscount, 1)
+              }
+            }
+            this.calculateTotalDiscount()
+          }
+        }
+      }
+    }
+    this.calculateTotalBalance()
+    if (json.price_discount) {
+      let discountAmount
+      for (const discount of json.price_discount) {
+        if (discount) {
+          const {
+            price_discount_id,
+            price_discount_title,
+            price_discount_total,
+            price_discount_rate,
+          } = discount
+          let total =
+            this.totalPrice -
+            +this.discounts
+              .reduce((total, discount) => total + discount.price, 0)
+              .toFixed(2)
+          if (total >= price_discount_total) {
+            if (price_discount_rate.startsWith('-')) {
+              discountAmount = parseFloat(price_discount_rate)
+            } else if (price_discount_rate.startsWith('*')) {
+              const discountMultiplier = parseFloat(
+                price_discount_rate.slice(1)
+              )
+              discountAmount = total * (discountMultiplier - 1)
+            }
+            let checkPriceDiscountList = this.price_discount.length > 0
+            if (
+              checkPriceDiscountList &&
+              typeof discountAmount !== 'undefined'
+            ) {
+              this.price_discount[0].id = price_discount_id
+              this.price_discount[0].name = price_discount_title
+              this.price_discount[0].price = +discountAmount.toFixed(2)
+            }
+          }
+          if (
+            total < this.price_discount[0].price &&
+            typeof discountAmount !== 'undefined'
+          ) {
+            if (typeof discountAmount !== 'undefined') {
+              this.price_discount[0].id = price_discount_id
+              this.price_discount[0].name = price_discount_title
+              this.price_discount[0].price = +discountAmount.toFixed(2)
+            }
+          }
+        }
+      }
+      this.calculateTotalDiscount()
+      this.checkPriceDiscount(json.price_discount)
+      this.calculateTotalBalance()
+    }
+  }
+
+  checkPriceDiscount(json: any) {
+    let total =
+      this.totalPrice -
+      +this.discounts
+        .reduce((total, discount) => total + discount.price, 0)
+        .toFixed(2)
+    if (
+      json.every((discount: any) => {
+        return discount.price_discount_total > total
+      })
+    ) {
+      this.price_discount.splice(0, 1)
+    }
+    this.calculateTotalDiscount()
   }
   //   let dummyArray = new Set([...this.searchedItemIDList, idToFilter])
   //   if (dummyArray.size === this.searchedItemIDList.length) {
@@ -468,6 +826,18 @@ export class CustomerPage {
     this.handleAddItemResult(json)
   }
 
+  async increase(index: number) {
+    let id = this.items[index].id
+    let json = await this.customerService.addToCartByProductId(id)
+    this.handleAddItemResult(json)
+  }
+
+  async decrease(index: number) {
+    let id = this.items[index].id
+    let json = await this.customerService.addToCartByProductId(id)
+    this.handleRemoveItemResult(json)
+  }
+
   removeItem(index: number) {
     Swal.fire({
       title: 'Confirm to delete below gitem?',
@@ -478,7 +848,7 @@ export class CustomerPage {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Confirm',
       heightAuto: false,
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Deleted!',
@@ -487,23 +857,22 @@ export class CustomerPage {
           confirmButtonColor: '#ffa065',
           heightAuto: false,
         })
-        this.items.splice(index, 1)
+        let id = this.items[index].id
+        let json = await this.customerService.addToCartByProductId(id)
+        this.handleDeleteItemResult(json)
       }
     })
   }
 
-  calculateTotalQuantity(): number {
+  calculateTotalBalance(): number {
     this.totalQuantity = +this.originals
       .reduce((total, item) => total + item.quantity, 0)
       .toFixed(2)
-    return this.totalQuantity
-  }
-
-  calculateTotalPrice(): number {
     this.totalPrice = +this.originals
       .reduce((total, item) => total + item.price, 0)
       .toFixed(2)
-    return this.totalPrice
+    this.totalBalance = +(this.totalPrice - this.totalDiscount).toFixed(2)
+    return this.totalQuantity, this.totalPrice, this.totalBalance
   }
 
   calculateTotalDiscount(): number {
@@ -517,53 +886,6 @@ export class CustomerPage {
     return this.totalDiscount
   }
 
-  calculateBalance(): number {
-    this.totalBalance = +(this.totalPrice - this.totalDiscount).toFixed(2)
-    return this.totalBalance
-  }
-
-  // summarizeItem2() {
-  //   type ResultItem = {
-  //     id: number
-  //     name: string
-  //     totalQuantity: number
-  //     totalPrice: number
-  //   }
-  //   type ResultMap = Record<number, ResultItem>
-  //   let result: ResultItem[] = Object.values(
-  //     this.items.reduce((r: ResultMap, { id, name, quantity, price }) => {
-  //       r[id] ??= { id, name, totalQuantity: 0, totalPrice: 0 }
-  //       r[id].totalQuantity += quantity
-  //       r[id].totalPrice += price
-  //       return r
-  //     }, {})
-  //   )
-  //   let mappedResult = result.map((item) => {
-  //     return {
-  //       id: item.id,
-  //       name: item.name,
-  //       quantity: item.totalQuantity,
-  //       price: item.totalPrice,
-  //     }
-  //   })
-  //   this.summarizedItems = mappedResult
-  // }
-
-  // summarizeItem() {
-  //   const itemList: {
-  //     id: number
-  //     name: string
-  //     quantity: number
-  //     price: number
-  //   }[] = []
-
-  //   Array.from(this.itemListMap).map(([id, productInfo]) => {
-  //     itemList.push({ ...productInfo, id })
-  //   })
-  //   console.log({ itemList })
-  //   this.summarizedItems = itemList
-  // }
-
   cancel() {
     this.modal.dismiss()
   }
@@ -572,12 +894,25 @@ export class CustomerPage {
     this.showDeleteButton = !this.showDeleteButton
   }
 
+  select(item: any) {
+    this.selected = this.selected === item ? null : item
+  }
+  isActive(item: any) {
+    return this.selected === item
+  }
+
   async payment() {
     let receipt_items = this.originals.map((item) => {
-      return { name: item.name, quantity: item.quantity, price: item.price }
+      return {
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        product_id: item.id,
+        brand_id: item.brand_id,
+        category_id: item.categories_id,
+      }
     })
-    let pos_id = sessionStorage['POS']
-
+    let pos_id = sessionStorage['pos']
     let json = await this.customerService.postReceipt({
       items: receipt_items,
       user_id: this.user_id,
@@ -617,6 +952,7 @@ export class CustomerPage {
               this.router.navigate(['/login'])
               sessionStorage.removeItem('user_id')
               sessionStorage.removeItem('username')
+              sessionStorage.removeItem('role')
             }
           })
         }

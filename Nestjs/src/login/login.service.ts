@@ -21,7 +21,7 @@ export class LoginService {
       })
       .returning('id');
     let id = result[0].id;
-    return { username: username, id: id };
+    return { username: username, id: id, role: 'member' };
   }
 
   async login(input) {

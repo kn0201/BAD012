@@ -9,6 +9,7 @@ let loginResult = object({
 })
 
 let register = object({
+  role: string(),
   username: string(),
   id: number(),
 })

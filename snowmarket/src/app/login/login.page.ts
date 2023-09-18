@@ -12,6 +12,7 @@ export class LoginPage implements OnInit {
   constructor(private loginService: LoginService, private router: Router) {}
   username: string = ''
   password: string = ''
+  email: string = ''
   signUpPageVisible: boolean = false
 
   @ViewChild('popover') popover: any
@@ -22,7 +23,6 @@ export class LoginPage implements OnInit {
     this.popover.event = e
     this.isOpen = true
   }
-  email: string = ''
 
   ngOnInit() {}
 
@@ -47,12 +47,14 @@ export class LoginPage implements OnInit {
 
       if (json.role == 'member') {
         sweetalert2Success('Login Success')
+        sessionStorage.setItem('role', json.role)
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
         this.router.navigate(['/customer'])
       } else if (json.role == 'admin') {
         sweetalert2Success('Login Success')
+        sessionStorage.setItem('role', json.role)
         sessionStorage.setItem('username', this.username)
         sessionStorage.setItem('user_id', user_id)
         this.popover.dismiss()
@@ -87,6 +89,7 @@ export class LoginPage implements OnInit {
     let id = json.id.toString()
     sweetalert2Success(`Welcome ${json.username}`)
     this.clear()
+    sessionStorage.setItem('role', json.role)
     sessionStorage.setItem('username', json.username)
     sessionStorage.setItem('user_id', id)
     this.popover.dismiss()

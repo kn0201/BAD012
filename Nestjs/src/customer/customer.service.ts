@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectKnex, Knex } from 'nestjs-knex';
 
 @Injectable()
@@ -45,7 +45,7 @@ export class CustomerService {
         });
       })
       .first();
-    console.log(item);
+    if (!item) throw new NotFoundException('Product not found or deleted');
     let price_discount = await this.knex
       .select(
         'id as price_discount_id',
@@ -57,11 +57,13 @@ export class CustomerService {
       .where('start_date', '<=', currentDate)
       .andWhere('end_date', '>=', currentDate)
       .andWhere('is_delete', '=', false);
+    if (!price_discount) {
+      return { item, price_discount: null };
+    }
     return { item, price_discount };
   }
 
   async postReceipt(receipt) {
-    console.log('receipt', receipt);
     let receipt_id: number;
     let currentPoint: number;
     let receipt_rows = await this.knex('receipt')
@@ -78,16 +80,18 @@ export class CustomerService {
       await this.knex('receipt_item').insert({
         receipt_id: receipt_id,
         name: item.name,
+        quantity: item.quantity,
         price: item.price,
+        product_id: item.product_id,
+        brand_id: item.brand_id,
+        category_id: item.category_id,
       });
       let currentStocks = await this.knex
         .select('stock')
         .from('product')
         .where('name', item.name);
       currentStock = currentStocks[0].stock;
-      console.log('currentStock', currentStock);
       let remainingStock = currentStock - item.quantity;
-      console.log('remainingStock', remainingStock);
       await this.knex('product')
         .where('name', item.name)
         .update('stock', remainingStock);
@@ -98,9 +102,7 @@ export class CustomerService {
         .from('users')
         .where('id', receipt.user_id);
       currentPoint = currentPoints[0].point;
-      console.log('currentPoint', currentPoint);
       let updatedPoint = currentPoint + Math.floor(receipt.balance / 10);
-      console.log('updatedPoint', updatedPoint);
       await this.knex('users')
         .where('id', receipt.user_id)
         .update('point', updatedPoint);

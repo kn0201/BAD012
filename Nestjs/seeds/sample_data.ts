@@ -237,12 +237,25 @@ export async function seed(knex: Knex): Promise<void> {
         .from('receipt')
         .where('id', row.id);
     }
-    // for (let item_content of receipt.item) {
-    //   await knex('receipt_item').insert({
-    //     receipt_id,
-    //     name: item_content.name,
-    //     price: item_content.price,
-    //   });
-    // }
+    for (let item_content of receipt.item) {
+      await knex('receipt_item').insert({
+        receipt_id,
+        name: item_content.name,
+        price: item_content.price,
+        quantity: item_content.quantity,
+        product_id: knex
+          .select('id')
+          .from('product')
+          .where('name', item_content.name),
+        brand_id: knex
+          .select('id')
+          .from('brand')
+          .where('name', item_content.brand),
+        category_id: knex
+          .select('id')
+          .from('categories')
+          .where('name', item_content.category),
+      });
+    }
   }
 }

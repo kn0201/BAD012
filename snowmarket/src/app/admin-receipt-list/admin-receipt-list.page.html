@@ -34,7 +34,7 @@
       <div *ngFor="let item of receiptItemData; let i = index">
         <ion-list *ngIf="item.receipt_id == row.id">
           <ion-item>
-            <div>Item {{i + 1}} :&nbsp;&nbsp;&nbsp;</div>
+            <div>Item :&nbsp;&nbsp;&nbsp;</div>
             <div class="fw-bold text-end">{{item.name}}</div>
           </ion-item>
           <ion-item>Price :&nbsp;&nbsp;&nbsp;${{item.price}}</ion-item>

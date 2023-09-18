@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
+import { adminGuard, posGuard } from './admin.guard'
 
 const routes: Routes = [
   {
@@ -9,6 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [adminGuard],
     loadChildren: () =>
       import('./admin-page/admin-page.module').then(
         (m) => m.AdminPagePageModule
@@ -16,16 +18,19 @@ const routes: Routes = [
   },
   {
     path: 'login',
+    canActivate: [posGuard],
     loadChildren: () =>
       import('./login/login.module').then((m) => m.LoginPageModule),
   },
   {
     path: 'customer',
+    canActivate: [posGuard],
     loadChildren: () =>
       import('./customer/customer.module').then((m) => m.CustomerPageModule),
   },
   {
     path: 'customer/:id',
+    canActivate: [posGuard],
     loadChildren: () =>
       import('./customer/customer.module').then((m) => m.CustomerPageModule),
   },

@@ -61,7 +61,8 @@ export class AdminService {
       .select('id', 'username', 'email', 'birthday', 'point')
       .from('users')
       .where('is_delete', 'false')
-      .where('role', 'member');
+      .where('role', 'member')
+      .orderBy('id');
 
     return { memberList };
   }
@@ -78,7 +79,8 @@ export class AdminService {
       )
       .from('receipt')
       .leftJoin('users', 'user_id', 'users.id')
-      .leftJoin('pos', 'pos_id', 'pos.id');
+      .leftJoin('pos', 'pos_id', 'pos.id')
+      .orderBy('id');
 
     let receiptItemList = await this.knex.select('*').from('receipt_item');
     console.log(receiptItemList);
@@ -118,7 +120,8 @@ export class AdminService {
     let priceDiscountList = await this.knex
       .select('*')
       .from('price_discount')
-      .where('is_delete', 'false');
+      .where('is_delete', 'false')
+      .orderBy('id');
 
     let productDiscountList = await this.knex
       .select(
@@ -139,7 +142,8 @@ export class AdminService {
       .leftJoin('brand', 'brand_id', 'brand.id')
       .leftJoin('categories', 'categories_id', 'categories.id')
       .leftJoin('product', 'product_id', 'product.id')
-      .where('quantity_discount.is_delete', 'false');
+      .where('quantity_discount.is_delete', 'false')
+      .orderBy('id');
 
     let brandList = await this.knex.select('*').from('brand').orderBy('id');
 
@@ -162,7 +166,8 @@ export class AdminService {
       .from('product')
       .leftJoin('brand', 'brand_id', 'brand.id')
       .leftJoin('categories', 'categories_id', 'categories.id')
-      .where('is_delete', false);
+      .where('is_delete', false)
+      .orderBy('product.id');
 
     return {
       productDiscountList,

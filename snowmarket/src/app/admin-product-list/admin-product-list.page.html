@@ -19,7 +19,7 @@
       <ngx-table
         [configuration]="configuration"
         [data]="data"
-        (event)="eventEmitted($event)"
+        (event)="checkBox($event)"
         #table
         [columns]="columns"
       >
@@ -53,7 +53,7 @@
           </ion-buttons>
           <ion-title class="text-center">Adding Product</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="submit()" [strong]="true">Confirm</ion-button>
+            <ion-button (click)="clear()">Clear</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -182,7 +182,7 @@
       <ion-footer>
         <ion-toolbar>
           <ion-buttons slot="end">
-            <ion-button [strong]="true" (click)="clear()">Clear</ion-button>
+            <ion-button [strong]="true" (click)="submit()">Confirm</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-footer>

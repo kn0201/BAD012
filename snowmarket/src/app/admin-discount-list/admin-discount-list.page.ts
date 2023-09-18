@@ -217,25 +217,7 @@ export class AdminDiscountListPage implements OnInit {
     modal.dismiss()
   }
 
-  confirm() {
-    console.log(this.selectedDiscount)
-    console.log('title : ' + this.title)
-    console.log('Product ID : ' + this.selectedProductID)
-    console.log('Brand ID : ' + this.selectedBrandID)
-    console.log('Category ID : ' + this.selectedCategoryID)
-    console.log('Quantity : ' + this.quantity)
-    console.log('Discount Amount : ' + this.discount_amount)
-    console.log('Total Price : ' + this.total_price)
-    console.log('Discount Rate : ' + this.discount_rate)
-    console.log(this.selectedStartDate)
-    console.log(this.selectedEndDate)
-
-    this.clear()
-    this.addModal.dismiss()
-  }
-
   handleChange(event: any) {
-    console.log(event.target.value)
     if (event.target.value === 'product_discount') {
       this.selectedDiscount = 'product_discount'
     } else if (event.target.value === 'price_discount') {
@@ -255,6 +237,13 @@ export class AdminDiscountListPage implements OnInit {
     this.discount_amount = ''
     this.total_price = ''
     this.discount_rate = ''
+  }
+
+  startDay(event: any) {
+    this.selectedStartDate = event.target.value
+  }
+  endDay(event: any) {
+    this.selectedEndDate = event.target.value
   }
 
   selectProductID(event: any) {
@@ -281,7 +270,6 @@ export class AdminDiscountListPage implements OnInit {
       ;(this as any)[param] = ''
       ;(this as any)[msg] = this.originalMsg
       this.filterBy(id_param, id)
-      console.log('id : ', this.selectedCategoryID)
 
       return
     }
@@ -290,13 +278,6 @@ export class AdminDiscountListPage implements OnInit {
     ;(this as any)[msg] = `${event.target.value} : ${event.target.name}`
 
     this.filterBy(id_param, event.target.value)
-  }
-
-  startDay(event: any) {
-    this.selectedStartDate = event.target.value
-  }
-  endDay(event: any) {
-    this.selectedEndDate = event.target.value
   }
 
   searchProduct(ev: any) {
@@ -374,9 +355,7 @@ export class AdminDiscountListPage implements OnInit {
         } else {
           this.selectedProductChecked.add($event.value.rowId)
           this.ProductArrayID.push(+$event.value.row.id)
-          console.log($event.value)
         }
-        console.log(this.ProductArrayID)
 
         break
     }
@@ -394,9 +373,7 @@ export class AdminDiscountListPage implements OnInit {
         } else {
           this.selectedPriceChecked.add($event.value.rowId)
           this.PriceArrayID.push(+$event.value.row.id)
-          console.log($event.value)
         }
-        console.log(this.PriceArrayID)
 
         break
     }
@@ -458,7 +435,7 @@ export class AdminDiscountListPage implements OnInit {
     this.loadList()
   }
 
-  async addRow(): Promise<void> {
+  async confirm(): Promise<void> {
     if (this.title == '') {
       sweetalert2error('Missing title')
       return
@@ -512,8 +489,6 @@ export class AdminDiscountListPage implements OnInit {
       return
     }
     if (this.selectedDiscount == 'product_discount') {
-      console.log('adding Product')
-
       let json = await this.adminService.addProductDiscount({
         selectedDiscount: this.selectedDiscount,
         title: this.title,
