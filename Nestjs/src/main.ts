@@ -5,18 +5,28 @@ import { env } from 'utils/env';
 // import { join } from 'path';
 // import { NestExpressApplication } from '@nestjs/platform-express';
 // import * as cors from 'cors';
+import dayjs from 'dayjs';
+import dotenv from 'dotenv';
+import grant from 'grant';
+import { sessionMiddleware } from 'utils/session';
 
 async function bootstrap() {
   let port = env.PORT;
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  // app.use(cors());
+  app.use(sessionMiddleware);
+  app.use((req, res, next) => {
+    let counter = req.session.counter || 0;
+    counter++;
+    req.session.counter = counter;
+    let timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    console.log(`[${timestamp}] ${req.method} ${req.url} (${counter})`);
+    next();
+  });
   await app.listen(port);
 
   print(port);
 }
 bootstrap();
 
-import dotenv from 'dotenv';
 dotenv.config();
-import grant from 'grant';
