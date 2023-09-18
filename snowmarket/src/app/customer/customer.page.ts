@@ -910,7 +910,7 @@ export class CustomerPage {
     let receipt_items = this.originals.map((item) => {
       return { name: item.name, quantity: item.quantity, price: item.price }
     })
-    let pos_id = sessionStorage['POS']
+    let pos_id = sessionStorage['pos']
     let json = await this.customerService.postReceipt({
       items: receipt_items,
       user_id: this.user_id,

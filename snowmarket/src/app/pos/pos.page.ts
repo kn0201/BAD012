@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import Swal from 'sweetalert2'
-import { sweetalert2Success } from 'utils/sweetalert2'
+import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { PosService } from '../pos.service'
 
 @Component({
@@ -23,11 +23,16 @@ export class PosPage implements OnInit {
       showCancelButton: true,
       inputValidator: async (pos_id) => {
         let json = await this.posService.checkPOS({ pos: pos_id })
-        let id = json.id.toString()
-        if (pos_id == json.code) {
-          sweetalert2Success('System Login')
-          sessionStorage.setItem('pos', id)
-          this.router.navigate(['/login'])
+        if (json.error != null) {
+          sweetalert2error(json.error)
+          return
+        } else if (json.id) {
+          let id = json.id.toString()
+          if (pos_id == json.code) {
+            sweetalert2Success('System Login')
+            sessionStorage.setItem('pos', id)
+            this.router.navigate(['/login'])
+          }
         }
       },
     })

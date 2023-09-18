@@ -12,6 +12,7 @@ export class LoginPage implements OnInit {
   constructor(private loginService: LoginService, private router: Router) {}
   username: string = ''
   password: string = ''
+  email: string = ''
   signUpPageVisible: boolean = false
 
   @ViewChild('popover') popover: any
@@ -22,7 +23,6 @@ export class LoginPage implements OnInit {
     this.popover.event = e
     this.isOpen = true
   }
-  email: string = ''
 
   ngOnInit() {}
 
