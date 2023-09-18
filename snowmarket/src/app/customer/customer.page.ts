@@ -50,12 +50,10 @@ export class CustomerPage {
     name: string
     price: number
   }[] = []
-  // summarizedItems: {
-  //   id: number
-  //   name: string
-  //   quantity: number
-  //   price: number
-  // }[] = []
+  paymentMethods: {
+    name: string
+  }[] = [{ name: 'logo-alipay' }, { name: 'card-outline' }]
+  selected: any
 
   user_id = null
   username = 'Guest'
@@ -76,20 +74,6 @@ export class CustomerPage {
 
   mediaStream?: MediaStream
   coolDownProductLabels = new Set<string>()
-
-  // Add Item Section
-  // searchedItemIDList: number[] = []
-  // itemListMap: Map<
-  //   number /*product id */,
-  //   { name: string; quantity: number; unit_price: number; price: number }
-  // > = new Map()
-  // productDiscountMap: Map<
-  //   number /*product id */,
-  //   { amount: number; quantity: number }
-  // > = new Map()
-  // /* */
-
-  // public multipleWebcamsAvailable = false
 
   @ViewChild(IonModal) modal!: IonModal
 
@@ -856,48 +840,6 @@ export class CustomerPage {
     return this.totalDiscount
   }
 
-  // summarizeItem2() {
-  //   type ResultItem = {
-  //     id: number
-  //     name: string
-  //     totalQuantity: number
-  //     totalPrice: number
-  //   }
-  //   type ResultMap = Record<number, ResultItem>
-  //   let result: ResultItem[] = Object.values(
-  //     this.items.reduce((r: ResultMap, { id, name, quantity, price }) => {
-  //       r[id] ??= { id, name, totalQuantity: 0, totalPrice: 0 }
-  //       r[id].totalQuantity += quantity
-  //       r[id].totalPrice += price
-  //       return r
-  //     }, {})
-  //   )
-  //   let mappedResult = result.map((item) => {
-  //     return {
-  //       id: item.id,
-  //       name: item.name,
-  //       quantity: item.totalQuantity,
-  //       price: item.totalPrice,
-  //     }
-  //   })
-  //   this.summarizedItems = mappedResult
-  // }
-
-  // summarizeItem() {
-  //   const itemList: {
-  //     id: number
-  //     name: string
-  //     quantity: number
-  //     price: number
-  //   }[] = []
-
-  //   Array.from(this.itemListMap).map(([id, productInfo]) => {
-  //     itemList.push({ ...productInfo, id })
-  //   })
-  //   console.log({ itemList })
-  //   this.summarizedItems = itemList
-  // }
-
   cancel() {
     this.modal.dismiss()
   }
@@ -906,11 +848,18 @@ export class CustomerPage {
     this.showDeleteButton = !this.showDeleteButton
   }
 
+  select(item: any) {
+    this.selected = item
+  }
+  isActive(item: any) {
+    return this.selected === item
+  }
+
   async payment() {
     let receipt_items = this.originals.map((item) => {
       return { name: item.name, quantity: item.quantity, price: item.price }
     })
-    let pos_id = sessionStorage['POS']
+    let pos_id = sessionStorage['pos']
     let json = await this.customerService.postReceipt({
       items: receipt_items,
       user_id: this.user_id,
