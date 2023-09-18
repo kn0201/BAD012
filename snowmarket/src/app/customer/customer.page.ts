@@ -195,7 +195,7 @@ export class CustomerPage {
       this.coolDownProductLabels.add(prediction.class)
       setTimeout(() => {
         this.coolDownProductLabels.delete(prediction.class)
-      }, 5000)
+      }, 3500)
 
       this.customerService
         .addToCartByProductLabel(prediction.class)
@@ -777,6 +777,48 @@ export class CustomerPage {
     }
     this.calculateTotalDiscount()
   }
+  //   let dummyArray = new Set([...this.searchedItemIDList, idToFilter])
+  //   if (dummyArray.size === this.searchedItemIDList.length) {
+  //     let objectInConsideration = this.itemListMap.get(idToFilter)
+  //     if (objectInConsideration) {
+  //       this.itemListMap.set(idToFilter, {
+  //         ...objectInConsideration,
+  //         quantity: objectInConsideration.quantity + 1,
+  //         price:
+  //           objectInConsideration.unit_price * objectInConsideration.quantity,
+  //       })
+  //     }
+  //     let json = await this.customerService.postID({ id: idToFilter })
+  //     this.searchedItemIDList.push(idToFilter)
+  //     const { id, name, unit_price, discount_amount, discount_quantity } =
+  //       json.item
+  //     this.itemListMap.set(idToFilter, {
+  //       name,
+  //       unit_price,
+  //       price: unit_price,
+  //       quantity: 1,
+  //     })
+  //     if (discount_amount && discount_quantity) {
+  //       this.productDiscountMap.set(idToFilter, {
+  //         amount: discount_amount,
+  //         quantity: discount_quantity,
+  //       })
+  //     }
+  //   }
+  //   const productDiscountInfo = this.productDiscountMap.get(idToFilter)
+  //   if (productDiscountInfo) {
+  //     const productInConsideration = this.itemListMap.get(idToFilter)
+  //     if (productInConsideration) {
+  //       const discountTimes = Math.floor(
+  //         productInConsideration.quantity / productDiscountInfo.quantity
+  //       )
+  //       /* Update the discount = discount times * productDiscountInfo.amount */
+  //     }
+  //     this.items = Array.from(this.itemListMap).map(([id, productInfo]) => {
+  //       return { ...productInfo, id }
+  //     })
+  //     this.findID = ''
+  //   }
 
   async addBag() {
     const product_id = 1
