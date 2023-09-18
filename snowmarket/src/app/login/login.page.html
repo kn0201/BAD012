@@ -18,112 +18,6 @@
         (didDismiss)="isOpen = false"
       >
         <ng-template>
-<<<<<<< HEAD
-          <ion-content class="X">
-            <div class="form">
-              <div
-                class="container"
-                id="container"
-                [ngClass]="{'right-panel-active':signUpPageVisible}"
-              >
-                <div class="form-container sign-up-container">
-                  <form
-                    id="loginform"
-                    title="loginForm"
-                    method="post"
-                    action="/register"
-                  >
-                    <h1>Create Account</h1>
-
-                    <ion-item>
-                      <ion-input
-                        type="text"
-                        [(ngModel)]="username"
-                        name="username"
-                        [clearInput]="true"
-                        labelPlacement="username"
-                        placeholder="Username"
-                      />
-                    </ion-item>
-                    <ion-item>
-                      <ion-input
-                        type="email"
-                        [(ngModel)]="email"
-                        name="email"
-                        [clearInput]="true"
-                        labelPlacement="Email"
-                        placeholder="Email"
-                      />
-                    </ion-item>
-                    <ion-item>
-                      <ion-input
-                        type="password"
-                        [(ngModel)]="password"
-                        name="password"
-                        [clearInput]="true"
-                        labelPlacement="Password"
-                        placeholder="password"
-                      />
-                    </ion-item>
-                    <ion-button (click)="register()">Sign Up</ion-button>
-                  </form>
-                </div>
-                <div class="form-container sign-in-container">
-                  <form action="#">
-                    <h1>Sign in</h1>
-                    <ion-item>
-                      <ion-input
-                        type="text"
-                        [(ngModel)]="username"
-                        name="username"
-                        [clearInput]="true"
-                        labelPlacement="Email"
-                        placeholder="Username"
-                      />
-                    </ion-item>
-                    <ion-item>
-                      <ion-input
-                        type="password"
-                        [(ngModel)]="password"
-                        name="password"
-                        [clearInput]="true"
-                        labelPlacement="Password"
-                        placeholder="password"
-                      />
-                    </ion-item>
-                    <ion-button (click)="login()">Login In</ion-button>
-                  </form>
-                  <ion-button>RESET PASSWORD</ion-button>
-                </div>
-                <div class="overlay-container">
-                  <div class="overlay">
-                    <div class="overlay-panel overlay-left">
-                      <h1 class="h1Word">Hello, Friend!</h1>
-                      <p>
-                        To keep connected with us please login with your
-                        personal info
-                      </p>
-
-                      <button
-                        class="ghost"
-                        id="signIn"
-                        (click)="switchPage(false)"
-                      >
-                        Sign In
-                      </button>
-                    </div>
-                    <div class="overlay-panel overlay-right">
-                      <h1 class="h1Word">Welcome Back!</h1>
-                      <p>Enter your personal details and start discount now!</p>
-                      <button
-                        class="ghost"
-                        id="signUp"
-                        (click)="switchPage(true)"
-                      >
-                        Sign Up
-                      </button>
-                    </div>
-=======
           <div class="form">
             <div
               class="container"
@@ -222,7 +116,6 @@
                     >
                       Sign Up
                     </button>
->>>>>>> refs/remotes/origin/main
                   </div>
                 </div>
               </div>

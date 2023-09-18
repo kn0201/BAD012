@@ -2,12 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { LoginService } from '../login.service'
-<<<<<<< HEAD
-import * as e from 'express'
-=======
 import Swal from 'sweetalert2'
 import { IonModal } from '@ionic/angular'
->>>>>>> refs/remotes/origin/main
 
 @Component({
   selector: 'app-login',
@@ -23,16 +19,10 @@ export class LoginPage implements OnInit {
   email: string = ''
   signUpPageVisible: boolean = false
   isOpen: boolean = false
-  canDismiss: boolean = true
   model: any
 
   @ViewChild(IonModal) modal!: IonModal
   @ViewChild('popover') popover: any
-<<<<<<< HEAD
-  @ViewChild('productModal') productModal: any
-  isOpen = false
-=======
->>>>>>> refs/remotes/origin/main
 
   presentPopover(e: Event) {
     this.popover.event = e
