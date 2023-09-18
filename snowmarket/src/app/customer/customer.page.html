@@ -191,12 +191,7 @@
                           class="col-lg-5 mbr-col-md-10"
                           *ngFor="let paymentMethod of paymentMethods"
                         >
-                          <h4
-                            class="text-center"
-                            style="color: #f35d2e"
-                            (click)="select(paymentMethod)"
-                            [ngClass]="{ hidden: isActive(paymentMethod) }"
-                          >
+                          <h4 class="text-center" style="color: #f35d2e">
                             {{paymentMethod.method}}
                           </h4>
                           <div

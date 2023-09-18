@@ -30,17 +30,20 @@ export class LoginService {
       .select('role', 'id', 'password')
       .where('username', input.username)
       .first();
-    let match: boolean = await comparePassword({
-      password: input.password,
-      password_hash: foundUser.password,
-    });
-    if (!foundUser || !match) {
+    if (!foundUser) {
       return { error: 'Wrong Username/Password' };
-    }
-    let role = foundUser.role;
-    let id = foundUser.id;
-    console.log(role);
+    } else {
+      let match: boolean = await comparePassword({
+        password: input.password,
+        password_hash: foundUser.password,
+      });
+      if (!match) {
+        return { error: 'Wrong Username/Password' };
+      }
+      let role = foundUser.role;
+      let id = foundUser.id;
 
-    return { role: role, error: null, id: id };
+      return { role: role, error: null, id: id };
+    }
   }
 }
