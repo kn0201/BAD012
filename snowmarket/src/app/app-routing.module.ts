@@ -28,7 +28,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./customer/customer.module').then((m) => m.CustomerPageModule),
   },
-
+  {
+    path: 'customer/:id',
+    canActivate: [posGuard],
+    loadChildren: () =>
+      import('./customer/customer.module').then((m) => m.CustomerPageModule),
+  },
   {
     path: 'pos',
     loadChildren: () => import('./pos/pos.module').then((m) => m.PosPageModule),
