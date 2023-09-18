@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { LoginService } from '../login.service'
+import * as e from 'express'
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,7 @@ import { LoginService } from '../login.service'
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  canDismiss: boolean | undefined
   constructor(private loginService: LoginService, private router: Router) {}
   username: string = ''
   password: string = ''
@@ -16,7 +18,7 @@ export class LoginPage implements OnInit {
   signUpPageVisible: boolean = false
 
   @ViewChild('popover') popover: any
-
+  @ViewChild('productModal') productModal: any
   isOpen = false
 
   presentPopover(e: Event) {
@@ -35,7 +37,10 @@ export class LoginPage implements OnInit {
     this.password = ''
     this.email = ''
   }
-
+  presentReset(e: Event) {
+    this.popover.event = e
+    this.isOpen = true
+  }
   async login() {
     let json = await this.loginService.login({
       username: this.username,

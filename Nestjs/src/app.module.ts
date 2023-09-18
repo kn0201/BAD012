@@ -9,6 +9,7 @@ import { KnexModule } from 'nestjs-knex';
 import { env } from 'utils/env';
 import { ProductModule } from './product/product.module';
 import { PosModule } from './pos/pos.module';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { PosModule } from './pos/pos.module';
     PosModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy],
 })
 export class AppModule {}
