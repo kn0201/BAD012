@@ -52,7 +52,11 @@ export class CustomerPage {
   }[] = []
   paymentMethods: {
     name: string
-  }[] = [{ name: 'logo-alipay' }, { name: 'card-outline' }]
+    method: string
+  }[] = [
+    { name: 'logo-alipay', method: 'Alipay' },
+    { name: 'card-outline', method: 'Credit Card' },
+  ]
   selected: any
 
   user_id = null
@@ -849,7 +853,7 @@ export class CustomerPage {
   }
 
   select(item: any) {
-    this.selected = item
+    this.selected = this.selected === item ? null : item
   }
   isActive(item: any) {
     return this.selected === item
@@ -857,7 +861,14 @@ export class CustomerPage {
 
   async payment() {
     let receipt_items = this.originals.map((item) => {
-      return { name: item.name, quantity: item.quantity, price: item.price }
+      return {
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        product_id: item.id,
+        brand_id: item.brand_id,
+        category_id: item.categories_id,
+      }
     })
     let pos_id = sessionStorage['pos']
     let json = await this.customerService.postReceipt({

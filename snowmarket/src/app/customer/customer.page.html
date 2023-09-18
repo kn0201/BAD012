@@ -191,6 +191,14 @@
                           class="col-lg-5 mbr-col-md-10"
                           *ngFor="let paymentMethod of paymentMethods"
                         >
+                          <h4
+                            class="text-center"
+                            style="color: #f35d2e"
+                            (click)="select(paymentMethod)"
+                            [ngClass]="{ hidden: isActive(paymentMethod) }"
+                          >
+                            {{paymentMethod.method}}
+                          </h4>
                           <div
                             class="wrap"
                             (click)="select(paymentMethod)"
@@ -203,50 +211,12 @@
                           </div>
                         </div>
                       </div>
-                      <!-- <table class="table table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th scope="col" width="40%">Name</th>
-                            <th scope="col" width="17%" class="text-center">
-                              Unit Price($)
-                            </th>
-                            <th scope="col" width="10%" class="text-center">
-                              Qty
-                            </th>
-                            <th scope="col" width="22%" class="text-center">
-                              Total Amount($)
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of items; let i = index">
-                            <td>{{item.name}}</td>
-                            <td class="text-center">
-                              {{item.unit_price||null}}
-                            </td>
-                            <td class="text-center">{{item.quantity||null}}</td>
-                            <td class="text-center">{{item.price}}</td>
-                          </tr>
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <th scope="row">Total</th>
-                            <td></td>
-                            <td class="text-center" style="font-weight: 900">
-                              {{totalQuantity}}
-                            </td>
-                            <td class="text-center" style="font-weight: 900">
-                              ${{totalBalance}}
-                            </td>
-                          </tr>
-                        </tfoot>
-                      </table> -->
                     </ion-content>
                   </ng-template>
                 </ion-modal>
-              </ion-item></ion-col
-            ></ion-row
-          >
+              </ion-item>
+            </ion-col>
+          </ion-row>
         </ion-col>
       </ion-row>
     </ion-grid>

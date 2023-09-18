@@ -80,7 +80,11 @@ export class CustomerService {
       await this.knex('receipt_item').insert({
         receipt_id: receipt_id,
         name: item.name,
+        quantity: item.quantity,
         price: item.price,
+        product_id: item.product_id,
+        brand_id: item.brand_id,
+        category_id: item.category_id,
       });
       let currentStocks = await this.knex
         .select('stock')
