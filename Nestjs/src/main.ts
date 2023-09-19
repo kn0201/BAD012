@@ -5,20 +5,26 @@ import { env } from 'utils/env';
 
 import dayjs from 'dayjs';
 import dotenv from 'dotenv';
-
+import session from 'express-session';
 import { sessionMiddleware } from 'utils/session';
 
 async function bootstrap() {
   let port = env.PORT;
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  app.use(sessionMiddleware);
+  app.use(
+    session({
+      secret: 'my-secret',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
   app.use((req, res, next) => {
-    let counter = req.session.counter || 0;
-    counter++;
-    req.session.counter = counter;
+    // let counter = req.session.dummy || 0;
+    // counter++;
+    req.session.dummy = 8;
     let timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-    console.log(`[${timestamp}] ${req.method} ${req.url} (${counter})`);
+    console.log(`[${timestamp}] ${req.method} ${req.url} (${8})`);
     next();
   });
   await app.listen(port);

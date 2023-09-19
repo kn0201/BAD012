@@ -12,6 +12,8 @@ declare module 'express-session' {
     counter: number;
     user_id: number;
     role: string;
+    pos: number;
+    username: string;
   }
 }
 

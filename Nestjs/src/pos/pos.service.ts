@@ -5,7 +5,7 @@ import { InjectKnex, Knex } from 'nestjs-knex';
 export class PosService {
   constructor(@InjectKnex() private readonly knex: Knex) {}
 
-  async posCheck(body) {
+  async posCheck(body, req) {
     let result = await this.knex('pos')
       .select('*')
       .where('code', body.pos)
@@ -17,6 +17,9 @@ export class PosService {
 
     let id = result.id;
     let code = result.code;
+    req.session.pos = body.pos;
+    req.session.save();
+    console.log(req.session);
 
     return { id: id, code: code, error: null };
   }

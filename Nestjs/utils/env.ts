@@ -6,7 +6,7 @@ config();
 
 export let env = {
   NODE_ENV: 'development',
-  SESSION_SECRET: randomUUID(),
+  SESSION_SECRET: 'my-secret',
   DB_NAME: '',
   DB_USERNAME: '',
   DB_PASSWORD: '',

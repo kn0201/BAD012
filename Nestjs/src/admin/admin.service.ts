@@ -93,14 +93,12 @@ export class AdminService {
     let currentDateTotal = await this.knex('receipt')
       .sum('total')
       .whereRaw('DATE(created_at) = ?', currentDate);
-    console.log(currentDateTotal);
 
     let receiptItemBrandList = await this.knex
       .select('brand.name' as 'brand_name')
       .from('receipt_item')
       .leftJoin('brand', 'brand_id', 'brand.id')
       .orderBy('brand.name');
-    console.log(receiptItemBrandList);
 
     return {
       receiptList,

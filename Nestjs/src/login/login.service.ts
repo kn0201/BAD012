@@ -48,7 +48,7 @@ export class LoginService {
     return { username: username, id: id, role: 'member' };
   }
 
-  async login(input) {
+  async login(input, req) {
     let foundUser = await this.knex('users')
       .select('role', 'id', 'password')
       .where('username', input.username)
@@ -65,6 +65,9 @@ export class LoginService {
       }
       let role = foundUser.role;
       let id = foundUser.id;
+      req.session.role = role;
+      req.session.save();
+      console.log(req.session);
 
       return { role: role, error: null, id: id };
     }

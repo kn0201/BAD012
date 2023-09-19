@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { AdminService } from '../admin.service'
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js'
 import { BaseChartDirective } from 'ng2-charts'
-import { number, string } from 'cast.ts'
+import { number, object, string } from 'cast.ts'
 import { CheckData, Dish } from 'src/assets/type'
 
 @Component({
@@ -15,7 +15,7 @@ export class AdminChartListPage implements OnInit {
 
   @ViewChild(BaseChartDirective) BaseChart?: BaseChartDirective
 
-  @ViewChild('BaseChartDirective') revenueChart?: BaseChartDirective | undefined
+  // @ViewChild('BaseChartDirective') revenueChart?: BaseChartDirective | undefined
 
   // Doughnut
   public doughnutChartLabels: string[] = []
@@ -40,7 +40,7 @@ export class AdminChartListPage implements OnInit {
     scales: {
       x: {},
       y: {
-        min: 10,
+        min: 0,
       },
     },
   }
@@ -58,7 +58,7 @@ export class AdminChartListPage implements OnInit {
   }
 
   public brandBarChartData: ChartData<'bar'> = {
-    labels: [this.brandChartLabels],
+    labels: ['Brand'],
     datasets: [],
   }
 
@@ -73,6 +73,8 @@ export class AdminChartListPage implements OnInit {
   brand_array: string[] = []
   brandDataArray: number[] = []
 
+  brandBarChartObjectArray: Dish[] = []
+  brand = {} as Dish
   ngOnInit() {
     this.loadList()
   }
@@ -117,6 +119,8 @@ export class AdminChartListPage implements OnInit {
     }
     this.productChartData.datasets = [{ data: this.productDataArray }]
 
+    // console.log(receiptItemBrandList)
+
     for (let brand of receiptItemBrandList) {
       this.brand_array.push(brand.name)
 
@@ -128,21 +132,26 @@ export class AdminChartListPage implements OnInit {
       }
     }
 
-    for (let label of this.brandChartLabels) {
-      console.log(label)
+    // console.log(this.brandChartLabels)
+    // console.log(this.brandDataArray)
 
-      for (let value of this.brandDataArray) {
-        console.log(value)
+    for (let i = 0; i < this.brandDataArray.length; i++) {
+      let brand = {} as Dish
+      brand.data = [this.brandDataArray[i]]
+      brand.label = this.brandChartLabels[i]
+      // console.log(brand)
 
-        let brand = {} as Dish
-
-        brand.data = [value]
-        brand.label = label
-        this.brandBarChartData.datasets.push(brand)
-      }
+      this.brandBarChartObjectArray.push(brand)
     }
+    this.brandBarChartObjectArray = this.brandBarChartObjectArray.sort(
+      function (a, b) {
+        console.log(a.data[0])
+        return a.data[0] > b.data[0] ? -1 : 1
+      }
+    )
+    console.log(this.brandBarChartObjectArray)
 
-    this.brandChartData.datasets = [{ data: this.brandDataArray }]
+    this.brandBarChartData.datasets = this.brandBarChartObjectArray.slice(0, 5)
   }
 
   getValue(array: string[]) {
