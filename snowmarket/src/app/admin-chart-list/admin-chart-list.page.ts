@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { AdminService } from '../admin.service'
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js'
 import { BaseChartDirective } from 'ng2-charts'
-import { string } from 'cast.ts'
-import { CheckData } from 'src/assets/type'
+import { number, string } from 'cast.ts'
+import { CheckData, Dish } from 'src/assets/type'
 
 @Component({
   selector: 'app-admin-chart-list',
@@ -14,9 +14,6 @@ export class AdminChartListPage implements OnInit {
   constructor(private adminService: AdminService) {}
 
   @ViewChild(BaseChartDirective) BaseChart?: BaseChartDirective
-  // @ViewChild(BaseChartDirective) productBaseChart?: BaseChartDirective
-  // @ViewChild('BaseChart') BaseChart?: BaseChartDirective
-  // @ViewChild('productBaseChart') productBaseChart?: BaseChartDirective
 
   @ViewChild('BaseChartDirective') revenueChart?: BaseChartDirective | undefined
 
@@ -29,6 +26,8 @@ export class AdminChartListPage implements OnInit {
   doughnutChartType: ChartType = 'doughnut'
 
   public productChartLabels: string[] = []
+  public brandChartLabels: string[] = []
+
   productChartData: ChartData<'doughnut'> = {
     labels: this.productChartLabels,
     datasets: [{ data: [] }],
@@ -45,10 +44,21 @@ export class AdminChartListPage implements OnInit {
       },
     },
   }
+
   public barChartType: ChartType = 'bar'
 
   public barChartData: ChartData<'bar'> = {
-    labels: [' Total Income'],
+    labels: ['Revenue'],
+    datasets: [],
+  }
+
+  public brandChartData: ChartData<'doughnut'> = {
+    labels: this.brandChartLabels,
+    datasets: [{ data: [] }],
+  }
+
+  public brandBarChartData: ChartData<'bar'> = {
+    labels: [this.brandChartLabels],
     datasets: [],
   }
 
@@ -60,6 +70,9 @@ export class AdminChartListPage implements OnInit {
   product_array: string[] = []
   productDataArray: number[] = []
 
+  brand_array: string[] = []
+  brandDataArray: number[] = []
+
   ngOnInit() {
     this.loadList()
   }
@@ -70,10 +83,7 @@ export class AdminChartListPage implements OnInit {
     let receiptItemList = json.receiptItemList
     let currentDateTotal = json.currentDateTotal
     let previousTotal = json.previousTotal
-    console.log('list')
-    console.log(json.receiptList)
-    console.log('item')
-    console.log(json.receiptItemList)
+    let receiptItemBrandList = json.receiptItemBrandList
 
     let previousRevenue = previousTotal[0].sum
     let currentRevenue = currentDateTotal[0].sum
@@ -105,9 +115,34 @@ export class AdminChartListPage implements OnInit {
         this.productDataArray[this.productChartLabels.indexOf(product.name)]++
       }
     }
-    console.log(this.productDataArray)
-
     this.productChartData.datasets = [{ data: this.productDataArray }]
+
+    for (let brand of receiptItemBrandList) {
+      this.brand_array.push(brand.name)
+
+      if (!this.brandChartLabels.includes(brand.name)) {
+        this.brandChartLabels.push(brand.name)
+        this.brandDataArray.push(1)
+      } else {
+        this.brandDataArray[this.brandChartLabels.indexOf(brand.name)]++
+      }
+    }
+
+    for (let label of this.brandChartLabels) {
+      console.log(label)
+
+      for (let value of this.brandDataArray) {
+        console.log(value)
+
+        let brand = {} as Dish
+
+        brand.data = [value]
+        brand.label = label
+        this.brandBarChartData.datasets.push(brand)
+      }
+    }
+
+    this.brandChartData.datasets = [{ data: this.brandDataArray }]
   }
 
   getValue(array: string[]) {

@@ -2,12 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { print } from 'listening-on';
 import { env } from 'utils/env';
-// import { join } from 'path';
-// import { NestExpressApplication } from '@nestjs/platform-express';
-// import * as cors from 'cors';
+
 import dayjs from 'dayjs';
 import dotenv from 'dotenv';
-import grant from 'grant';
+
 import { sessionMiddleware } from 'utils/session';
 
 async function bootstrap() {

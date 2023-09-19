@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { ApiService } from './api.service'
-import { array, number, object, string } from 'cast.ts'
+import { array, nullable, number, object, string } from 'cast.ts'
 import {
   brand,
   category,
@@ -28,7 +28,8 @@ let receiptPageList = object({
   receiptList: array(receipt),
   receiptItemList: array(item),
   previousTotal: array(object({ sum: number() })),
-  currentDateTotal: array(object({ sum: number() })),
+  currentDateTotal: array(object({ sum: nullable(number()) })),
+  receiptItemBrandList: array(object({ name: string() })),
 })
 
 let productPageList = object({
