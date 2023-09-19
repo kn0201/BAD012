@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { sweetalert2Success, sweetalert2error } from 'utils/sweetalert2'
 import { LoginService } from '../login.service'
+import * as e from 'express'
 import Swal from 'sweetalert2'
 import { IonModal } from '@ionic/angular'
 
@@ -18,11 +19,11 @@ export class LoginPage implements OnInit {
   email: string = ''
   signUpPageVisible: boolean = false
   isOpen: boolean = false
-  canDismiss: boolean = true
   model: any
 
   @ViewChild(IonModal) modal!: IonModal
   @ViewChild('popover') popover: any
+  @ViewChild('productModal') productModal: any
 
   presentPopover(e: Event) {
     this.popover.event = e
@@ -40,7 +41,10 @@ export class LoginPage implements OnInit {
     this.password = ''
     this.email = ''
   }
-
+  presentReset(e: Event) {
+    this.popover.event = e
+    this.isOpen = true
+  }
   async login() {
     if (this.username == '') {
       this.loginSweetalert2error('Missing User Name')

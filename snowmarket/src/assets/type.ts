@@ -170,3 +170,12 @@ export let deletedPriceDiscount = object({
   id: number(),
   title: string(),
 })
+
+export interface CheckData {
+  data: number[]
+}
+
+export interface Dish {
+  data: Array<number>
+  label: string
+}

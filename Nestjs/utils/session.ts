@@ -9,7 +9,9 @@ export let sessionMiddleware = session({
 
 declare module 'express-session' {
   interface SessionData {
+    counter: number;
     user_id: number;
+    role: string;
   }
 }
 
