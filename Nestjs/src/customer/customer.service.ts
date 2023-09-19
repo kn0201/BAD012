@@ -15,7 +15,15 @@ export class CustomerService {
         'product.categories_id as product_categories_id',
         'product.price as unit_price',
         'product.stock as product_stock',
-        'product.is_delete',
+      )
+      .from('product')
+      .where('product.id', product_id)
+      .andWhere('product.stock', '>', 0)
+      .andWhere('product.is_delete', '=', false)
+      .first();
+    if (!item) throw new NotFoundException('Product not found or deleted');
+    let quantity_discount = await this.knex
+      .select(
         'quantity_discount.id as discount_id',
         'quantity_discount.title as discount_title',
         'quantity_discount.product_id as discount_product_id',
@@ -23,29 +31,35 @@ export class CustomerService {
         'quantity_discount.categories_id as discount_categories_id',
         'quantity_discount.quantity as discount_quantity',
         'quantity_discount.discount_amount',
-        'quantity_discount.is_delete',
       )
-      .from('product')
-      .leftJoin('quantity_discount', function () {
-        this.on('product.id', 'quantity_discount.product_id').orOn(function () {
-          this.on('product.brand_id', 'quantity_discount.brand_id').andOn(
-            'product.categories_id',
-            'quantity_discount.categories_id',
-          );
-        });
+      .from('quantity_discount')
+      .where(function () {
+        this.where('quantity_discount.product_id', product_id).orWhere(
+          function () {
+            this.where(
+              'quantity_discount.brand_id',
+              item.product_brand_id,
+            ).andWhere(
+              'quantity_discount.categories_id',
+              item.product_categories_id,
+            );
+          },
+        );
       })
-      .where('product.id', product_id)
-      .andWhere('product.stock', '>', 0)
-      .andWhere('product.is_delete', '=', false)
       .andWhere(function () {
-        this.whereNull('quantity_discount.start_date').orWhere(function () {
-          this.where('quantity_discount.start_date', '<=', currentDate)
-            .andWhere('quantity_discount.end_date', '>=', currentDate)
-            .andWhere('quantity_discount.is_delete', '=', false);
-        });
+        this.where('quantity_discount.start_date', '<=', currentDate)
+          .andWhere('quantity_discount.end_date', '>=', currentDate)
+          .andWhere('quantity_discount.is_delete', '=', false);
       })
       .first();
-    if (!item) throw new NotFoundException('Product not found or deleted');
+    if (!quantity_discount) {
+      return { item, quantity_discount: null };
+    }
+    return { item, quantity_discount };
+  }
+
+  async getPriceDiscount() {
+    const currentDate = new Date();
     let price_discount = await this.knex
       .select(
         'id as price_discount_id',
@@ -58,9 +72,9 @@ export class CustomerService {
       .andWhere('end_date', '>=', currentDate)
       .andWhere('is_delete', '=', false);
     if (!price_discount) {
-      return { item, price_discount: null };
+      return { price_discount: null };
     }
-    return { item, price_discount };
+    return price_discount;
   }
 
   async postReceipt(receipt) {
