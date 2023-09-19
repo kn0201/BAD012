@@ -68,7 +68,8 @@ export class AdminService {
   }
 
   async getReceiptList() {
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toLocaleDateString().split('T')[0];
+    console.log(currentDate);
 
     let receiptList = await this.knex
       .select(
@@ -88,11 +89,19 @@ export class AdminService {
 
     let previousTotal = await this.knex('receipt')
       .sum('total')
-      .whereRaw('DATE(created_at) < ?', currentDate);
+      .whereRaw('DATE(created_at) < ?', currentDate)
+      .first();
+    console.log(previousTotal);
+
+    if (!previousTotal) {
+      previousTotal = null;
+    }
 
     let currentDateTotal = await this.knex('receipt')
       .sum('total')
-      .whereRaw('DATE(created_at) = ?', currentDate);
+      .whereRaw('DATE(created_at) = ?', currentDate)
+      .first();
+    console.log(currentDateTotal);
 
     let receiptItemBrandList = await this.knex
       .select('brand.name' as 'brand_name')

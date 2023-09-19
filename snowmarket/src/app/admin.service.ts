@@ -27,8 +27,8 @@ let memberList = object({
 let receiptPageList = object({
   receiptList: array(receipt),
   receiptItemList: array(item),
-  previousTotal: array(object({ sum: number() })),
-  currentDateTotal: array(object({ sum: nullable(number()) })),
+  previousTotal: object({ sum: nullable(number()) }),
+  currentDateTotal: object({ sum: nullable(number()) }),
   receiptItemBrandList: array(object({ name: string() })),
 })
 

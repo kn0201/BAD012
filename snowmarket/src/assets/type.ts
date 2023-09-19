@@ -175,7 +175,7 @@ export interface CheckData {
   data: number[]
 }
 
-export interface Dish {
+export interface BarChartData {
   data: Array<number>
   label: string
 }
