@@ -9,14 +9,19 @@ let item = object({
   product_categories_id: number(),
   unit_price: number(),
   product_stock: number(),
-  discount_id: nullable(number()),
-  discount_title: nullable(string()),
-  discount_product_id: nullable(number()),
-  discount_brand_id: nullable(number()),
-  discount_categories_id: nullable(number()),
-  discount_quantity: nullable(number()),
-  discount_amount: nullable(number()),
 })
+
+let quantity_discount = nullable(
+  object({
+    discount_id: number(),
+    discount_title: string(),
+    discount_product_id: nullable(number()),
+    discount_brand_id: nullable(number()),
+    discount_categories_id: nullable(number()),
+    discount_quantity: number(),
+    discount_amount: number(),
+  })
+)
 
 let price_discount = nullable(
   object({
@@ -29,10 +34,14 @@ let price_discount = nullable(
 
 let addToCartResult = object({
   item: item,
-  price_discount: nullable(array(price_discount)),
+  quantity_discount: quantity_discount,
 })
 
+let getPriceDiscountResult = nullable(array(price_discount))
+
 export type AddToCartResult = ParseResult<typeof addToCartResult>
+export type getPriceDiscountResult = ParseResult<typeof getPriceDiscountResult>
+export type PriceDiscountResult = ParseResult<typeof price_discount>
 
 let receipt_return = object({})
 @Injectable({
@@ -40,6 +49,10 @@ let receipt_return = object({})
 })
 export class CustomerService {
   constructor(private api: ApiService) {}
+
+  getPriceDiscount() {
+    return this.api.get('/customer/cart/price-discount', getPriceDiscountResult)
+  }
 
   addToCartByProductId(id: number) {
     return this.api.post('/customer/cart/by-id', { id }, addToCartResult)

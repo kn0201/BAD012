@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { array, nullable, number, object, string } from 'cast.ts';
 import { CustomerService } from './customer.service';
 import { ProductService } from 'src/product/product.service';
@@ -28,6 +28,11 @@ export class CustomerController {
     private customerService: CustomerService,
     private productService: ProductService,
   ) {}
+
+  @Get('cart/price-discount')
+  getPriceDiscount() {
+    return this.customerService.getPriceDiscount();
+  }
 
   @Post('cart/by-id')
   addToCartByProductId(@Body() body: unknown) {

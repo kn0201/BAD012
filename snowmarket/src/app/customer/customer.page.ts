@@ -8,7 +8,12 @@ import {
 import { IonModal } from '@ionic/angular'
 
 import Swal from 'sweetalert2'
-import { AddToCartResult, CustomerService } from '../customer.service'
+import {
+  AddToCartResult,
+  CustomerService,
+  PriceDiscountResult,
+  getPriceDiscountResult,
+} from '../customer.service'
 import { sweetalert2error } from 'utils/sweetalert2'
 import { Router } from '@angular/router'
 import { ProductService } from '../product.service'
@@ -107,7 +112,7 @@ export class CustomerPage {
       sessionStorage.removeItem('user_id')
       sessionStorage.removeItem('username')
       sessionStorage.removeItem('role')
-    }, 600000)
+    }, 1500000)
   }
 
   async ionViewDidEnter() {
@@ -203,13 +208,17 @@ export class CustomerPage {
         continue
       }
       this.coolDownProductLabels.add(prediction.class)
+
+      let json = await this.customerService.addToCartByProductLabel(
+        prediction.class
+      )
+      let discount_json = await this.customerService.getPriceDiscount()
+
       setTimeout(() => {
         this.coolDownProductLabels.delete(prediction.class)
       }, 3500)
 
-      this.customerService
-        .addToCartByProductLabel(prediction.class)
-        .then((json) => this.handleAddItemResult(json))
+      this.handleAddItemResult(json, discount_json)
     }
 
     requestAnimationFrame(() => this.detectFrame())
@@ -231,34 +240,28 @@ export class CustomerPage {
     this.findID = ''
 
     let json = await this.customerService.addToCartByProductId(product_id)
-    this.handleAddItemResult(json)
+    let discount_json = await this.customerService.getPriceDiscount()
+    this.handleAddItemResult(json, discount_json)
   }
 
-  handleAddItemResult(json: AddToCartResult) {
-    const {
-      discount_id,
-      discount_title,
-      discount_product_id,
-      discount_brand_id,
-      discount_categories_id,
-      discount_quantity,
-      discount_amount,
-      ...itemData
-    } = json.item
+  handleAddItemResult(
+    json: AddToCartResult,
+    discount_json: getPriceDiscountResult
+  ) {
     const newItem = {
-      id: itemData.id,
-      name: itemData.name,
-      brand_id: itemData.product_brand_id,
-      categories_id: itemData.product_categories_id,
-      unit_price: itemData.unit_price,
+      id: json.item.id,
+      name: json.item.name,
+      brand_id: json.item.product_brand_id,
+      categories_id: json.item.product_categories_id,
+      unit_price: json.item.unit_price,
       quantity: 1,
-      price: itemData.unit_price,
+      price: json.item.unit_price,
     }
-    let item = this.items.find((item) => item.id == itemData.id)
+    let item = this.items.find((item) => item.id == json.item.id)
     let brandItem = this.items.find(
       (item) =>
-        item.brand_id == itemData.product_brand_id &&
-        item.categories_id == itemData.product_categories_id
+        item.brand_id == json.item.product_brand_id &&
+        item.categories_id == json.item.product_categories_id
     )
 
     if (!item) {
@@ -268,31 +271,27 @@ export class CustomerPage {
       item.quantity++
       item.price += newItem.unit_price
       if (
-        discount_id &&
-        discount_title &&
-        discount_product_id &&
-        discount_quantity &&
-        discount_amount &&
-        item.quantity % discount_quantity == 0
+        json.quantity_discount?.discount_product_id &&
+        item.quantity % json.quantity_discount.discount_quantity == 0
       ) {
         const newDiscount = {
-          id: discount_id,
-          name: discount_title,
-          unit_price: -discount_amount,
+          id: json.quantity_discount.discount_id,
+          name: json.quantity_discount.discount_title,
+          unit_price: -json.quantity_discount.discount_amount,
           quantity: 1,
-          price: -discount_amount,
+          price: -json.quantity_discount.discount_amount,
         }
         const newDiscountItem = {
-          id: discount_id,
-          name: discount_title,
+          id: json.quantity_discount.discount_id,
+          name: json.quantity_discount.discount_title,
           brand_id: +'',
           categories_id: +'',
           unit_price: +'',
           quantity: +'',
-          price: discount_amount,
+          price: json.quantity_discount.discount_amount,
         }
         let checkDiscountList = this.discounts.find(
-          (discount) => discount.id == discount_id
+          (discount) => discount.id == json.quantity_discount?.discount_id
         )
         if (!checkDiscountList) {
           this.items.push(newDiscountItem)
@@ -301,7 +300,8 @@ export class CustomerPage {
           checkDiscountList.quantity++
           checkDiscountList.price += newDiscount.unit_price
           let checkDiscountListItem = this.items.find(
-            (discount) => discount.name == discount_title
+            (discount) =>
+              discount.name == json.quantity_discount?.discount_title
           )
           if (checkDiscountListItem) {
             checkDiscountListItem.price -= newDiscount.unit_price
@@ -311,11 +311,14 @@ export class CustomerPage {
       }
     }
     if (brandItem) {
-      if (discount_quantity) {
+      if (
+        json.quantity_discount?.discount_brand_id &&
+        json.quantity_discount?.discount_categories_id
+      ) {
         let sameBrand = this.items.filter((item) => {
           return (
-            item.brand_id == discount_brand_id &&
-            item.categories_id == discount_categories_id
+            item.brand_id == json.quantity_discount?.discount_brand_id &&
+            item.categories_id == json.quantity_discount?.discount_categories_id
           )
         })
         let sameBrandNum = sameBrand.reduce(
@@ -323,31 +326,27 @@ export class CustomerPage {
           0
         )
         if (
-          discount_id &&
-          discount_title &&
-          discount_brand_id &&
-          discount_categories_id &&
-          discount_amount &&
-          sameBrandNum % discount_quantity == 0
+          json.quantity_discount &&
+          sameBrandNum % json.quantity_discount.discount_quantity == 0
         ) {
           const newBrandDiscount = {
-            id: discount_id,
-            name: discount_title,
-            unit_price: -discount_amount,
+            id: json.quantity_discount.discount_id,
+            name: json.quantity_discount.discount_title,
+            unit_price: -json.quantity_discount.discount_amount,
             quantity: 1,
-            price: -discount_amount,
+            price: -json.quantity_discount.discount_amount,
           }
           const newBrandDiscountItem = {
-            id: discount_id,
-            name: discount_title,
+            id: json.quantity_discount.discount_id,
+            name: json.quantity_discount.discount_title,
             brand_id: +'',
             categories_id: +'',
             unit_price: +'',
             quantity: +'',
-            price: discount_amount,
+            price: json.quantity_discount.discount_amount,
           }
           let checkBrandDiscountList = this.discounts.find(
-            (discount) => discount.id == discount_id
+            (discount) => discount.id == json.quantity_discount?.discount_id
           )
           if (!checkBrandDiscountList) {
             this.items.push(newBrandDiscountItem)
@@ -356,7 +355,8 @@ export class CustomerPage {
             checkBrandDiscountList.quantity++
             checkBrandDiscountList.price += newBrandDiscount.unit_price
             let checkBrandDiscountListItem = this.items.find(
-              (discount) => discount.name == discount_title
+              (discount) =>
+                discount.name == json.quantity_discount?.discount_title
             )
             if (checkBrandDiscountListItem) {
               checkBrandDiscountListItem.price -= newBrandDiscount.unit_price
@@ -367,9 +367,9 @@ export class CustomerPage {
       }
     }
     this.calculateTotalBalance()
-    if (json.price_discount) {
+    if (discount_json) {
       let discountAmount
-      for (const discount of json.price_discount) {
+      for (const discount of discount_json) {
         if (discount) {
           const {
             price_discount_id,
@@ -414,56 +414,43 @@ export class CustomerPage {
     }
   }
 
-  handleRemoveItemResult(json: AddToCartResult) {
-    const {
-      discount_id,
-      discount_title,
-      discount_product_id,
-      discount_brand_id,
-      discount_categories_id,
-      discount_quantity,
-      discount_amount,
-      ...itemData
-    } = json.item
-    let item = this.items.find((item) => item.id == itemData.id)
+  handleRemoveItemResult(
+    json: AddToCartResult,
+    discount_json: getPriceDiscountResult
+  ) {
+    let item = this.items.find((item) => item.id == json.item.id)
     let brandItem = this.items.find(
       (item) =>
-        item.brand_id == itemData.product_brand_id &&
-        item.categories_id == itemData.product_categories_id
+        item.brand_id == json.item.product_brand_id &&
+        item.categories_id == json.item.product_categories_id
     )
     if (item) {
       item.quantity--
-      item.price -= itemData.unit_price
+      item.price -= json.item.unit_price
       if (item.quantity <= 0) {
         const indexToRemove = this.items.findIndex(
-          (item) => item.id == itemData.id
+          (item) => item.id == json.item.id
         )
         if (indexToRemove !== -1) {
           this.items.splice(indexToRemove, 1)
         }
         const indexToRemoveOriginal = this.originals.findIndex(
-          (item) => item.id == itemData.id
+          (item) => item.id == json.item.id
         )
         if (indexToRemoveOriginal !== -1) {
           this.originals.splice(indexToRemoveOriginal, 1)
         }
       }
-      if (
-        discount_id &&
-        discount_title &&
-        discount_product_id &&
-        discount_quantity &&
-        discount_amount
-      ) {
+      if (json.quantity_discount?.discount_product_id) {
         let checkDiscountList = this.discounts.find(
-          (discount) => discount.id == discount_id
+          (discount) => discount.id == json.quantity_discount?.discount_id
         )
         let checkDiscountListItem = this.items.find(
-          (discount) => discount.name == discount_title
+          (discount) => discount.name == json.quantity_discount?.discount_title
         )
         if (checkDiscountList && checkDiscountListItem) {
           let discountQuantity = +Math.floor(
-            item.quantity / discount_quantity
+            item.quantity / json.quantity_discount.discount_quantity
           ).toFixed(0)
           if (discountQuantity >= 0) {
             checkDiscountList.quantity = discountQuantity
@@ -474,13 +461,13 @@ export class CustomerPage {
           }
           if (discountQuantity <= 0) {
             const indexToRemove = this.items.findIndex(
-              (item) => item.id == checkDiscountList!.id
+              (item) => item.id == checkDiscountList?.id
             )
             if (indexToRemove !== -1) {
               this.items.splice(indexToRemove, 1)
             }
             const indexToRemoveDiscount = this.discounts.findIndex(
-              (discount) => discount.id == checkDiscountListItem!.id
+              (discount) => discount.id == checkDiscountListItem?.id
             )
             if (indexToRemoveDiscount !== -1) {
               this.discounts.splice(indexToRemoveDiscount, 1)
@@ -491,64 +478,59 @@ export class CustomerPage {
       }
     }
     if (brandItem) {
-      if (discount_quantity) {
+      if (
+        json.quantity_discount?.discount_brand_id &&
+        json.quantity_discount?.discount_categories_id
+      ) {
         let sameBrand = this.items.filter((item) => {
           return (
-            item.brand_id == discount_brand_id &&
-            item.categories_id == discount_categories_id
+            item.brand_id == json.quantity_discount?.discount_brand_id &&
+            item.categories_id == json.quantity_discount?.discount_categories_id
           )
         })
         let sameBrandNum = sameBrand.reduce(
           (total, item) => total + item.quantity,
           0
         )
-        if (
-          discount_id &&
-          discount_title &&
-          discount_brand_id &&
-          discount_categories_id &&
-          discount_amount
-        ) {
-          let checkBrandDiscountList = this.discounts.find(
-            (discount) => discount.id == discount_id
-          )
-          let checkBrandDiscountListItem = this.items.find(
-            (discount) => discount.name == discount_title
-          )
-          if (checkBrandDiscountList && checkBrandDiscountListItem) {
-            let brandDiscountQuantity = +Math.floor(
-              sameBrandNum / discount_quantity
-            ).toFixed(0)
-            if (brandDiscountQuantity >= 0) {
-              checkBrandDiscountList.quantity = brandDiscountQuantity
-              checkBrandDiscountList.price =
-                checkBrandDiscountList.unit_price * brandDiscountQuantity
-              checkBrandDiscountListItem.price =
-                -checkBrandDiscountList.unit_price * brandDiscountQuantity
-            }
-            if (brandDiscountQuantity <= 0) {
-              const indexToRemoveBrand = this.items.findIndex(
-                (item) => item.id == checkBrandDiscountList!.id
-              )
-              if (indexToRemoveBrand !== -1) {
-                this.items.splice(indexToRemoveBrand, 1)
-              }
-              const indexToRemoveBrandDiscount = this.discounts.findIndex(
-                (discount) => discount.id == checkBrandDiscountListItem!.id
-              )
-              if (indexToRemoveBrandDiscount !== -1) {
-                this.discounts.splice(indexToRemoveBrandDiscount, 1)
-              }
-            }
-            this.calculateTotalDiscount()
+        let checkBrandDiscountList = this.discounts.find(
+          (discount) => discount.id == json.quantity_discount?.discount_id
+        )
+        let checkBrandDiscountListItem = this.items.find(
+          (discount) => discount.name == json.quantity_discount?.discount_title
+        )
+        if (checkBrandDiscountList && checkBrandDiscountListItem) {
+          let brandDiscountQuantity = +Math.floor(
+            sameBrandNum / json.quantity_discount.discount_quantity
+          ).toFixed(0)
+          if (brandDiscountQuantity >= 0) {
+            checkBrandDiscountList.quantity = brandDiscountQuantity
+            checkBrandDiscountList.price =
+              checkBrandDiscountList.unit_price * brandDiscountQuantity
+            checkBrandDiscountListItem.price =
+              -checkBrandDiscountList.unit_price * brandDiscountQuantity
           }
+          if (brandDiscountQuantity <= 0) {
+            const indexToRemoveBrand = this.items.findIndex(
+              (item) => item.id == checkBrandDiscountList!.id
+            )
+            if (indexToRemoveBrand !== -1) {
+              this.items.splice(indexToRemoveBrand, 1)
+            }
+            const indexToRemoveBrandDiscount = this.discounts.findIndex(
+              (discount) => discount.id == checkBrandDiscountListItem!.id
+            )
+            if (indexToRemoveBrandDiscount !== -1) {
+              this.discounts.splice(indexToRemoveBrandDiscount, 1)
+            }
+          }
+          this.calculateTotalDiscount()
         }
       }
     }
     this.calculateTotalBalance()
-    if (json.price_discount) {
+    if (discount_json) {
       let discountAmount
-      for (const discount of json.price_discount) {
+      for (const discount of discount_json) {
         if (discount) {
           const {
             price_discount_id,
@@ -594,56 +576,43 @@ export class CustomerPage {
         }
       }
       this.calculateTotalDiscount()
-      this.checkPriceDiscount(json.price_discount)
+      this.checkPriceDiscount(discount_json)
       this.calculateTotalBalance()
     }
   }
 
-  handleDeleteItemResult(json: AddToCartResult) {
-    const {
-      discount_id,
-      discount_title,
-      discount_product_id,
-      discount_brand_id,
-      discount_categories_id,
-      discount_quantity,
-      discount_amount,
-      ...itemData
-    } = json.item
-    let item = this.items.find((item) => item.id == itemData.id)
+  handleDeleteItemResult(
+    json: AddToCartResult,
+    discount_json: getPriceDiscountResult
+  ) {
+    let item = this.items.find((item) => item.id == json.item.id)
     let brandItem = this.items.find(
       (item) =>
-        item.brand_id == itemData.product_brand_id &&
-        item.categories_id == itemData.product_categories_id
+        item.brand_id == json.item.product_brand_id &&
+        item.categories_id == json.item.product_categories_id
     )
     if (item) {
       item.quantity = 0
       item.price = 0
       const indexToRemove = this.items.findIndex(
-        (item) => item.id == itemData.id
+        (item) => item.id == json.item.id
       )
       if (indexToRemove !== -1) {
         this.items.splice(indexToRemove, 1)
       }
       const indexToRemoveOriginal = this.originals.findIndex(
-        (item) => item.id == itemData.id
+        (item) => item.id == json.item.id
       )
       if (indexToRemoveOriginal !== -1) {
         this.originals.splice(indexToRemoveOriginal, 1)
       }
     }
-    if (
-      discount_id &&
-      discount_title &&
-      discount_product_id &&
-      discount_quantity &&
-      discount_amount
-    ) {
+    if (json.quantity_discount?.discount_product_id) {
       let checkDiscountList = this.discounts.find(
-        (discount) => discount.id == discount_id
+        (discount) => discount.id == json.quantity_discount?.discount_id
       )
       let checkDiscountListItem = this.items.find(
-        (discount) => discount.name == discount_title
+        (discount) => discount.name == json.quantity_discount?.discount_title
       )
       if (checkDiscountList && checkDiscountListItem) {
         checkDiscountList.quantity = 0
@@ -665,64 +634,59 @@ export class CustomerPage {
       this.calculateTotalDiscount()
     }
     if (brandItem) {
-      if (discount_quantity) {
+      if (
+        json.quantity_discount?.discount_brand_id &&
+        json.quantity_discount?.discount_categories_id
+      ) {
         let sameBrand = this.items.filter((item) => {
           return (
-            item.brand_id == discount_brand_id &&
-            item.categories_id == discount_categories_id
+            item.brand_id == json.quantity_discount?.discount_brand_id &&
+            item.categories_id == json.quantity_discount?.discount_categories_id
           )
         })
         let sameBrandNum = sameBrand.reduce(
           (total, item) => total + item.quantity,
           0
         )
-        if (
-          discount_id &&
-          discount_title &&
-          discount_brand_id &&
-          discount_categories_id &&
-          discount_amount
-        ) {
-          let checkBrandDiscountList = this.discounts.find(
-            (discount) => discount.id == discount_id
-          )
-          let checkBrandDiscountListItem = this.items.find(
-            (discount) => discount.name == discount_title
-          )
-          if (checkBrandDiscountList && checkBrandDiscountListItem) {
-            let brandDiscountQuantity = +Math.floor(
-              sameBrandNum / discount_quantity
-            ).toFixed(0)
-            if (brandDiscountQuantity >= 0) {
-              checkBrandDiscountList.quantity = brandDiscountQuantity
-              checkBrandDiscountList.price =
-                checkBrandDiscountList.unit_price * brandDiscountQuantity
-              checkBrandDiscountListItem.price =
-                -checkBrandDiscountList.unit_price * brandDiscountQuantity
-            }
-            if (brandDiscountQuantity <= 0) {
-              const indexToRemoveBrand = this.items.findIndex(
-                (item) => item.id == checkBrandDiscountList!.id
-              )
-              if (indexToRemoveBrand !== -1) {
-                this.items.splice(indexToRemoveBrand, 1)
-              }
-              const indexToRemoveBrandDiscount = this.discounts.findIndex(
-                (discount) => discount.id == checkBrandDiscountListItem!.id
-              )
-              if (indexToRemoveBrandDiscount !== -1) {
-                this.discounts.splice(indexToRemoveBrandDiscount, 1)
-              }
-            }
-            this.calculateTotalDiscount()
+        let checkBrandDiscountList = this.discounts.find(
+          (discount) => discount.id == json.quantity_discount?.discount_id
+        )
+        let checkBrandDiscountListItem = this.items.find(
+          (discount) => discount.name == json.quantity_discount?.discount_title
+        )
+        if (checkBrandDiscountList && checkBrandDiscountListItem) {
+          let brandDiscountQuantity = +Math.floor(
+            sameBrandNum / json.quantity_discount.discount_quantity
+          ).toFixed(0)
+          if (brandDiscountQuantity >= 0) {
+            checkBrandDiscountList.quantity = brandDiscountQuantity
+            checkBrandDiscountList.price =
+              checkBrandDiscountList.unit_price * brandDiscountQuantity
+            checkBrandDiscountListItem.price =
+              -checkBrandDiscountList.unit_price * brandDiscountQuantity
           }
+          if (brandDiscountQuantity <= 0) {
+            const indexToRemoveBrand = this.items.findIndex(
+              (item) => item.id == checkBrandDiscountList!.id
+            )
+            if (indexToRemoveBrand !== -1) {
+              this.items.splice(indexToRemoveBrand, 1)
+            }
+            const indexToRemoveBrandDiscount = this.discounts.findIndex(
+              (discount) => discount.id == checkBrandDiscountListItem!.id
+            )
+            if (indexToRemoveBrandDiscount !== -1) {
+              this.discounts.splice(indexToRemoveBrandDiscount, 1)
+            }
+          }
+          this.calculateTotalDiscount()
         }
       }
     }
     this.calculateTotalBalance()
-    if (json.price_discount) {
+    if (discount_json) {
       let discountAmount
-      for (const discount of json.price_discount) {
+      for (const discount of discount_json) {
         if (discount) {
           const {
             price_discount_id,
@@ -767,20 +731,20 @@ export class CustomerPage {
         }
       }
       this.calculateTotalDiscount()
-      this.checkPriceDiscount(json.price_discount)
+      this.checkPriceDiscount(discount_json)
       this.calculateTotalBalance()
     }
   }
 
-  checkPriceDiscount(json: any) {
+  checkPriceDiscount(discount_json: getPriceDiscountResult) {
     let total =
       this.totalPrice -
       +this.discounts
         .reduce((total, discount) => total + discount.price, 0)
         .toFixed(2)
     if (
-      json.every((discount: any) => {
-        return discount.price_discount_total > total
+      discount_json?.every((discount: PriceDiscountResult) => {
+        return discount!.price_discount_total > total
       })
     ) {
       this.price_discount.splice(0, 1)
@@ -833,19 +797,22 @@ export class CustomerPage {
   async addBag() {
     const product_id = 1
     let json = await this.customerService.addToCartByProductId(product_id)
-    this.handleAddItemResult(json)
+    let discount_json = await this.customerService.getPriceDiscount()
+    this.handleAddItemResult(json, discount_json)
   }
 
   async increase(index: number) {
     let id = this.items[index].id
     let json = await this.customerService.addToCartByProductId(id)
-    this.handleAddItemResult(json)
+    let discount_json = await this.customerService.getPriceDiscount()
+    this.handleAddItemResult(json, discount_json)
   }
 
   async decrease(index: number) {
     let id = this.items[index].id
     let json = await this.customerService.addToCartByProductId(id)
-    this.handleRemoveItemResult(json)
+    let discount_json = await this.customerService.getPriceDiscount()
+    this.handleRemoveItemResult(json, discount_json)
   }
 
   removeItem(index: number) {
@@ -869,7 +836,8 @@ export class CustomerPage {
         })
         let id = this.items[index].id
         let json = await this.customerService.addToCartByProductId(id)
-        this.handleDeleteItemResult(json)
+        let discount_json = await this.customerService.getPriceDiscount()
+        this.handleDeleteItemResult(json, discount_json)
       }
     })
   }
