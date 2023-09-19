@@ -30,7 +30,7 @@
       <h2 class="fw-bold">Receipt Number : {{ row.id }}</h2>
       <h3 class="fw-bold">Date : {{row.date}}</h3>
       <h4>POS ID : {{row.pos_name}}</h4>
-      <h4>Customer Name : {{row.username}}</h4>
+      <h4 class="text-capitalize">Customer Name : {{row.username}}</h4>
       <div *ngFor="let item of receiptItemData;">
         <ion-list *ngIf="item.receipt_id == row.id">
           <ion-item>
