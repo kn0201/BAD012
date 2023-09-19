@@ -36,7 +36,7 @@
               "src/global.scss",
               "node_modules/ngx-easy-table/style.css"
             ],
-            "scripts": ["./node_modules/chart.js/dist/Chart.min.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {
