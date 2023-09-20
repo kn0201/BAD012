@@ -1,0 +1,101 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>demo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">demo</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-item-divider>Version 1</ion-item-divider>
+
+  <ion-list>
+    <ion-item>
+      <ion-select label="Fruit" [(ngModel)]="user.fruit">
+        <ion-select-option *ngFor="let value of fruits" [value]="value">
+          {{value}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Agent" [(ngModel)]="user.name">
+        <ion-select-option *ngFor="let value of names" [value]="value">
+          {{value}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-item-divider>Version 2</ion-item-divider>
+
+  <ion-list>
+    <ion-item *ngFor="let field of fields">
+      <ion-select [label]="field.label" [(ngModel)]="user[field.key]">
+        <ion-select-option *ngFor="let value of field.options" [value]="value">
+          {{value}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-item-divider>Version 3</ion-item-divider>
+  <ion-list>
+    <ion-item>
+      <ion-label>Fruit</ion-label>
+      <div
+        (click)="pickingFruit = true"
+        style="display: flex; align-items: center; cursor: pointer"
+      >
+        <ion-text>{{user2.fruit_id}} - {{selectedFruitOption?.text}}</ion-text>
+        <ion-icon size="small" name="chevron-down-outline"></ion-icon>
+      </div>
+    </ion-item>
+  </ion-list>
+  x
+  <div class="ion-margin">
+    <ion-button (click)="reset()">Reset</ion-button>
+  </div>
+</ion-content>
+
+<!-- 
+<ion-modal [isOpen]="pickingFruit">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="pickingFruit = false">Close</ion-button>
+        </ion-buttons>
+        <ion-title>Pick a fruit</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-searchbar
+        [(ngModel)]="searchText"
+        (ngModelChange)="searchOption()"
+      ></ion-searchbar>
+      <ion-list>
+        <ion-item
+          *ngFor="let value of matchedOptions"
+          (click)="chooseOption(value)"
+        >
+          <ion-label> {{value}} </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+-->
+
+<searchable-select-modal
+  title="Pick a fruit"
+  [object]="user2"
+  key="fruit_id"
+  [options]="fruitOptions"
+  [isOpen]="pickingFruit"
+  (close)="pickingFruit = false"
+  (select)="selectedFruitOption = $event"
+></searchable-select-modal>

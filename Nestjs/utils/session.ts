@@ -1,9 +1,9 @@
 import session from 'express-session';
-import { env } from './env';
+import { env } from '../src/env';
 
 export let sessionMiddleware = session({
   secret: env.SESSION_SECRET,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
 });
 

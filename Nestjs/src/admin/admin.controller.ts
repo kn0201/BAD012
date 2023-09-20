@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { array, nullable, number, object, string } from 'cast.ts';
-import { GuardGuard } from 'src/guard/guard.guard';
 
 let bcParser = object({
   name: string(),

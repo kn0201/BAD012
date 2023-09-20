@@ -1,20 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Knex } from 'knex';
 import { comparePassword, hashPassword } from 'utils/hash';
-import * as nodemailer from 'nodemailer';
 import { InjectKnex } from 'nestjs-knex';
+import { EmailService } from 'src/email/email.service';
+import { env } from 'src/env';
 
-const nodemailer = require('nodemailer');
 @Injectable()
 export class LoginService {
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'snowmarket011@gmail.com',
-      pass: 'qqeigvyszkjdtzkz',
-    },
-  });
-  constructor(@InjectKnex() private readonly knex: Knex) {}
+  constructor(
+    @InjectKnex() private readonly knex: Knex,
+    private emailService: EmailService,
+  ) {}
 
   async register(body: { username: any; email: any; password: any }) {
     let username = body.username;
@@ -31,20 +27,12 @@ export class LoginService {
       .returning('id');
     let id = result[0].id;
 
-    const mailOptions = {
-      from: 'snowmarket011@gmail.com',
+    await this.emailService.sendMail({
       to: body.email,
-      subject: 'Snowmarket Register',
-      text: 'Welcome to Snowmarket, enjoy your member benefits!',
-    };
-
-    this.transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent:' + info.response);
-      }
+      subject: env.APP_NAME + ' Register',
+      text: `Welcome to ${env.APP_NAME}, enjoy your member benefits!`,
     });
+
     return { username: username, id: id, role: 'member' };
   }
 
@@ -53,47 +41,20 @@ export class LoginService {
       .select('role', 'id', 'password')
       .where('username', input.username)
       .first();
-    if (!foundUser) {
-      return { error: 'Wrong Username/Password' };
-    } else {
-      let match: boolean = await comparePassword({
-        password: input.password,
-        password_hash: foundUser.password,
-      });
-      if (!match) {
-        return { error: 'Wrong Username/Password' };
-      }
-      let role = foundUser.role;
-      let id = foundUser.id;
-      req.session.role = role;
-      req.session.save();
-      console.log(req.session);
+    if (!foundUser) throw new UnauthorizedException('Wrong Username/Password');
 
-      return { role: role, error: null, id: id };
-    }
+    let match: boolean = await comparePassword({
+      password: input.password,
+      password_hash: foundUser.password,
+    });
+    if (!match) throw new UnauthorizedException('Wrong Username/Password');
+
+    let role = foundUser.role;
+    let id = foundUser.id;
+    req.session.role = role;
+    req.session.save();
+    console.log(req.session);
+
+    return { role: role, error: null, id: id };
   }
 }
-
-// const nodemailer = require('nodemailer');
-
-// transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: 'snowmarket011@gmail.com',
-//     pass: 'qqeigvyszkjdtzkz',
-//   },
-// });
-// const mailOptions = {
-//   from: 'snowmarket011@gmail.com',
-//   to: body.email,
-//   subject: 'Snowmarket Register',
-//   text: 'Welcome to Snowmarket, enjoy your member benefits!',
-// };
-
-// this.transporter.sendMail(mailOptions, function (error, info) {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log('Email sent:' + info.response);
-//   }
-// });

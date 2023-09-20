@@ -1,19 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { email } from 'cast.ts';
 import { InjectKnex, Knex } from 'nestjs-knex';
-import * as nodemailer from 'nodemailer';
 import { receiptList } from 'source/receipt';
+import { EmailService } from 'src/email/email.service';
+import { env } from 'src/env';
 
 @Injectable()
 export class CustomerService {
-  constructor(@InjectKnex() private readonly knex: Knex) {}
-  transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'snowmarket011@gmail.com',
-      pass: 'qqeigvyszkjdtzkz',
-    },
-  });
+  constructor(
+    @InjectKnex() private readonly knex: Knex,
+    private emailService: EmailService,
+  ) {}
+
   async addProductToCart(product_id: number) {
     const currentDate = new Date();
     let item = await this.knex
@@ -135,25 +133,18 @@ export class CustomerService {
       .from('users')
       .where('id', receipt.user_id)
       .first();
-    const mailOptions = {
-      from: 'snowmarket011@gmail.com',
-      to: userEmail.email,
-      subject: 'Snowmarket Receipt',
-      html: `
-    <Storage>Thank you for your patronage, this is your receipt,please check!</Storage>
-    <p>${receiptList}</p>
-    `,
-    };
 
     if (!userEmail) throw new NotFoundException('User not found');
-    else
-      this.transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent:' + info.response);
-        }
-      });
+
+    await this.emailService.sendMail({
+      to: userEmail.email,
+      subject: env.APP_NAME + ' Receipt',
+      html: `
+    <strong>Thank you for your patronage, this is your receipt, please check!</strong>
+    <p>${receiptList}</p>
+    `,
+    });
+
     return {};
   }
 }

@@ -11,6 +11,7 @@ import { ProductModule } from './product/product.module';
 import { PosModule } from './pos/pos.module';
 import { GuardGuard } from './guard/guard.guard';
 import { GoogleStrategy } from './google.strategy';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { GoogleStrategy } from './google.strategy';
     PosModule,
   ],
   controllers: [AppController],
-  providers: [AppService, GoogleStrategy],
+  providers: [AppService, GoogleStrategy, EmailService],
 })
 export class AppModule {}
