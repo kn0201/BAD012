@@ -52,8 +52,6 @@ export class LoginService {
     let role = foundUser.role;
     let id = foundUser.id;
     req.session.role = role;
-    req.session.save();
-    console.log(req.session);
 
     return { role: role, error: null, id: id };
   }

@@ -179,3 +179,8 @@ export interface BarChartData {
   data: Array<number>
   label: string
 }
+
+export let revenue = object({
+  date: string(),
+  sum: nullable(number()),
+})

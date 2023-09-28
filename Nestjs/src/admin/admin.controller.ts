@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Patch,
-  Post,
-  Req,
-  Session,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Req } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { array, nullable, number, object, string } from 'cast.ts';
 
@@ -80,8 +71,6 @@ export class AdminController {
 
   @Get('/product-list')
   getProductList(@Req() req: any) {
-    console.log({ session: req.session });
-
     return this.adminService.getProductList();
   }
 
@@ -98,6 +87,11 @@ export class AdminController {
   @Get('/chart-list')
   getChartList() {
     return this.adminService.getReceiptList();
+  }
+
+  @Get('revenue')
+  getWeeklyRevenue() {
+    return this.adminService.getWeeklyRevenue();
   }
 
   @Post('/b&c-list/add')

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core'
 import { AdminService } from '../admin.service'
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js'
 import { BaseChartDirective } from 'ng2-charts'
@@ -12,7 +12,7 @@ import { BarChartData } from 'src/assets/type'
 export class AdminChartListPage implements OnInit {
   constructor(private adminService: AdminService) {}
 
-  @ViewChild(BaseChartDirective) BaseChart?: BaseChartDirective
+  @ViewChildren(BaseChartDirective) charts?: BaseChartDirective[]
 
   // @ViewChild('BaseChartDirective') revenueChart?: BaseChartDirective | undefined
 
@@ -54,9 +54,17 @@ export class AdminChartListPage implements OnInit {
   productBarChartObjectArray: BarChartData[] = []
   //
 
+  public lineChartType: ChartType = 'line'
+
   //Bar Chart Default Setting
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+
+    elements: {
+      line: {
+        tension: 0.4,
+      },
+    },
 
     scales: {
       x: {},
@@ -64,34 +72,54 @@ export class AdminChartListPage implements OnInit {
         min: 0,
       },
     },
+    plugins: {
+      legend: { display: true },
+    },
   }
   public barChartType: ChartType = 'bar'
 
-  public barChartData: ChartData<'bar'> = {
+  //
+  public revenueChartData: ChartData<'bar'> = {
     labels: ['Revenue'],
     datasets: [],
   }
-  //
 
-  ngOnInit() {
-    this.loadList()
+  async ngOnInit() {
+    await this.loadList()
+    for (let chart of this.charts!) {
+      chart.update()
+    }
   }
 
   async loadList() {
+    let revenueList = await this.adminService.getWeeklyRevenue()
+    let weeklyRevenue = revenueList.weeklyRevenue
+    console.log(weeklyRevenue)
+
     let json = await this.adminService.getChartList()
     let receiptList = json.receiptList
     let receiptItemList = json.receiptItemList
-    let currentDateTotal = json.currentDateTotal
-    let previousTotal = json.previousTotal
+
     let receiptItemBrandList = json.receiptItemBrandList
 
-    let previousRevenue = previousTotal.sum
-    let currentRevenue = currentDateTotal.sum
+    //Revenue Chart
+    let date: string[] = []
+    let sum: number[] = []
 
-    this.barChartData.datasets = [
-      { data: [previousRevenue], label: 'Previous Revenue' },
-      { data: [currentRevenue], label: 'Today Revenue' },
-    ]
+    for (let daily of weeklyRevenue) {
+      daily.date = daily.date.replaceAll('-', '').slice(4)
+      date.push(daily.date)
+      if (daily.sum == null) {
+        sum.push(0)
+      } else {
+        sum.push(daily.sum)
+      }
+    }
+
+    this.revenueChartData.labels = date.reverse()
+    this.revenueChartData.datasets = [{ data: sum.reverse(), label: 'Revenue' }]
+    //
+
     //Pos Chart
     for (let receipt of receiptList) {
       this.pos_array.push(receipt.pos_name)

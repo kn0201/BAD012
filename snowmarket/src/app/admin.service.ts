@@ -12,6 +12,7 @@ import {
   product,
   productDiscount,
   receipt,
+  revenue,
   user,
 } from 'src/assets/type'
 
@@ -27,9 +28,12 @@ let memberList = object({
 let receiptPageList = object({
   receiptList: array(receipt),
   receiptItemList: array(item),
-  previousTotal: object({ sum: nullable(number()) }),
-  currentDateTotal: object({ sum: nullable(number()) }),
+
   receiptItemBrandList: array(object({ name: string() })),
+})
+
+let weeklyRevenue = object({
+  weeklyRevenue: array(revenue),
 })
 
 let productPageList = object({
@@ -104,6 +108,10 @@ export class AdminService {
 
   getChartList() {
     return this.api.get('/admin/chart-list', receiptPageList)
+  }
+
+  getWeeklyRevenue() {
+    return this.api.get('/admin/revenue', weeklyRevenue)
   }
 
   addBrandCategory(body: { name: string; selectValue: string }) {

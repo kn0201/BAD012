@@ -411,6 +411,7 @@ export class CustomerPage {
       }
       this.calculateTotalDiscount()
       this.calculateTotalBalance()
+      // this.playSound()
     }
   }
 
@@ -937,4 +938,11 @@ export class CustomerPage {
       })
     }
   }
+
+  // playSound() {
+  //   const audio = new Audio('beep.mp3')
+  //   console.log('play music')
+  //   audio.load()
+  //   audio.play()
+  // }
 }

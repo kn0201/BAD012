@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { object } from 'cast.ts';
 import { InjectKnex, Knex } from 'nestjs-knex';
 @Injectable()
 export class AdminService {
@@ -68,9 +69,6 @@ export class AdminService {
   }
 
   async getReceiptList() {
-    const currentDate = new Date().toISOString().split('T')[0];
-    console.log(currentDate);
-
     let receiptList = await this.knex
       .select(
         'receipt.id',
@@ -87,20 +85,6 @@ export class AdminService {
 
     let receiptItemList = await this.knex.select('*').from('receipt_item');
 
-    let previousTotal = await this.knex('receipt')
-      .sum('total')
-      .whereRaw('DATE(created_at) < ?', currentDate)
-      .first();
-
-    if (!previousTotal) {
-      previousTotal = null;
-    }
-
-    let currentDateTotal = await this.knex('receipt')
-      .sum('total')
-      .whereRaw('DATE(created_at) = ?', currentDate)
-      .first();
-
     let receiptItemBrandList = await this.knex
       .select('brand.name' as 'brand_name')
       .from('receipt_item')
@@ -110,10 +94,32 @@ export class AdminService {
     return {
       receiptList,
       receiptItemList,
-      previousTotal,
-      currentDateTotal,
       receiptItemBrandList,
     };
+  }
+
+  async getWeeklyRevenue() {
+    let weeklyRevenue = [];
+
+    for (let i = 0; i < 7; i++) {
+      let date = new Date();
+      date.setDate(date.getDate() - i);
+      date.toISOString().split('T')[0];
+
+      let result = await this.knex('receipt')
+        .sum('total')
+        .whereRaw('DATE(created_at) = ?', date)
+        .first();
+
+      let object = {
+        date: date.toISOString().split('T')[0],
+        sum: result.sum,
+      };
+
+      weeklyRevenue.push(object);
+    }
+
+    return { weeklyRevenue };
   }
 
   async getProductList() {

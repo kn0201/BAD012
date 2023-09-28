@@ -18,8 +18,6 @@ export class PosService {
     let id = result.id;
     let code = result.code;
     req.session.pos = body.pos;
-    req.session.save();
-    console.log(req.session);
 
     return { id: id, code: code, error: null };
   }

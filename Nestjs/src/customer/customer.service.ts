@@ -127,24 +127,24 @@ export class CustomerService {
       await this.knex('users')
         .where('id', receipt.user_id)
         .update('point', updatedPoint);
-    }
-    let userEmail = await this.knex
-      .select('email')
-      .from('users')
-      .where('id', receipt.user_id)
-      .first();
 
-    if (!userEmail) throw new NotFoundException('User not found');
+      let userEmail = await this.knex
+        .select('email')
+        .from('users')
+        .where('id', receipt.user_id)
+        .first();
 
-    await this.emailService.sendMail({
-      to: userEmail.email,
-      subject: env.APP_NAME + ' Receipt',
-      html: `
+      if (!userEmail) throw new NotFoundException('User not found');
+
+      await this.emailService.sendMail({
+        to: userEmail.email,
+        subject: env.APP_NAME + ' Receipt',
+        html: `
     <strong>Thank you for your patronage, this is your receipt, please check!</strong>
     <p>${receiptList}</p>
     `,
-    });
-
+      });
+    }
     return {};
   }
 }
