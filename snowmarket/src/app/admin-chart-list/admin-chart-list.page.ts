@@ -93,8 +93,19 @@ export class AdminChartListPage implements OnInit {
 
   async loadList() {
     let revenueList = await this.adminService.getWeeklyRevenue()
-    let weeklyRevenue = revenueList.weeklyRevenue
-    console.log(weeklyRevenue)
+    // let weeklyRevenue = revenueList.weeklyRevenue
+    // console.log(weeklyRevenue)
+
+    let weeklyRevenue = [
+      { date: '1020', sum: 1345 },
+      { date: '1021', sum: 3824.21 },
+      { date: '1022', sum: 4422.3 },
+      { date: '1023', sum: 2615.89 },
+      { date: '1024', sum: 3010 },
+      { date: '1025', sum: 7462.65 },
+      { date: '1026', sum: 5555.24 },
+      { date: '1027', sum: 4812.2 },
+    ]
 
     let json = await this.adminService.getChartList()
     let receiptList = json.receiptList

@@ -11,7 +11,7 @@ export let env = {
   DB_PASSWORD: '',
   DB_HOST: '',
   DB_PORT: 5432,
-  WEBP_PORT: 8200,
+  WEBP_PORT: 8300,
   EMAIL_ADDRESS: '',
   EMAIL_PASSWORD: '',
   APP_NAME: 'Pufferct Market',
