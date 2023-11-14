@@ -29,7 +29,7 @@ export class AdminService {
     let param = body.selectValue;
     let name = body.name;
     let result = await this.knex(param).insert({ name: name });
-    console.log(result);
+    // console.log(result);
 
     return { param, name };
   }
@@ -213,7 +213,7 @@ export class AdminService {
   }
 
   async addProductDiscount(body) {
-    console.log(body);
+    // console.log(body);
 
     await this.knex('quantity_discount').insert({
       title: body.title,

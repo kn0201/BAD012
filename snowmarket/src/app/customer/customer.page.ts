@@ -202,7 +202,7 @@ export class CustomerPage {
       )
 
       if (
-        prediction.confidence < 0.8 ||
+        prediction.confidence < 0.85 ||
         this.coolDownProductLabels.has(prediction.class)
       ) {
         continue

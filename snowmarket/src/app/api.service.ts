@@ -6,7 +6,7 @@ import { Parser } from 'cast.ts'
   providedIn: 'root',
 })
 export class ApiService {
-  apiOrigin = 'http://localhost:8300'
+  apiOrigin = 'http://172.20.10.11:8900'
 
   constructor(private alertService: AlertService) {}
 
